@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>SmartEdu AI - Smart Academic Assistant</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="loginScreen" class="login-screen">
+  <div class="login-card">
+    <div class="brand-big">🎓 SmartEdu <span>AI</span></div>
+    <p class="muted">Smart Academic Management & AI Learning Assistant</p>
+    <label>Student Name</label>
+    <input id="loginName" placeholder="Enter your full name">
+    <label>USN</label>
+    <input id="loginUsn" placeholder="Example: 3RB23CI053">
+    <button class="primary full" onclick="login()">Login to SmartEdu AI</button>
+    <p class="small muted">Your demo data is stored only in this browser.</p>
+  </div>
+</div>
+
+<div id="app" class="app hidden">
+  <aside class="sidebar">
+    <div class="brand">🎓 <b>SmartEdu</b><span>AI</span></div>
+    <div class="profile"><div class="avatar" id="avatar">S</div><div><b id="studentName">Student</b><small id="studentUsn">USN</small></div></div>
+    <nav>
+      <button data-page="dashboard" onclick="showPage('dashboard')">🏠 Dashboard</button>
+      <button data-page="chatbot" onclick="showPage('chatbot')">🤖 AI Academic Chatbot</button>
+      <button data-page="attendance" onclick="showPage('attendance')">📊 Attendance</button>
+      <button data-page="results" onclick="showPage('results')">🎓 Academic Results</button>
+      <button data-page="learning" onclick="showPage('learning')">📚 Personalized Learning</button>
+      <button data-page="quiz" onclick="showPage('quiz')">📝 AI Quiz Generator</button>
+      <button data-page="planner" onclick="showPage('planner')">🎯 Study Planner</button>
+      <button data-page="notes" onclick="showPage('notes')">📄 Notes & PDF Q&A</button>
+      <button data-page="voice" onclick="showPage('voice')">🎤 Voice Assistant</button>
+      <button data-page="campus" onclick="showPage('campus')">📅 College Information</button>
+      <button data-page="notifications" onclick="showPage('notifications')">🔔 Notifications</button>
+      <button data-page="progress" onclick="showPage('progress')">📈 Student Progress</button>
+      <button data-page="risk" onclick="showPage('risk')">🔍 Early Risk Detection</button>
+      <button data-page="teacher" onclick="showPage('teacher')">👨‍🏫 Teacher Dashboard</button>
+    </nav>
+    <button class="logout" onclick="logout()">↩ Logout</button>
+  </aside>
+
+  <main class="main">
+    <header class="topbar"><div><span class="muted">Welcome back,</span><h2 id="welcomeName">Student 👋</h2></div><div class="top-actions"><span class="pill" id="today"></span><button onclick="resetDemo()" title="Reset demo data">↻ Reset</button></div></header>
+
+    <section id="dashboard" class="page">
+      <h1>AI Student Dashboard</h1>
+      <p class="muted">One place for learning, results, attendance and intelligent academic support.</p>
+      <div class="cards">
+        <div class="card stat"><span>📊 Overall Attendance</span><strong id="dashAttendance">86%</strong><small>Healthy overall</small></div>
+        <div class="card stat"><span>📝 Quiz Performance</span><strong>78%</strong><small>Good • improve weak topics</small></div>
+        <div class="card stat"><span>🎓 Current SGPA</span><strong id="dashSGPA">8.8</strong><small>6th Semester</small></div>
+        <div class="card stat"><span>🔥 Learning Streak</span><strong>5 days</strong><small>Keep going!</small></div>
+      </div>
+      <div class="grid2">
+        <div class="card"><h3>🤖 AI Academic Insight</h3><div id="dashboardInsight"></div><button class="primary" onclick="showPage('chatbot')">Ask AI in detail →</button></div>
+        <div class="card"><h3>📅 Upcoming</h3><ul class="clean"><li>ML Assignment — 18 Aug</li><li>Cloud Quiz — 22 Aug</li><li>Project Review — 28 Aug</li></ul></div>
+      </div>
+      <div class="card"><h3>⚡ Quick Actions</h3><div class="quick"><button onclick="showPage('chatbot')">Ask Academic Doubt</button><button onclick="showPage('quiz')">Generate Quiz</button><button onclick="showPage('planner')">Build Study Plan</button><button onclick="showPage('results')">View All Results</button></div></div>
+    </section>
+
+    <section id="chatbot" class="page hidden">
+      <div class="page-head">
+        <div>
+          <h1>🤖 AI Academic Chatbot</h1>
+          <p class="muted">Ask an academic question. SmartEdu identifies the topic and gives a relevant, structured answer.</p>
+        </div>
+        <select id="language" onchange="setUILanguage()">
+          <option value="English">English</option>
+          <option value="Kannada">Kannada</option>
+          <option value="Hindi">Hindi</option>
+        </select>
+      </div>
+
+      <div class="chat-layout">
+        <div class="card chat-card">
+          <div id="chatMessages" class="messages">
+            <div class="msg bot">
+              <b>SmartEdu AI</b>
+              <p>👋 Ask me something like <b>“Explain ACID properties in DBMS”</b>, <b>“What is RSA?”</b>, <b>“Difference between IaaS and PaaS”</b>, or a maths question such as <b>“301 mod 60”</b>.</p>
+              <p>I will give the <b>definition, detailed explanation, working/steps, example, key points, advantages/limitations where relevant, exam-ready answer and a practice question</b>.</p>
+            </div>
+          </div>
+
+          <div class="suggestions">
+            <button onclick="useQuestion('Explain ACID properties in DBMS with a real-world example')">ACID – DBMS</button>
+            <button onclick="useQuestion('Explain multilayer perceptron in deep learning step by step')">MLP – Deep Learning</button>
+            <button onclick="useQuestion('Solve RSA for p=7, q=11 and e=7 and explain every step')">RSA – Cryptography</button>
+            <button onclick="useQuestion('Explain IaaS, PaaS and SaaS and give the difference')">Cloud – IaaS/PaaS/SaaS</button>
+            <button onclick="useQuestion('What is PCA in machine learning? Explain with steps')">PCA – ML</button>
+          </div>
+
+          <div class="chat-input">
+            <textarea id="chatInput" rows="3" placeholder="Type your academic question here..."></textarea>
+            <div class="chat-buttons">
+              <button class="secondary" onclick="startChatVoice()">🎤 Speak</button>
+              <button class="primary" onclick="askAI()">Ask AI</button>
+            </div>
+          </div>
+          <div class="chat-hint">
+            <span id="chatVoiceStatus">Voice ready</span>
+            <button class="link-btn" onclick="clearChat()">Clear chat</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>🧠 Answer Settings</h3>
+          <label><input type="checkbox" id="examMode" checked> Include exam-ready answer</label>
+          <label><input type="checkbox" id="practiceMode" checked> Include practice question</label>
+          <label><input type="checkbox" id="speakMode"> Read answer aloud</label>
+          <hr>
+          <h3>✨ Answer format</h3>
+          <ul class="clean">
+            <li>Exact topic identification</li>
+            <li>Simple definition</li>
+            <li>Detailed explanation</li>
+            <li>Step-by-step working</li>
+            <li>Formula/algorithm when relevant</li>
+            <li>Real-world example</li>
+            <li>Advantages & limitations</li>
+            <li>Exam-ready answer</li>
+            <li>Practice question</li>
+          </ul>
+          <div class="result-box"><b>Tip:</b> You can ask follow-ups such as “explain point 3”, “give a 5-mark answer”, “give an example”, or “compare the two concepts”.</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="attendance" class="page hidden">
+      <h1>📊 Smart Attendance Analysis</h1><p class="muted">Track subjects and get intelligent low-attendance alerts.</p>
+      <div class="card"><div id="attendanceList"></div></div>
+    </section>
+
+    <section id="results" class="page hidden">
+      <div class="page-head"><div><h1>🎓 Academic Results</h1><p class="muted">Semester-wise SGPA, credits, subjects and backlog status from 1st semester onward.</p></div><button class="primary" onclick="addSemester()">+ Add Semester</button></div>
+      <div class="cards"><div class="card stat"><span>Current SGPA</span><strong id="resultCurrent">8.8</strong></div><div class="card stat"><span>CGPA</span><strong id="cgpa">8.45</strong></div><div class="card stat"><span>Total Backlogs</span><strong id="backlogs">0</strong></div><div class="card stat"><span>Semesters</span><strong id="semCount">6</strong></div></div>
+      <div class="card"><table><thead><tr><th>Semester</th><th>SGPA</th><th>Credits</th><th>Backlogs</th><th>Performance</th></tr></thead><tbody id="resultsBody"></tbody></table></div>
+    </section>
+
+    <section id="learning" class="page hidden">
+      <h1>📚 Personalized Learning</h1><p class="muted">Select a topic and SmartEdu recommends what to study next.</p>
+      <div class="card form-grid"><select id="learnSubject"><option>Machine Learning</option><option>Cloud Computing</option><option>Computer Networks</option><option>DBMS</option><option>Deep Learning</option><option>Cryptography</option></select><input id="learnTopic" placeholder="Enter topic e.g. PCA"><button class="primary" onclick="personalize()">Create My Learning Path</button></div>
+      <div id="learningResult"></div>
+    </section>
+
+    <section id="quiz" class="page hidden">
+      <h1>📝 AI Quiz Generator</h1><p class="muted">Generate MCQs, answer them, and see which concepts need practice.</p>
+      <div class="card form-grid"><select id="quizTopic"><option>Machine Learning</option><option>DBMS</option><option>Cloud Computing</option><option>Cryptography</option><option>Deep Learning</option></select><select id="quizDifficulty"><option>Easy</option><option>Medium</option><option>Hard</option></select><button class="primary" onclick="generateQuiz()">Generate Quiz</button></div>
+      <div id="quizArea"></div>
+    </section>
+
+    <section id="planner" class="page hidden">
+      <h1>🎯 Personalized Study Planner</h1><div class="card form-grid"><input id="planSubjects" placeholder="Subjects (comma separated)" value="Machine Learning, Cloud Computing, Flutter"><input id="examDate" type="date"><input id="studyHours" type="number" min="1" max="12" value="3" placeholder="Hours/day"><button class="primary" onclick="makePlan()">Create AI Study Plan</button></div><div id="planResult"></div>
+    </section>
+
+    <section id="notes" class="page hidden">
+      <h1>📄 Notes & PDF Q&A</h1><p class="muted">Upload a text/PDF note. The app can read text files locally; PDF extraction uses the browser's PDF reader when available online.</p>
+      <div class="card"><input type="file" id="docFile" accept=".txt,.md,.pdf"><div id="docStatus" class="result-box">No document loaded.</div><textarea id="docQuestion" rows="3" placeholder="Ask a question about your uploaded notes..."></textarea><button class="primary" onclick="askDocument()">Answer From Document</button><div id="docAnswer"></div></div>
+    </section>
+
+    <section id="voice" class="page hidden">
+      <h1>🎤 Voice-Based AI Assistant</h1>
+      <p class="muted">Speak your academic question. SmartEdu converts your speech to text, answers it, and can read the answer aloud.</p>
+      <div class="card center">
+        <div class="mic" id="micIcon">🎙️</div>
+        <button class="primary voice-big" id="voiceButton" onclick="toggleVoice()">🎤 Start Listening</button>
+        <button class="secondary" onclick="stopVoice()">⏹ Stop</button>
+        <p id="voiceStatus" class="muted">Press Start Listening and allow microphone access if the browser asks.</p>
+        <div class="voice-transcript"><b>Recognized question:</b><p id="voiceTranscript">—</p></div>
+        <div id="voiceAnswer"></div>
+        <div class="result-box">
+          <b>Voice support:</b> Chrome/Edge are recommended. If microphone permission is blocked, click the 🔒 icon near the browser address bar → allow Microphone → reload the page.
+        </div>
+      </div>
+    </section>
+
+    <section id="campus" class="page hidden">
+      <h1>📅 College Information Assistant</h1><div class="cards"><div class="card"><h3>🕘 Timetable</h3><p>Mon–Fri • 9:00 AM – 4:30 PM</p><p>ML • Cloud • Flutter • Project • Networks</p></div><div class="card"><h3>📢 Announcements</h3><p>Project review on 28 Aug.</p><p>Assignment submissions before deadline.</p></div><div class="card"><h3>🏖 Holidays</h3><p>Check the college notice board for official holidays.</p></div></div>
+    </section>
+
+    <section id="notifications" class="page hidden">
+      <h1>🔔 Smart Notifications</h1><div class="card"><div class="notice urgent">⚠️ Attendance: Cloud Computing is approaching the minimum requirement.</div><div class="notice">📝 ML Assignment due — 18 Aug.</div><div class="notice">🧪 Cloud Quiz — 22 Aug.</div><div class="notice">🎓 Project Review — 28 Aug.</div></div>
+    </section>
+
+    <section id="progress" class="page hidden">
+      <h1>📈 Student Progress</h1><div class="card"><h3>Semester SGPA Progress</h3><div id="progressChart" class="bar-chart"></div></div><div class="grid2"><div class="card"><h3>Strengths</h3><ul class="clean"><li>Consistent semester performance</li><li>Good quiz participation</li><li>Strong project progress</li></ul></div><div class="card"><h3>Improve Next</h3><ul class="clean"><li>Cloud attendance</li><li>Machine Learning Unit 3 revision</li><li>Pending quiz completion</li></ul></div></div></section>
+
+    <section id="risk" class="page hidden">
+      <h1>🔍 Early Academic Risk Detection</h1><p class="muted">A demo AI rule engine combines attendance, quiz and task completion.</p><div id="riskResult"></div>
+    </section>
+
+    <section id="teacher" class="page hidden">
+      <h1>👨‍🏫 Teacher Dashboard</h1><div class="cards"><div class="card stat"><span>Students</span><strong>64</strong></div><div class="card stat"><span>Class Attendance</span><strong>82%</strong></div><div class="card stat"><span>Average Quiz</span><strong>76%</strong></div><div class="card stat"><span>At Risk</span><strong>7</strong></div></div><div class="card form-grid"><input placeholder="Announcement title"><input placeholder="Announcement details"><button class="primary" onclick="teacherAction()">Publish Announcement</button></div><div id="teacherMsg"></div></section>
+  </main>
+</div>
+<script src="app.js"></script>
+</body>
+</html>
