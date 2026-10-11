@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # SmartEdu – Final Multi-College + Signup + AI Edition
 
 SmartEdu is a Flask-based multi-college student academic assistant.
@@ -164,3 +165,7 @@ The included catalog is a public VTU-focused seed for development/testing. VTU's
 ## Final AI setup and app launch
 
 See `SETUP_AI_AND_RUN.txt` for the step-by-step Windows/Edge setup. The visual style uses navy and deep green backgrounds, purple accents, grey buttons, white content cards, and color-coded tables.
+=======
+# Smart-Edu-ChatBot-System
+AI &amp; ML Engineering Student | Python | Machine Learning | Flutter | Building AI-powered applications
+>>>>>>> afd34356df52beb21f62f79396ccc851211d8a37
