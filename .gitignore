@@ -1,0 +1,7 @@
+.env
+smart_edu.db
+__pycache__/
+*.pyc
+.vscode/
+.venv/
+venv/

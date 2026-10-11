@@ -1,0 +1,469 @@
+student_id,college_code,college_name,name,email,usn,branch,semester,mobile,data_type
+1,EE001,Acharya Institute of Technology,Aarav Kumar AY,demo.ay.1@smartedu.local,1AY22AI001,AI,7,,SYNTHETIC_DEMO
+2,EE001,Acharya Institute of Technology,Ananya Patil AY,demo.ay.2@smartedu.local,1AY22CS002,CS,7,,SYNTHETIC_DEMO
+3,EE001,Acharya Institute of Technology,Rahul Shetty AY,demo.ay.3@smartedu.local,1AY22EC003,EC,7,,SYNTHETIC_DEMO
+4,EE002,A.P.S. College of Engineering,Aarav Kumar AP,demo.ap.1@smartedu.local,1AP22AI001,AI,7,,SYNTHETIC_DEMO
+5,EE002,A.P.S. College of Engineering,Ananya Patil AP,demo.ap.2@smartedu.local,1AP22CS002,CS,7,,SYNTHETIC_DEMO
+6,EE002,A.P.S. College of Engineering,Rahul Shetty AP,demo.ap.3@smartedu.local,1AP22EC003,EC,7,,SYNTHETIC_DEMO
+7,EE003,AMC Engineering College,Aarav Kumar AM,demo.am.1@smartedu.local,1AM22AI001,AI,7,,SYNTHETIC_DEMO
+8,EE003,AMC Engineering College,Ananya Patil AM,demo.am.2@smartedu.local,1AM22CS002,CS,7,,SYNTHETIC_DEMO
+9,EE003,AMC Engineering College,Rahul Shetty AM,demo.am.3@smartedu.local,1AM22EC003,EC,7,,SYNTHETIC_DEMO
+10,EE004,Amrutha Institute of Engineering and Management Sciences,Aarav Kumar AR,demo.ar.1@smartedu.local,1AR22AI001,AI,7,,SYNTHETIC_DEMO
+11,EE004,Amrutha Institute of Engineering and Management Sciences,Ananya Patil AR,demo.ar.2@smartedu.local,1AR22CS002,CS,7,,SYNTHETIC_DEMO
+12,EE004,Amrutha Institute of Engineering and Management Sciences,Rahul Shetty AR,demo.ar.3@smartedu.local,1AR22EC003,EC,7,,SYNTHETIC_DEMO
+13,EE005,Atria Institute of Technology,Aarav Kumar AT,demo.at.1@smartedu.local,1AT22AI001,AI,7,,SYNTHETIC_DEMO
+14,EE005,Atria Institute of Technology,Ananya Patil AT,demo.at.2@smartedu.local,1AT22CS002,CS,7,,SYNTHETIC_DEMO
+15,EE005,Atria Institute of Technology,Rahul Shetty AT,demo.at.3@smartedu.local,1AT22EC003,EC,7,,SYNTHETIC_DEMO
+16,EE006,Bengaluru College of Engineering and Technology,Aarav Kumar BC,demo.bc.1@smartedu.local,1BC22AI001,AI,7,,SYNTHETIC_DEMO
+17,EE006,Bengaluru College of Engineering and Technology,Ananya Patil BC,demo.bc.2@smartedu.local,1BC22CS002,CS,7,,SYNTHETIC_DEMO
+18,EE006,Bengaluru College of Engineering and Technology,Rahul Shetty BC,demo.bc.3@smartedu.local,1BC22EC003,EC,7,,SYNTHETIC_DEMO
+19,EE007,Bengaluru Institute of Technology,Aarav Kumar BI,demo.bi.1@smartedu.local,1BI22AI001,AI,7,,SYNTHETIC_DEMO
+20,EE007,Bengaluru Institute of Technology,Ananya Patil BI,demo.bi.2@smartedu.local,1BI22CS002,CS,7,,SYNTHETIC_DEMO
+21,EE007,Bengaluru Institute of Technology,Rahul Shetty BI,demo.bi.3@smartedu.local,1BI22EC003,EC,7,,SYNTHETIC_DEMO
+22,EE008,Brindavan College of Engineering,Aarav Kumar BO,demo.bo.1@smartedu.local,1BO22AI001,AI,7,,SYNTHETIC_DEMO
+23,EE008,Brindavan College of Engineering,Ananya Patil BO,demo.bo.2@smartedu.local,1BO22CS002,CS,7,,SYNTHETIC_DEMO
+24,EE008,Brindavan College of Engineering,Rahul Shetty BO,demo.bo.3@smartedu.local,1BO22EC003,EC,7,,SYNTHETIC_DEMO
+25,EE009,CMR Institute of Technology,Aarav Kumar CR,demo.cr.1@smartedu.local,1CR22AI001,AI,7,,SYNTHETIC_DEMO
+26,EE009,CMR Institute of Technology,Ananya Patil CR,demo.cr.2@smartedu.local,1CR22CS002,CS,7,,SYNTHETIC_DEMO
+27,EE009,CMR Institute of Technology,Rahul Shetty CR,demo.cr.3@smartedu.local,1CR22EC003,EC,7,,SYNTHETIC_DEMO
+28,EE010,Cambridge Institute of Technology,Aarav Kumar CD,demo.cd.1@smartedu.local,1CD22AI001,AI,7,,SYNTHETIC_DEMO
+29,EE010,Cambridge Institute of Technology,Ananya Patil CD,demo.cd.2@smartedu.local,1CD22CS002,CS,7,,SYNTHETIC_DEMO
+30,EE010,Cambridge Institute of Technology,Rahul Shetty CD,demo.cd.3@smartedu.local,1CD22EC003,EC,7,,SYNTHETIC_DEMO
+31,EE011,Channabasaveshwara Institute of Technology,Aarav Kumar CG,demo.cg.1@smartedu.local,1CG22AI001,AI,7,,SYNTHETIC_DEMO
+32,EE011,Channabasaveshwara Institute of Technology,Ananya Patil CG,demo.cg.2@smartedu.local,1CG22CS002,CS,7,,SYNTHETIC_DEMO
+33,EE011,Channabasaveshwara Institute of Technology,Rahul Shetty CG,demo.cg.3@smartedu.local,1CG22EC003,EC,7,,SYNTHETIC_DEMO
+34,EE012,City Engineering College,Aarav Kumar CE,demo.ce.1@smartedu.local,1CE22AI001,AI,7,,SYNTHETIC_DEMO
+35,EE012,City Engineering College,Ananya Patil CE,demo.ce.2@smartedu.local,1CE22CS002,CS,7,,SYNTHETIC_DEMO
+36,EE012,City Engineering College,Rahul Shetty CE,demo.ce.3@smartedu.local,1CE22EC003,EC,7,,SYNTHETIC_DEMO
+37,EE013,CMR Center for Business Studies and CMR Institute of Technology,Aarav Kumar CM,demo.cm.1@smartedu.local,1CM22AI001,AI,7,,SYNTHETIC_DEMO
+38,EE013,CMR Center for Business Studies and CMR Institute of Technology,Ananya Patil CM,demo.cm.2@smartedu.local,1CM22CS002,CS,7,,SYNTHETIC_DEMO
+39,EE013,CMR Center for Business Studies and CMR Institute of Technology,Rahul Shetty CM,demo.cm.3@smartedu.local,1CM22EC003,EC,7,,SYNTHETIC_DEMO
+40,EE014,Dayananda Sagar College of Engineering,Aarav Kumar DS,demo.ds.1@smartedu.local,1DS22AI001,AI,7,,SYNTHETIC_DEMO
+41,EE014,Dayananda Sagar College of Engineering,Ananya Patil DS,demo.ds.2@smartedu.local,1DS22CS002,CS,7,,SYNTHETIC_DEMO
+42,EE014,Dayananda Sagar College of Engineering,Rahul Shetty DS,demo.ds.3@smartedu.local,1DS22EC003,EC,7,,SYNTHETIC_DEMO
+43,EE015,Dayananda Sagar University,Aarav Kumar DSU,demo.dsu.1@smartedu.local,1DS22AI001,AI,7,,SYNTHETIC_DEMO
+44,EE015,Dayananda Sagar University,Ananya Patil DSU,demo.dsu.2@smartedu.local,1DS22CS002,CS,7,,SYNTHETIC_DEMO
+45,EE015,Dayananda Sagar University,Rahul Shetty DSU,demo.dsu.3@smartedu.local,1DS22EC003,EC,7,,SYNTHETIC_DEMO
+46,EE016,East West Institute of Technology,Aarav Kumar EW,demo.ew.1@smartedu.local,1EW22AI001,AI,7,,SYNTHETIC_DEMO
+47,EE016,East West Institute of Technology,Ananya Patil EW,demo.ew.2@smartedu.local,1EW22CS002,CS,7,,SYNTHETIC_DEMO
+48,EE016,East West Institute of Technology,Rahul Shetty EW,demo.ew.3@smartedu.local,1EW22EC003,EC,7,,SYNTHETIC_DEMO
+49,EE017,Gopalan College of Engineering and Management,Aarav Kumar GM,demo.gm.1@smartedu.local,1GM22AI001,AI,7,,SYNTHETIC_DEMO
+50,EE017,Gopalan College of Engineering and Management,Ananya Patil GM,demo.gm.2@smartedu.local,1GM22CS002,CS,7,,SYNTHETIC_DEMO
+51,EE017,Gopalan College of Engineering and Management,Rahul Shetty GM,demo.gm.3@smartedu.local,1GM22EC003,EC,7,,SYNTHETIC_DEMO
+52,EE018,GSSS Institute of Engineering and Technology for Women,Aarav Kumar GSS,demo.gss.1@smartedu.local,1GS22AI001,AI,7,,SYNTHETIC_DEMO
+53,EE018,GSSS Institute of Engineering and Technology for Women,Ananya Patil GSS,demo.gss.2@smartedu.local,1GS22CS002,CS,7,,SYNTHETIC_DEMO
+54,EE018,GSSS Institute of Engineering and Technology for Women,Rahul Shetty GSS,demo.gss.3@smartedu.local,1GS22EC003,EC,7,,SYNTHETIC_DEMO
+55,EE019,Jain Institute of Technology,Aarav Kumar JY,demo.jy.1@smartedu.local,1JY22AI001,AI,7,,SYNTHETIC_DEMO
+56,EE019,Jain Institute of Technology,Ananya Patil JY,demo.jy.2@smartedu.local,1JY22CS002,CS,7,,SYNTHETIC_DEMO
+57,EE019,Jain Institute of Technology,Rahul Shetty JY,demo.jy.3@smartedu.local,1JY22EC003,EC,7,,SYNTHETIC_DEMO
+58,EE020,Jnana Vikas Institute of Technology,Aarav Kumar JV,demo.jv.1@smartedu.local,1JV22AI001,AI,7,,SYNTHETIC_DEMO
+59,EE020,Jnana Vikas Institute of Technology,Ananya Patil JV,demo.jv.2@smartedu.local,1JV22CS002,CS,7,,SYNTHETIC_DEMO
+60,EE020,Jnana Vikas Institute of Technology,Rahul Shetty JV,demo.jv.3@smartedu.local,1JV22EC003,EC,7,,SYNTHETIC_DEMO
+61,EE021,JSS Academy of Technical Education,Aarav Kumar JS,demo.js.1@smartedu.local,1JS22AI001,AI,7,,SYNTHETIC_DEMO
+62,EE021,JSS Academy of Technical Education,Ananya Patil JS,demo.js.2@smartedu.local,1JS22CS002,CS,7,,SYNTHETIC_DEMO
+63,EE021,JSS Academy of Technical Education,Rahul Shetty JS,demo.js.3@smartedu.local,1JS22EC003,EC,7,,SYNTHETIC_DEMO
+64,EE022,K.S. Institute of Technology,Aarav Kumar KS,demo.ks.1@smartedu.local,1KS22AI001,AI,7,,SYNTHETIC_DEMO
+65,EE022,K.S. Institute of Technology,Ananya Patil KS,demo.ks.2@smartedu.local,1KS22CS002,CS,7,,SYNTHETIC_DEMO
+66,EE022,K.S. Institute of Technology,Rahul Shetty KS,demo.ks.3@smartedu.local,1KS22EC003,EC,7,,SYNTHETIC_DEMO
+67,EE023,KNS Institute of Technology,Aarav Kumar KN,demo.kn.1@smartedu.local,1KN22AI001,AI,7,,SYNTHETIC_DEMO
+68,EE023,KNS Institute of Technology,Ananya Patil KN,demo.kn.2@smartedu.local,1KN22CS002,CS,7,,SYNTHETIC_DEMO
+69,EE023,KNS Institute of Technology,Rahul Shetty KN,demo.kn.3@smartedu.local,1KN22EC003,EC,7,,SYNTHETIC_DEMO
+70,EE024,M.S. Engineering College,Aarav Kumar ME,demo.me.1@smartedu.local,1ME22AI001,AI,7,,SYNTHETIC_DEMO
+71,EE024,M.S. Engineering College,Ananya Patil ME,demo.me.2@smartedu.local,1ME22CS002,CS,7,,SYNTHETIC_DEMO
+72,EE024,M.S. Engineering College,Rahul Shetty ME,demo.me.3@smartedu.local,1ME22EC003,EC,7,,SYNTHETIC_DEMO
+73,EE025,The Oxford College of Engineering,Aarav Kumar OX,demo.ox.1@smartedu.local,1OX22AI001,AI,7,,SYNTHETIC_DEMO
+74,EE025,The Oxford College of Engineering,Ananya Patil OX,demo.ox.2@smartedu.local,1OX22CS002,CS,7,,SYNTHETIC_DEMO
+75,EE025,The Oxford College of Engineering,Rahul Shetty OX,demo.ox.3@smartedu.local,1OX22EC003,EC,7,,SYNTHETIC_DEMO
+76,EE026,R.R. Institute of Technology,Aarav Kumar RI,demo.ri.1@smartedu.local,1RI22AI001,AI,7,,SYNTHETIC_DEMO
+77,EE026,R.R. Institute of Technology,Ananya Patil RI,demo.ri.2@smartedu.local,1RI22CS002,CS,7,,SYNTHETIC_DEMO
+78,EE026,R.R. Institute of Technology,Rahul Shetty RI,demo.ri.3@smartedu.local,1RI22EC003,EC,7,,SYNTHETIC_DEMO
+79,EE027,R.L. Jalappa Institute of Technology,Aarav Kumar RL,demo.rl.1@smartedu.local,1RL22AI001,AI,7,,SYNTHETIC_DEMO
+80,EE027,R.L. Jalappa Institute of Technology,Ananya Patil RL,demo.rl.2@smartedu.local,1RL22CS002,CS,7,,SYNTHETIC_DEMO
+81,EE027,R.L. Jalappa Institute of Technology,Rahul Shetty RL,demo.rl.3@smartedu.local,1RL22EC003,EC,7,,SYNTHETIC_DEMO
+82,EE028,Rajarajeswari College of Engineering,Aarav Kumar RR,demo.rr.1@smartedu.local,1RR22AI001,AI,7,,SYNTHETIC_DEMO
+83,EE028,Rajarajeswari College of Engineering,Ananya Patil RR,demo.rr.2@smartedu.local,1RR22CS002,CS,7,,SYNTHETIC_DEMO
+84,EE028,Rajarajeswari College of Engineering,Rahul Shetty RR,demo.rr.3@smartedu.local,1RR22EC003,EC,7,,SYNTHETIC_DEMO
+85,EE029,Rajiv Gandhi Institute of Technology,Aarav Kumar RG,demo.rg.1@smartedu.local,1RG22AI001,AI,7,,SYNTHETIC_DEMO
+86,EE029,Rajiv Gandhi Institute of Technology,Ananya Patil RG,demo.rg.2@smartedu.local,1RG22CS002,CS,7,,SYNTHETIC_DEMO
+87,EE029,Rajiv Gandhi Institute of Technology,Rahul Shetty RG,demo.rg.3@smartedu.local,1RG22EC003,EC,7,,SYNTHETIC_DEMO
+88,EE030,RNS Institute of Technology,Aarav Kumar RN,demo.rn.1@smartedu.local,1RN22AI001,AI,7,,SYNTHETIC_DEMO
+89,EE030,RNS Institute of Technology,Ananya Patil RN,demo.rn.2@smartedu.local,1RN22CS002,CS,7,,SYNTHETIC_DEMO
+90,EE030,RNS Institute of Technology,Rahul Shetty RN,demo.rn.3@smartedu.local,1RN22EC003,EC,7,,SYNTHETIC_DEMO
+91,EE031,Sambhram Institute of Technology,Aarav Kumar SA,demo.sa.1@smartedu.local,1SA22AI001,AI,7,,SYNTHETIC_DEMO
+92,EE031,Sambhram Institute of Technology,Ananya Patil SA,demo.sa.2@smartedu.local,1SA22CS002,CS,7,,SYNTHETIC_DEMO
+93,EE031,Sambhram Institute of Technology,Rahul Shetty SA,demo.sa.3@smartedu.local,1SA22EC003,EC,7,,SYNTHETIC_DEMO
+94,EE032,Sri Krishna Institute of Technology,Aarav Kumar SK,demo.sk.1@smartedu.local,1SK22AI001,AI,7,,SYNTHETIC_DEMO
+95,EE032,Sri Krishna Institute of Technology,Ananya Patil SK,demo.sk.2@smartedu.local,1SK22CS002,CS,7,,SYNTHETIC_DEMO
+96,EE032,Sri Krishna Institute of Technology,Rahul Shetty SK,demo.sk.3@smartedu.local,1SK22EC003,EC,7,,SYNTHETIC_DEMO
+97,EE033,SJB Institute of Technology,Aarav Kumar SJ,demo.sj.1@smartedu.local,1SJ22AI001,AI,7,,SYNTHETIC_DEMO
+98,EE033,SJB Institute of Technology,Ananya Patil SJ,demo.sj.2@smartedu.local,1SJ22CS002,CS,7,,SYNTHETIC_DEMO
+99,EE033,SJB Institute of Technology,Rahul Shetty SJ,demo.sj.3@smartedu.local,1SJ22EC003,EC,7,,SYNTHETIC_DEMO
+100,EE034,Sir M. Visvesvaraya Institute of Technology,Aarav Kumar SM,demo.sm.1@smartedu.local,1SM22AI001,AI,7,,SYNTHETIC_DEMO
+101,EE034,Sir M. Visvesvaraya Institute of Technology,Ananya Patil SM,demo.sm.2@smartedu.local,1SM22CS002,CS,7,,SYNTHETIC_DEMO
+102,EE034,Sir M. Visvesvaraya Institute of Technology,Rahul Shetty SM,demo.sm.3@smartedu.local,1SM22EC003,EC,7,,SYNTHETIC_DEMO
+103,EE035,Sri Venkateshwara College of Engineering,Aarav Kumar SV,demo.sv.1@smartedu.local,1SV22AI001,AI,7,,SYNTHETIC_DEMO
+104,EE035,Sri Venkateshwara College of Engineering,Ananya Patil SV,demo.sv.2@smartedu.local,1SV22CS002,CS,7,,SYNTHETIC_DEMO
+105,EE035,Sri Venkateshwara College of Engineering,Rahul Shetty SV,demo.sv.3@smartedu.local,1SV22EC003,EC,7,,SYNTHETIC_DEMO
+106,EE036,Vemana Institute of Technology,Aarav Kumar VT,demo.vt.1@smartedu.local,1VT22AI001,AI,7,,SYNTHETIC_DEMO
+107,EE036,Vemana Institute of Technology,Ananya Patil VT,demo.vt.2@smartedu.local,1VT22CS002,CS,7,,SYNTHETIC_DEMO
+108,EE036,Vemana Institute of Technology,Rahul Shetty VT,demo.vt.3@smartedu.local,1VT22EC003,EC,7,,SYNTHETIC_DEMO
+109,EE037,B.N.M. Institute of Technology,Aarav Kumar BN,demo.bn.1@smartedu.local,1BN22AI001,AI,7,,SYNTHETIC_DEMO
+110,EE037,B.N.M. Institute of Technology,Ananya Patil BN,demo.bn.2@smartedu.local,1BN22CS002,CS,7,,SYNTHETIC_DEMO
+111,EE037,B.N.M. Institute of Technology,Rahul Shetty BN,demo.bn.3@smartedu.local,1BN22EC003,EC,7,,SYNTHETIC_DEMO
+112,EE038,Bangalore Institute of Technology,Aarav Kumar BIT,demo.bit.1@smartedu.local,1BI22AI001,AI,7,,SYNTHETIC_DEMO
+113,EE038,Bangalore Institute of Technology,Ananya Patil BIT,demo.bit.2@smartedu.local,1BI22CS002,CS,7,,SYNTHETIC_DEMO
+114,EE038,Bangalore Institute of Technology,Rahul Shetty BIT,demo.bit.3@smartedu.local,1BI22EC003,EC,7,,SYNTHETIC_DEMO
+115,EE039,B.M.S. College of Engineering,Aarav Kumar BMS,demo.bms.1@smartedu.local,1BM22AI001,AI,7,,SYNTHETIC_DEMO
+116,EE039,B.M.S. College of Engineering,Ananya Patil BMS,demo.bms.2@smartedu.local,1BM22CS002,CS,7,,SYNTHETIC_DEMO
+117,EE039,B.M.S. College of Engineering,Rahul Shetty BMS,demo.bms.3@smartedu.local,1BM22EC003,EC,7,,SYNTHETIC_DEMO
+118,EE040,BMS Institute of Technology and Management,Aarav Kumar BMSI,demo.bmsi.1@smartedu.local,1BM22AI001,AI,7,,SYNTHETIC_DEMO
+119,EE040,BMS Institute of Technology and Management,Ananya Patil BMSI,demo.bmsi.2@smartedu.local,1BM22CS002,CS,7,,SYNTHETIC_DEMO
+120,EE040,BMS Institute of Technology and Management,Rahul Shetty BMSI,demo.bmsi.3@smartedu.local,1BM22EC003,EC,7,,SYNTHETIC_DEMO
+121,EE041,Ballari Institute of Technology and Management,Aarav Kumar BITM,demo.bitm.1@smartedu.local,1BI22AI001,AI,7,,SYNTHETIC_DEMO
+122,EE041,Ballari Institute of Technology and Management,Ananya Patil BITM,demo.bitm.2@smartedu.local,1BI22CS002,CS,7,,SYNTHETIC_DEMO
+123,EE041,Ballari Institute of Technology and Management,Rahul Shetty BITM,demo.bitm.3@smartedu.local,1BI22EC003,EC,7,,SYNTHETIC_DEMO
+124,EE042,Bapuji Institute of Engineering and Technology,Aarav Kumar BIET,demo.biet.1@smartedu.local,1BI22AI001,AI,7,,SYNTHETIC_DEMO
+125,EE042,Bapuji Institute of Engineering and Technology,Ananya Patil BIET,demo.biet.2@smartedu.local,1BI22CS002,CS,7,,SYNTHETIC_DEMO
+126,EE042,Bapuji Institute of Engineering and Technology,Rahul Shetty BIET,demo.biet.3@smartedu.local,1BI22EC003,EC,7,,SYNTHETIC_DEMO
+127,EE043,Bheema​nna Khandre Institute of Technology,Aarav Kumar BK,demo.bk.1@smartedu.local,1BK22AI001,AI,7,,SYNTHETIC_DEMO
+128,EE043,Bheema​nna Khandre Institute of Technology,Ananya Patil BK,demo.bk.2@smartedu.local,1BK22CS002,CS,7,,SYNTHETIC_DEMO
+129,EE043,Bheema​nna Khandre Institute of Technology,Rahul Shetty BK,demo.bk.3@smartedu.local,1BK22EC003,EC,7,,SYNTHETIC_DEMO
+130,EE044,BLDEA’s V.P. Dr. P.G. Halakatti College of Engineering and Technology,Aarav Kumar BL,demo.bl.1@smartedu.local,1BL22AI001,AI,7,,SYNTHETIC_DEMO
+131,EE044,BLDEA’s V.P. Dr. P.G. Halakatti College of Engineering and Technology,Ananya Patil BL,demo.bl.2@smartedu.local,1BL22CS002,CS,7,,SYNTHETIC_DEMO
+132,EE044,BLDEA’s V.P. Dr. P.G. Halakatti College of Engineering and Technology,Rahul Shetty BL,demo.bl.3@smartedu.local,1BL22EC003,EC,7,,SYNTHETIC_DEMO
+133,EE045,Government Engineering College Haveri,Aarav Kumar GEH,demo.geh.1@smartedu.local,1GE22AI001,AI,7,,SYNTHETIC_DEMO
+134,EE045,Government Engineering College Haveri,Ananya Patil GEH,demo.geh.2@smartedu.local,1GE22CS002,CS,7,,SYNTHETIC_DEMO
+135,EE045,Government Engineering College Haveri,Rahul Shetty GEH,demo.geh.3@smartedu.local,1GE22EC003,EC,7,,SYNTHETIC_DEMO
+136,EE046,Government Engineering College Bidar,Aarav Kumar GEB,demo.geb.1@smartedu.local,1GE22AI001,AI,7,,SYNTHETIC_DEMO
+137,EE046,Government Engineering College Bidar,Ananya Patil GEB,demo.geb.2@smartedu.local,1GE22CS002,CS,7,,SYNTHETIC_DEMO
+138,EE046,Government Engineering College Bidar,Rahul Shetty GEB,demo.geb.3@smartedu.local,1GE22EC003,EC,7,,SYNTHETIC_DEMO
+139,EE047,Government Engineering College Raichur,Aarav Kumar GER,demo.ger.1@smartedu.local,1GE22AI001,AI,7,,SYNTHETIC_DEMO
+140,EE047,Government Engineering College Raichur,Ananya Patil GER,demo.ger.2@smartedu.local,1GE22CS002,CS,7,,SYNTHETIC_DEMO
+141,EE047,Government Engineering College Raichur,Rahul Shetty GER,demo.ger.3@smartedu.local,1GE22EC003,EC,7,,SYNTHETIC_DEMO
+142,EE048,Government Engineering College Gangavathi,Aarav Kumar GEG,demo.geg.1@smartedu.local,1GE22AI001,AI,7,,SYNTHETIC_DEMO
+143,EE048,Government Engineering College Gangavathi,Ananya Patil GEG,demo.geg.2@smartedu.local,1GE22CS002,CS,7,,SYNTHETIC_DEMO
+144,EE048,Government Engineering College Gangavathi,Rahul Shetty GEG,demo.geg.3@smartedu.local,1GE22EC003,EC,7,,SYNTHETIC_DEMO
+145,EE049,Government Engineering College Karwar,Aarav Kumar GEK,demo.gek.1@smartedu.local,1GE22AI001,AI,7,,SYNTHETIC_DEMO
+146,EE049,Government Engineering College Karwar,Ananya Patil GEK,demo.gek.2@smartedu.local,1GE22CS002,CS,7,,SYNTHETIC_DEMO
+147,EE049,Government Engineering College Karwar,Rahul Shetty GEK,demo.gek.3@smartedu.local,1GE22EC003,EC,7,,SYNTHETIC_DEMO
+148,EE050,Government Engineering College Talakal,Aarav Kumar GET,demo.get.1@smartedu.local,1GE22AI001,AI,7,,SYNTHETIC_DEMO
+149,EE050,Government Engineering College Talakal,Ananya Patil GET,demo.get.2@smartedu.local,1GE22CS002,CS,7,,SYNTHETIC_DEMO
+150,EE050,Government Engineering College Talakal,Rahul Shetty GET,demo.get.3@smartedu.local,1GE22EC003,EC,7,,SYNTHETIC_DEMO
+151,EE051,Government Engineering College Chamarajanagar,Aarav Kumar GEC,demo.gec.1@smartedu.local,1GE22AI001,AI,7,,SYNTHETIC_DEMO
+152,EE051,Government Engineering College Chamarajanagar,Ananya Patil GEC,demo.gec.2@smartedu.local,1GE22CS002,CS,7,,SYNTHETIC_DEMO
+153,EE051,Government Engineering College Chamarajanagar,Rahul Shetty GEC,demo.gec.3@smartedu.local,1GE22EC003,EC,7,,SYNTHETIC_DEMO
+154,EE052,Government Engineering College Hassan,Aarav Kumar GEHS,demo.gehs.1@smartedu.local,1GE22AI001,AI,7,,SYNTHETIC_DEMO
+155,EE052,Government Engineering College Hassan,Ananya Patil GEHS,demo.gehs.2@smartedu.local,1GE22CS002,CS,7,,SYNTHETIC_DEMO
+156,EE052,Government Engineering College Hassan,Rahul Shetty GEHS,demo.gehs.3@smartedu.local,1GE22EC003,EC,7,,SYNTHETIC_DEMO
+157,EE053,Government Engineering College Kushalnagar,Aarav Kumar GEKN,demo.gekn.1@smartedu.local,1GE22AI001,AI,7,,SYNTHETIC_DEMO
+158,EE053,Government Engineering College Kushalnagar,Ananya Patil GEKN,demo.gekn.2@smartedu.local,1GE22CS002,CS,7,,SYNTHETIC_DEMO
+159,EE053,Government Engineering College Kushalnagar,Rahul Shetty GEKN,demo.gekn.3@smartedu.local,1GE22EC003,EC,7,,SYNTHETIC_DEMO
+160,EE054,Government Engineering College Mandya,Aarav Kumar GEM,demo.gem.1@smartedu.local,1GE22AI001,AI,7,,SYNTHETIC_DEMO
+161,EE054,Government Engineering College Mandya,Ananya Patil GEM,demo.gem.2@smartedu.local,1GE22CS002,CS,7,,SYNTHETIC_DEMO
+162,EE054,Government Engineering College Mandya,Rahul Shetty GEM,demo.gem.3@smartedu.local,1GE22EC003,EC,7,,SYNTHETIC_DEMO
+163,EE055,Guru Nanak Dev Engineering College,Aarav Kumar GND,demo.gnd.1@smartedu.local,1GN22AI001,AI,7,,SYNTHETIC_DEMO
+164,EE055,Guru Nanak Dev Engineering College,Ananya Patil GND,demo.gnd.2@smartedu.local,1GN22CS002,CS,7,,SYNTHETIC_DEMO
+165,EE055,Guru Nanak Dev Engineering College,Rahul Shetty GND,demo.gnd.3@smartedu.local,1GN22EC003,EC,7,,SYNTHETIC_DEMO
+166,EE056,K.C.T. Engineering College,Aarav Kumar KCT,demo.kct.1@smartedu.local,1KC22AI001,AI,7,,SYNTHETIC_DEMO
+167,EE056,K.C.T. Engineering College,Ananya Patil KCT,demo.kct.2@smartedu.local,1KC22CS002,CS,7,,SYNTHETIC_DEMO
+168,EE056,K.C.T. Engineering College,Rahul Shetty KCT,demo.kct.3@smartedu.local,1KC22EC003,EC,7,,SYNTHETIC_DEMO
+169,EE057,Khaja Banda Nawaz College of Engineering,Aarav Kumar KB,demo.kb.1@smartedu.local,1KB22AI001,AI,7,,SYNTHETIC_DEMO
+170,EE057,Khaja Banda Nawaz College of Engineering,Ananya Patil KB,demo.kb.2@smartedu.local,1KB22CS002,CS,7,,SYNTHETIC_DEMO
+171,EE057,Khaja Banda Nawaz College of Engineering,Rahul Shetty KB,demo.kb.3@smartedu.local,1KB22EC003,EC,7,,SYNTHETIC_DEMO
+172,EE058,Navodaya Institute of Technology,Aarav Kumar NA,demo.na.1@smartedu.local,1NA22AI001,AI,7,,SYNTHETIC_DEMO
+173,EE058,Navodaya Institute of Technology,Ananya Patil NA,demo.na.2@smartedu.local,1NA22CS002,CS,7,,SYNTHETIC_DEMO
+174,EE058,Navodaya Institute of Technology,Rahul Shetty NA,demo.na.3@smartedu.local,1NA22EC003,EC,7,,SYNTHETIC_DEMO
+175,EE059,Proudadevaraya Institute of Technology,Aarav Kumar PDIT,demo.pdit.1@smartedu.local,1PD22AI001,AI,7,,SYNTHETIC_DEMO
+176,EE059,Proudadevaraya Institute of Technology,Ananya Patil PDIT,demo.pdit.2@smartedu.local,1PD22CS002,CS,7,,SYNTHETIC_DEMO
+177,EE059,Proudadevaraya Institute of Technology,Rahul Shetty PDIT,demo.pdit.3@smartedu.local,1PD22EC003,EC,7,,SYNTHETIC_DEMO
+178,EE060,Rao Bahadur Y. Mahabaleswarappa Engineering College,Aarav Kumar RYM,demo.rym.1@smartedu.local,1RY22AI001,AI,7,,SYNTHETIC_DEMO
+179,EE060,Rao Bahadur Y. Mahabaleswarappa Engineering College,Ananya Patil RYM,demo.rym.2@smartedu.local,1RY22CS002,CS,7,,SYNTHETIC_DEMO
+180,EE060,Rao Bahadur Y. Mahabaleswarappa Engineering College,Rahul Shetty RYM,demo.rym.3@smartedu.local,1RY22EC003,EC,7,,SYNTHETIC_DEMO
+181,EE061,H.K.E. Society’s Sir M Visvesvaraya College of Engineering,Aarav Kumar SL,demo.sl.1@smartedu.local,1SL22AI001,AI,7,,SYNTHETIC_DEMO
+182,EE061,H.K.E. Society’s Sir M Visvesvaraya College of Engineering,Ananya Patil SL,demo.sl.2@smartedu.local,1SL22CS002,CS,7,,SYNTHETIC_DEMO
+183,EE061,H.K.E. Society’s Sir M Visvesvaraya College of Engineering,Rahul Shetty SL,demo.sl.3@smartedu.local,1SL22EC003,EC,7,,SYNTHETIC_DEMO
+184,EE062,Veerappa Nisty Engineering College,Aarav Kumar VN,demo.vn.1@smartedu.local,1VN22AI001,AI,7,,SYNTHETIC_DEMO
+185,EE062,Veerappa Nisty Engineering College,Ananya Patil VN,demo.vn.2@smartedu.local,1VN22CS002,CS,7,,SYNTHETIC_DEMO
+186,EE062,Veerappa Nisty Engineering College,Rahul Shetty VN,demo.vn.3@smartedu.local,1VN22EC003,EC,7,,SYNTHETIC_DEMO
+187,EE063,Lingaraj Appa Engineering College,Aarav Kumar LA,demo.la.1@smartedu.local,1LA22AI001,AI,7,,SYNTHETIC_DEMO
+188,EE063,Lingaraj Appa Engineering College,Ananya Patil LA,demo.la.2@smartedu.local,1LA22CS002,CS,7,,SYNTHETIC_DEMO
+189,EE063,Lingaraj Appa Engineering College,Rahul Shetty LA,demo.la.3@smartedu.local,1LA22EC003,EC,7,,SYNTHETIC_DEMO
+190,EE064,Godutai Engineering College for Women,Aarav Kumar GF,demo.gf.1@smartedu.local,1GF22AI001,AI,7,,SYNTHETIC_DEMO
+191,EE064,Godutai Engineering College for Women,Ananya Patil GF,demo.gf.2@smartedu.local,1GF22CS002,CS,7,,SYNTHETIC_DEMO
+192,EE064,Godutai Engineering College for Women,Rahul Shetty GF,demo.gf.3@smartedu.local,1GF22EC003,EC,7,,SYNTHETIC_DEMO
+193,EE065,Shetty Institute of Technology,Aarav Kumar TS,demo.ts.1@smartedu.local,1TS22AI001,AI,7,,SYNTHETIC_DEMO
+194,EE065,Shetty Institute of Technology,Ananya Patil TS,demo.ts.2@smartedu.local,1TS22CS002,CS,7,,SYNTHETIC_DEMO
+195,EE065,Shetty Institute of Technology,Rahul Shetty TS,demo.ts.3@smartedu.local,1TS22EC003,EC,7,,SYNTHETIC_DEMO
+196,EE066,Angadi Institute of Technology and Management,Aarav Kumar AG,demo.ag.1@smartedu.local,1AG22AI001,AI,7,,SYNTHETIC_DEMO
+197,EE066,Angadi Institute of Technology and Management,Ananya Patil AG,demo.ag.2@smartedu.local,1AG22CS002,CS,7,,SYNTHETIC_DEMO
+198,EE066,Angadi Institute of Technology and Management,Rahul Shetty AG,demo.ag.3@smartedu.local,1AG22EC003,EC,7,,SYNTHETIC_DEMO
+199,EE067,Anjuman Institute of Technology and Management,Aarav Kumar AB,demo.ab.1@smartedu.local,1AB22AI001,AI,7,,SYNTHETIC_DEMO
+200,EE067,Anjuman Institute of Technology and Management,Ananya Patil AB,demo.ab.2@smartedu.local,1AB22CS002,CS,7,,SYNTHETIC_DEMO
+201,EE067,Anjuman Institute of Technology and Management,Rahul Shetty AB,demo.ab.3@smartedu.local,1AB22EC003,EC,7,,SYNTHETIC_DEMO
+202,EE068,BLDE Association’s College of Engineering,Aarav Kumar BLD,demo.bld.1@smartedu.local,1BL22AI001,AI,7,,SYNTHETIC_DEMO
+203,EE068,BLDE Association’s College of Engineering,Ananya Patil BLD,demo.bld.2@smartedu.local,1BL22CS002,CS,7,,SYNTHETIC_DEMO
+204,EE068,BLDE Association’s College of Engineering,Rahul Shetty BLD,demo.bld.3@smartedu.local,1BL22EC003,EC,7,,SYNTHETIC_DEMO
+205,EE069,Hirasugar Institute of Technology,Aarav Kumar HN,demo.hn.1@smartedu.local,1HN22AI001,AI,7,,SYNTHETIC_DEMO
+206,EE069,Hirasugar Institute of Technology,Ananya Patil HN,demo.hn.2@smartedu.local,1HN22CS002,CS,7,,SYNTHETIC_DEMO
+207,EE069,Hirasugar Institute of Technology,Rahul Shetty HN,demo.hn.3@smartedu.local,1HN22EC003,EC,7,,SYNTHETIC_DEMO
+208,EE070,KLE College of Engineering and Technology,Aarav Kumar KD,demo.kd.1@smartedu.local,1KD22AI001,AI,7,,SYNTHETIC_DEMO
+209,EE070,KLE College of Engineering and Technology,Ananya Patil KD,demo.kd.2@smartedu.local,1KD22CS002,CS,7,,SYNTHETIC_DEMO
+210,EE070,KLE College of Engineering and Technology,Rahul Shetty KD,demo.kd.3@smartedu.local,1KD22EC003,EC,7,,SYNTHETIC_DEMO
+211,EE071,KLE Institute of Technology,Aarav Kumar KE,demo.ke.1@smartedu.local,1KE22AI001,AI,7,,SYNTHETIC_DEMO
+212,EE071,KLE Institute of Technology,Ananya Patil KE,demo.ke.2@smartedu.local,1KE22CS002,CS,7,,SYNTHETIC_DEMO
+213,EE071,KLE Institute of Technology,Rahul Shetty KE,demo.ke.3@smartedu.local,1KE22EC003,EC,7,,SYNTHETIC_DEMO
+214,EE072,KLE Dr. M.S. Sheshgiri College of Engineering and Technology,Aarav Kumar KL,demo.kl.1@smartedu.local,1KL22AI001,AI,7,,SYNTHETIC_DEMO
+215,EE072,KLE Dr. M.S. Sheshgiri College of Engineering and Technology,Ananya Patil KL,demo.kl.2@smartedu.local,1KL22CS002,CS,7,,SYNTHETIC_DEMO
+216,EE072,KLE Dr. M.S. Sheshgiri College of Engineering and Technology,Rahul Shetty KL,demo.kl.3@smartedu.local,1KL22EC003,EC,7,,SYNTHETIC_DEMO
+217,EE073,Maratha Mandal Engineering College,Aarav Kumar MM,demo.mm.1@smartedu.local,1MM22AI001,AI,7,,SYNTHETIC_DEMO
+218,EE073,Maratha Mandal Engineering College,Ananya Patil MM,demo.mm.2@smartedu.local,1MM22CS002,CS,7,,SYNTHETIC_DEMO
+219,EE073,Maratha Mandal Engineering College,Rahul Shetty MM,demo.mm.3@smartedu.local,1MM22EC003,EC,7,,SYNTHETIC_DEMO
+220,EE074,Rural Engineering College,Aarav Kumar RH,demo.rh.1@smartedu.local,1RH22AI001,AI,7,,SYNTHETIC_DEMO
+221,EE074,Rural Engineering College,Ananya Patil RH,demo.rh.2@smartedu.local,1RH22CS002,CS,7,,SYNTHETIC_DEMO
+222,EE074,Rural Engineering College,Rahul Shetty RH,demo.rh.3@smartedu.local,1RH22EC003,EC,7,,SYNTHETIC_DEMO
+223,EE075,S.G. Balekundri Institute of Technology,Aarav Kumar BU,demo.bu.1@smartedu.local,1BU22AI001,AI,7,,SYNTHETIC_DEMO
+224,EE075,S.G. Balekundri Institute of Technology,Ananya Patil BU,demo.bu.2@smartedu.local,1BU22CS002,CS,7,,SYNTHETIC_DEMO
+225,EE075,S.G. Balekundri Institute of Technology,Rahul Shetty BU,demo.bu.3@smartedu.local,1BU22EC003,EC,7,,SYNTHETIC_DEMO
+226,EE076,S.T.J. Institute of Technology,Aarav Kumar SR,demo.sr.1@smartedu.local,1SR22AI001,AI,7,,SYNTHETIC_DEMO
+227,EE076,S.T.J. Institute of Technology,Ananya Patil SR,demo.sr.2@smartedu.local,1SR22CS002,CS,7,,SYNTHETIC_DEMO
+228,EE076,S.T.J. Institute of Technology,Rahul Shetty SR,demo.sr.3@smartedu.local,1SR22EC003,EC,7,,SYNTHETIC_DEMO
+229,EE077,Sri Tontadarya College of Engineering,Aarav Kumar TG,demo.tg.1@smartedu.local,1TG22AI001,AI,7,,SYNTHETIC_DEMO
+230,EE077,Sri Tontadarya College of Engineering,Ananya Patil TG,demo.tg.2@smartedu.local,1TG22CS002,CS,7,,SYNTHETIC_DEMO
+231,EE077,Sri Tontadarya College of Engineering,Rahul Shetty TG,demo.tg.3@smartedu.local,1TG22EC003,EC,7,,SYNTHETIC_DEMO
+232,EE078,Vishwanathrao Deshpande Institute of Technology,Aarav Kumar VD,demo.vd.1@smartedu.local,1VD22AI001,AI,7,,SYNTHETIC_DEMO
+233,EE078,Vishwanathrao Deshpande Institute of Technology,Ananya Patil VD,demo.vd.2@smartedu.local,1VD22CS002,CS,7,,SYNTHETIC_DEMO
+234,EE078,Vishwanathrao Deshpande Institute of Technology,Rahul Shetty VD,demo.vd.3@smartedu.local,1VD22EC003,EC,7,,SYNTHETIC_DEMO
+235,EE079,Jain College of Engineering,Aarav Kumar JI,demo.ji.1@smartedu.local,1JI22AI001,AI,7,,SYNTHETIC_DEMO
+236,EE079,Jain College of Engineering,Ananya Patil JI,demo.ji.2@smartedu.local,1JI22CS002,CS,7,,SYNTHETIC_DEMO
+237,EE079,Jain College of Engineering,Rahul Shetty JI,demo.ji.3@smartedu.local,1JI22EC003,EC,7,,SYNTHETIC_DEMO
+238,EE080,V.S.M.’s Institute of Technology,Aarav Kumar VSM,demo.vsm.1@smartedu.local,1VS22AI001,AI,7,,SYNTHETIC_DEMO
+239,EE080,V.S.M.’s Institute of Technology,Ananya Patil VSM,demo.vsm.2@smartedu.local,1VS22CS002,CS,7,,SYNTHETIC_DEMO
+240,EE080,V.S.M.’s Institute of Technology,Rahul Shetty VSM,demo.vsm.3@smartedu.local,1VS22EC003,EC,7,,SYNTHETIC_DEMO
+241,EE081,AGM Rural College of Engineering and Technology,Aarav Kumar AV,demo.av.1@smartedu.local,1AV22AI001,AI,7,,SYNTHETIC_DEMO
+242,EE081,AGM Rural College of Engineering and Technology,Ananya Patil AV,demo.av.2@smartedu.local,1AV22CS002,CS,7,,SYNTHETIC_DEMO
+243,EE081,AGM Rural College of Engineering and Technology,Rahul Shetty AV,demo.av.3@smartedu.local,1AV22EC003,EC,7,,SYNTHETIC_DEMO
+244,EE082,Grijabai Sail Institute of Technology,Aarav Kumar GJ,demo.gj.1@smartedu.local,1GJ22AI001,AI,7,,SYNTHETIC_DEMO
+245,EE082,Grijabai Sail Institute of Technology,Ananya Patil GJ,demo.gj.2@smartedu.local,1GJ22CS002,CS,7,,SYNTHETIC_DEMO
+246,EE082,Grijabai Sail Institute of Technology,Rahul Shetty GJ,demo.gj.3@smartedu.local,1GJ22EC003,EC,7,,SYNTHETIC_DEMO
+247,EE083,Biluru Gurubasava Mahaswamiji Institute of Technology,Aarav Kumar LB,demo.lb.1@smartedu.local,1LB22AI001,AI,7,,SYNTHETIC_DEMO
+248,EE083,Biluru Gurubasava Mahaswamiji Institute of Technology,Ananya Patil LB,demo.lb.2@smartedu.local,1LB22CS002,CS,7,,SYNTHETIC_DEMO
+249,EE083,Biluru Gurubasava Mahaswamiji Institute of Technology,Rahul Shetty LB,demo.lb.3@smartedu.local,1LB22EC003,EC,7,,SYNTHETIC_DEMO
+250,EE084,Basava Engineering School of Technology,Aarav Kumar VL,demo.vl.1@smartedu.local,1VL22AI001,AI,7,,SYNTHETIC_DEMO
+251,EE084,Basava Engineering School of Technology,Ananya Patil VL,demo.vl.2@smartedu.local,1VL22CS002,CS,7,,SYNTHETIC_DEMO
+252,EE084,Basava Engineering School of Technology,Rahul Shetty VL,demo.vl.3@smartedu.local,1VL22EC003,EC,7,,SYNTHETIC_DEMO
+253,EE085,Jain College of Engineering Hubballi,Aarav Kumar JCH,demo.jch.1@smartedu.local,1JC22AI001,AI,7,,SYNTHETIC_DEMO
+254,EE085,Jain College of Engineering Hubballi,Ananya Patil JCH,demo.jch.2@smartedu.local,1JC22CS002,CS,7,,SYNTHETIC_DEMO
+255,EE085,Jain College of Engineering Hubballi,Rahul Shetty JCH,demo.jch.3@smartedu.local,1JC22EC003,EC,7,,SYNTHETIC_DEMO
+256,EE086,Jain College of Engineering and Research,Aarav Kumar JR,demo.jr.1@smartedu.local,1JR22AI001,AI,7,,SYNTHETIC_DEMO
+257,EE086,Jain College of Engineering and Research,Ananya Patil JR,demo.jr.2@smartedu.local,1JR22CS002,CS,7,,SYNTHETIC_DEMO
+258,EE086,Jain College of Engineering and Research,Rahul Shetty JR,demo.jr.3@smartedu.local,1JR22EC003,EC,7,,SYNTHETIC_DEMO
+259,EE087,UBDT College of Engineering,Aarav Kumar UB,demo.ub.1@smartedu.local,1UB22AI001,AI,7,,SYNTHETIC_DEMO
+260,EE087,UBDT College of Engineering,Ananya Patil UB,demo.ub.2@smartedu.local,1UB22CS002,CS,7,,SYNTHETIC_DEMO
+261,EE087,UBDT College of Engineering,Rahul Shetty UB,demo.ub.3@smartedu.local,1UB22EC003,EC,7,,SYNTHETIC_DEMO
+262,EE088,G.M. Institute of Technology,Aarav Kumar GMIT,demo.gmit.1@smartedu.local,1GM22AI001,AI,7,,SYNTHETIC_DEMO
+263,EE088,G.M. Institute of Technology,Ananya Patil GMIT,demo.gmit.2@smartedu.local,1GM22CS002,CS,7,,SYNTHETIC_DEMO
+264,EE088,G.M. Institute of Technology,Rahul Shetty GMIT,demo.gmit.3@smartedu.local,1GM22EC003,EC,7,,SYNTHETIC_DEMO
+265,EE089,GEC University/Engineering College region campus,Aarav Kumar GEU,demo.geu.1@smartedu.local,1GE22AI001,AI,7,,SYNTHETIC_DEMO
+266,EE089,GEC University/Engineering College region campus,Ananya Patil GEU,demo.geu.2@smartedu.local,1GE22CS002,CS,7,,SYNTHETIC_DEMO
+267,EE089,GEC University/Engineering College region campus,Rahul Shetty GEU,demo.geu.3@smartedu.local,1GE22EC003,EC,7,,SYNTHETIC_DEMO
+268,EE090,Adichunchanagiri Institute of Technology,Aarav Kumar AI,demo.ai.1@smartedu.local,1AI22AI001,AI,7,,SYNTHETIC_DEMO
+269,EE090,Adichunchanagiri Institute of Technology,Ananya Patil AI,demo.ai.2@smartedu.local,1AI22CS002,CS,7,,SYNTHETIC_DEMO
+270,EE090,Adichunchanagiri Institute of Technology,Rahul Shetty AI,demo.ai.3@smartedu.local,1AI22EC003,EC,7,,SYNTHETIC_DEMO
+271,EE091,Alva’s Institute of Engineering and Technology,Aarav Kumar AL,demo.al.1@smartedu.local,1AL22AI001,AI,7,,SYNTHETIC_DEMO
+272,EE091,Alva’s Institute of Engineering and Technology,Ananya Patil AL,demo.al.2@smartedu.local,1AL22CS002,CS,7,,SYNTHETIC_DEMO
+273,EE091,Alva’s Institute of Engineering and Technology,Rahul Shetty AL,demo.al.3@smartedu.local,1AL22EC003,EC,7,,SYNTHETIC_DEMO
+274,EE092,Bahubali College of Engineering,Aarav Kumar BB,demo.bb.1@smartedu.local,1BB22AI001,AI,7,,SYNTHETIC_DEMO
+275,EE092,Bahubali College of Engineering,Ananya Patil BB,demo.bb.2@smartedu.local,1BB22CS002,CS,7,,SYNTHETIC_DEMO
+276,EE092,Bahubali College of Engineering,Rahul Shetty BB,demo.bb.3@smartedu.local,1BB22EC003,EC,7,,SYNTHETIC_DEMO
+277,EE093,Bearys Institute of Technology,Aarav Kumar BP,demo.bp.1@smartedu.local,1BP22AI001,AI,7,,SYNTHETIC_DEMO
+278,EE093,Bearys Institute of Technology,Ananya Patil BP,demo.bp.2@smartedu.local,1BP22CS002,CS,7,,SYNTHETIC_DEMO
+279,EE093,Bearys Institute of Technology,Rahul Shetty BP,demo.bp.3@smartedu.local,1BP22EC003,EC,7,,SYNTHETIC_DEMO
+280,EE094,Canara Engineering College,Aarav Kumar CB,demo.cb.1@smartedu.local,1CB22AI001,AI,7,,SYNTHETIC_DEMO
+281,EE094,Canara Engineering College,Ananya Patil CB,demo.cb.2@smartedu.local,1CB22CS002,CS,7,,SYNTHETIC_DEMO
+282,EE094,Canara Engineering College,Rahul Shetty CB,demo.cb.3@smartedu.local,1CB22EC003,EC,7,,SYNTHETIC_DEMO
+283,EE095,Coorg Institute of Technology,Aarav Kumar CI,demo.ci.1@smartedu.local,1CI22AI001,AI,7,,SYNTHETIC_DEMO
+284,EE095,Coorg Institute of Technology,Ananya Patil CI,demo.ci.2@smartedu.local,1CI22CS002,CS,7,,SYNTHETIC_DEMO
+285,EE095,Coorg Institute of Technology,Rahul Shetty CI,demo.ci.3@smartedu.local,1CI22EC003,EC,7,,SYNTHETIC_DEMO
+286,EE096,Vidya Vikas Institute of Engineering and Technology,Aarav Kumar VM,demo.vm.1@smartedu.local,1VM22AI001,AI,7,,SYNTHETIC_DEMO
+287,EE096,Vidya Vikas Institute of Engineering and Technology,Ananya Patil VM,demo.vm.2@smartedu.local,1VM22CS002,CS,7,,SYNTHETIC_DEMO
+288,EE096,Vidya Vikas Institute of Engineering and Technology,Rahul Shetty VM,demo.vm.3@smartedu.local,1VM22EC003,EC,7,,SYNTHETIC_DEMO
+289,EE097,Vivekananda College of Engineering and Technology,Aarav Kumar VP,demo.vp.1@smartedu.local,1VP22AI001,AI,7,,SYNTHETIC_DEMO
+290,EE097,Vivekananda College of Engineering and Technology,Ananya Patil VP,demo.vp.2@smartedu.local,1VP22CS002,CS,7,,SYNTHETIC_DEMO
+291,EE097,Vivekananda College of Engineering and Technology,Rahul Shetty VP,demo.vp.3@smartedu.local,1VP22EC003,EC,7,,SYNTHETIC_DEMO
+292,EE098,Navkis College of Engineering Hassan,Aarav Kumar YG,demo.yg.1@smartedu.local,1YG22AI001,AI,7,,SYNTHETIC_DEMO
+293,EE098,Navkis College of Engineering Hassan,Ananya Patil YG,demo.yg.2@smartedu.local,1YG22CS002,CS,7,,SYNTHETIC_DEMO
+294,EE098,Navkis College of Engineering Hassan,Rahul Shetty YG,demo.yg.3@smartedu.local,1YG22EC003,EC,7,,SYNTHETIC_DEMO
+295,EE099,Shri Madhwa Vadiraja Institute of Technology and Management,Aarav Kumar MW,demo.mw.1@smartedu.local,1MW22AI001,AI,7,,SYNTHETIC_DEMO
+296,EE099,Shri Madhwa Vadiraja Institute of Technology and Management,Ananya Patil MW,demo.mw.2@smartedu.local,1MW22CS002,CS,7,,SYNTHETIC_DEMO
+297,EE099,Shri Madhwa Vadiraja Institute of Technology and Management,Rahul Shetty MW,demo.mw.3@smartedu.local,1MW22EC003,EC,7,,SYNTHETIC_DEMO
+298,EE100,Academy for Technical and Management Excellence,Aarav Kumar AD,demo.ad.1@smartedu.local,1AD22AI001,AI,7,,SYNTHETIC_DEMO
+299,EE100,Academy for Technical and Management Excellence,Ananya Patil AD,demo.ad.2@smartedu.local,1AD22CS002,CS,7,,SYNTHETIC_DEMO
+300,EE100,Academy for Technical and Management Excellence,Rahul Shetty AD,demo.ad.3@smartedu.local,1AD22EC003,EC,7,,SYNTHETIC_DEMO
+301,EE101,G. Madegowda Institute of Technology,Aarav Kumar MG,demo.mg.1@smartedu.local,1MG22AI001,AI,7,,SYNTHETIC_DEMO
+302,EE101,G. Madegowda Institute of Technology,Ananya Patil MG,demo.mg.2@smartedu.local,1MG22CS002,CS,7,,SYNTHETIC_DEMO
+303,EE101,G. Madegowda Institute of Technology,Rahul Shetty MG,demo.mg.3@smartedu.local,1MG22EC003,EC,7,,SYNTHETIC_DEMO
+304,EE102,Mangalore Marine College and Technology,Aarav Kumar MR,demo.mr.1@smartedu.local,1MR22AI001,AI,7,,SYNTHETIC_DEMO
+305,EE102,Mangalore Marine College and Technology,Ananya Patil MR,demo.mr.2@smartedu.local,1MR22CS002,CS,7,,SYNTHETIC_DEMO
+306,EE102,Mangalore Marine College and Technology,Rahul Shetty MR,demo.mr.3@smartedu.local,1MR22EC003,EC,7,,SYNTHETIC_DEMO
+307,EE103,Cauvery Institute of Technology,Aarav Kumar CA,demo.ca.1@smartedu.local,1CA22AI001,AI,7,,SYNTHETIC_DEMO
+308,EE103,Cauvery Institute of Technology,Ananya Patil CA,demo.ca.2@smartedu.local,1CA22CS002,CS,7,,SYNTHETIC_DEMO
+309,EE103,Cauvery Institute of Technology,Rahul Shetty CA,demo.ca.3@smartedu.local,1CA22EC003,EC,7,,SYNTHETIC_DEMO
+310,EE104,Mysore School of Architecture and Planning,Aarav Kumar MA,demo.ma.1@smartedu.local,1MA22AI001,AI,7,,SYNTHETIC_DEMO
+311,EE104,Mysore School of Architecture and Planning,Ananya Patil MA,demo.ma.2@smartedu.local,1MA22CS002,CS,7,,SYNTHETIC_DEMO
+312,EE104,Mysore School of Architecture and Planning,Rahul Shetty MA,demo.ma.3@smartedu.local,1MA22EC003,EC,7,,SYNTHETIC_DEMO
+313,EE105,Jawaharlal Nehru National College of Engineering,Aarav Kumar JN,demo.jn.1@smartedu.local,1JN22AI001,AI,7,,SYNTHETIC_DEMO
+314,EE105,Jawaharlal Nehru National College of Engineering,Ananya Patil JN,demo.jn.2@smartedu.local,1JN22CS002,CS,7,,SYNTHETIC_DEMO
+315,EE105,Jawaharlal Nehru National College of Engineering,Rahul Shetty JN,demo.jn.3@smartedu.local,1JN22EC003,EC,7,,SYNTHETIC_DEMO
+316,EE106,K.V.G. College of Engineering,Aarav Kumar KV,demo.kv.1@smartedu.local,1KV22AI001,AI,7,,SYNTHETIC_DEMO
+317,EE106,K.V.G. College of Engineering,Ananya Patil KV,demo.kv.2@smartedu.local,1KV22CS002,CS,7,,SYNTHETIC_DEMO
+318,EE106,K.V.G. College of Engineering,Rahul Shetty KV,demo.kv.3@smartedu.local,1KV22EC003,EC,7,,SYNTHETIC_DEMO
+319,EE107,Karavali Institute of Technology,Aarav Kumar KM,demo.km.1@smartedu.local,1KM22AI001,AI,7,,SYNTHETIC_DEMO
+320,EE107,Karavali Institute of Technology,Ananya Patil KM,demo.km.2@smartedu.local,1KM22CS002,CS,7,,SYNTHETIC_DEMO
+321,EE107,Karavali Institute of Technology,Rahul Shetty KM,demo.km.3@smartedu.local,1KM22EC003,EC,7,,SYNTHETIC_DEMO
+322,EE108,Maharaja Institute of Technology Mysore,Aarav Kumar MH,demo.mh.1@smartedu.local,1MH22AI001,AI,7,,SYNTHETIC_DEMO
+323,EE108,Maharaja Institute of Technology Mysore,Ananya Patil MH,demo.mh.2@smartedu.local,1MH22CS002,CS,7,,SYNTHETIC_DEMO
+324,EE108,Maharaja Institute of Technology Mysore,Rahul Shetty MH,demo.mh.3@smartedu.local,1MH22EC003,EC,7,,SYNTHETIC_DEMO
+325,EE109,ATME College of Engineering,Aarav Kumar ATME,demo.atme.1@smartedu.local,1AT22AI001,AI,7,,SYNTHETIC_DEMO
+326,EE109,ATME College of Engineering,Ananya Patil ATME,demo.atme.2@smartedu.local,1AT22CS002,CS,7,,SYNTHETIC_DEMO
+327,EE109,ATME College of Engineering,Rahul Shetty ATME,demo.atme.3@smartedu.local,1AT22EC003,EC,7,,SYNTHETIC_DEMO
+328,EE110,JSS Science and Technology University,Aarav Kumar SJCE,demo.sjce.1@smartedu.local,1SJ22AI001,AI,7,,SYNTHETIC_DEMO
+329,EE110,JSS Science and Technology University,Ananya Patil SJCE,demo.sjce.2@smartedu.local,1SJ22CS002,CS,7,,SYNTHETIC_DEMO
+330,EE110,JSS Science and Technology University,Rahul Shetty SJCE,demo.sjce.3@smartedu.local,1SJ22EC003,EC,7,,SYNTHETIC_DEMO
+331,EE111,Manipal Institute of Technology,Aarav Kumar MIT,demo.mit.1@smartedu.local,1MI22AI001,AI,7,,SYNTHETIC_DEMO
+332,EE111,Manipal Institute of Technology,Ananya Patil MIT,demo.mit.2@smartedu.local,1MI22CS002,CS,7,,SYNTHETIC_DEMO
+333,EE111,Manipal Institute of Technology,Rahul Shetty MIT,demo.mit.3@smartedu.local,1MI22EC003,EC,7,,SYNTHETIC_DEMO
+334,EE112,The National Institute of Engineering,Aarav Kumar NIE,demo.nie.1@smartedu.local,1NI22AI001,AI,7,,SYNTHETIC_DEMO
+335,EE112,The National Institute of Engineering,Ananya Patil NIE,demo.nie.2@smartedu.local,1NI22CS002,CS,7,,SYNTHETIC_DEMO
+336,EE112,The National Institute of Engineering,Rahul Shetty NIE,demo.nie.3@smartedu.local,1NI22EC003,EC,7,,SYNTHETIC_DEMO
+337,EE113,Vidyavardhaka College of Engineering,Aarav Kumar VVCE,demo.vvce.1@smartedu.local,1VV22AI001,AI,7,,SYNTHETIC_DEMO
+338,EE113,Vidyavardhaka College of Engineering,Ananya Patil VVCE,demo.vvce.2@smartedu.local,1VV22CS002,CS,7,,SYNTHETIC_DEMO
+339,EE113,Vidyavardhaka College of Engineering,Rahul Shetty VVCE,demo.vvce.3@smartedu.local,1VV22EC003,EC,7,,SYNTHETIC_DEMO
+340,EE114,Malnad College of Engineering,Aarav Kumar MCE,demo.mce.1@smartedu.local,1MC22AI001,AI,7,,SYNTHETIC_DEMO
+341,EE114,Malnad College of Engineering,Ananya Patil MCE,demo.mce.2@smartedu.local,1MC22CS002,CS,7,,SYNTHETIC_DEMO
+342,EE114,Malnad College of Engineering,Rahul Shetty MCE,demo.mce.3@smartedu.local,1MC22EC003,EC,7,,SYNTHETIC_DEMO
+343,EE115,R.V. College of Engineering,Aarav Kumar RVCE,demo.rvce.1@smartedu.local,1RV22AI001,AI,7,,SYNTHETIC_DEMO
+344,EE115,R.V. College of Engineering,Ananya Patil RVCE,demo.rvce.2@smartedu.local,1RV22CS002,CS,7,,SYNTHETIC_DEMO
+345,EE115,R.V. College of Engineering,Rahul Shetty RVCE,demo.rvce.3@smartedu.local,1RV22EC003,EC,7,,SYNTHETIC_DEMO
+346,EE116,Ramaiah Institute of Technology,Aarav Kumar RIT,demo.rit.1@smartedu.local,1RI22AI001,AI,7,,SYNTHETIC_DEMO
+347,EE116,Ramaiah Institute of Technology,Ananya Patil RIT,demo.rit.2@smartedu.local,1RI22CS002,CS,7,,SYNTHETIC_DEMO
+348,EE116,Ramaiah Institute of Technology,Rahul Shetty RIT,demo.rit.3@smartedu.local,1RI22EC003,EC,7,,SYNTHETIC_DEMO
+349,EE117,PES University / PES College of Engineering,Aarav Kumar PES,demo.pes.1@smartedu.local,1PE22AI001,AI,7,,SYNTHETIC_DEMO
+350,EE117,PES University / PES College of Engineering,Ananya Patil PES,demo.pes.2@smartedu.local,1PE22CS002,CS,7,,SYNTHETIC_DEMO
+351,EE117,PES University / PES College of Engineering,Rahul Shetty PES,demo.pes.3@smartedu.local,1PE22EC003,EC,7,,SYNTHETIC_DEMO
+352,EE118,Dayananda Sagar College of Engineering,Aarav Kumar DSCE,demo.dsce.1@smartedu.local,1DS22AI001,AI,7,,SYNTHETIC_DEMO
+353,EE118,Dayananda Sagar College of Engineering,Ananya Patil DSCE,demo.dsce.2@smartedu.local,1DS22CS002,CS,7,,SYNTHETIC_DEMO
+354,EE118,Dayananda Sagar College of Engineering,Rahul Shetty DSCE,demo.dsce.3@smartedu.local,1DS22EC003,EC,7,,SYNTHETIC_DEMO
+355,EE119,Nitte Meenakshi Institute of Technology,Aarav Kumar NMIT,demo.nmit.1@smartedu.local,1NM22AI001,AI,7,,SYNTHETIC_DEMO
+356,EE119,Nitte Meenakshi Institute of Technology,Ananya Patil NMIT,demo.nmit.2@smartedu.local,1NM22CS002,CS,7,,SYNTHETIC_DEMO
+357,EE119,Nitte Meenakshi Institute of Technology,Rahul Shetty NMIT,demo.nmit.3@smartedu.local,1NM22EC003,EC,7,,SYNTHETIC_DEMO
+358,EE120,B.N.M. Institute of Technology,Aarav Kumar BNMIT,demo.bnmit.1@smartedu.local,1BN22AI001,AI,7,,SYNTHETIC_DEMO
+359,EE120,B.N.M. Institute of Technology,Ananya Patil BNMIT,demo.bnmit.2@smartedu.local,1BN22CS002,CS,7,,SYNTHETIC_DEMO
+360,EE120,B.N.M. Institute of Technology,Rahul Shetty BNMIT,demo.bnmit.3@smartedu.local,1BN22EC003,EC,7,,SYNTHETIC_DEMO
+361,EE121,CMR Institute of Technology,Aarav Kumar CMR,demo.cmr.1@smartedu.local,1CM22AI001,AI,7,,SYNTHETIC_DEMO
+362,EE121,CMR Institute of Technology,Ananya Patil CMR,demo.cmr.2@smartedu.local,1CM22CS002,CS,7,,SYNTHETIC_DEMO
+363,EE121,CMR Institute of Technology,Rahul Shetty CMR,demo.cmr.3@smartedu.local,1CM22EC003,EC,7,,SYNTHETIC_DEMO
+364,EE122,REVA University School of Engineering,Aarav Kumar REVA,demo.reva.1@smartedu.local,1RE22AI001,AI,7,,SYNTHETIC_DEMO
+365,EE122,REVA University School of Engineering,Ananya Patil REVA,demo.reva.2@smartedu.local,1RE22CS002,CS,7,,SYNTHETIC_DEMO
+366,EE122,REVA University School of Engineering,Rahul Shetty REVA,demo.reva.3@smartedu.local,1RE22EC003,EC,7,,SYNTHETIC_DEMO
+367,EE123,BMS Institute of Technology and Management,Aarav Kumar BMSIT,demo.bmsit.1@smartedu.local,1BM22AI001,AI,7,,SYNTHETIC_DEMO
+368,EE123,BMS Institute of Technology and Management,Ananya Patil BMSIT,demo.bmsit.2@smartedu.local,1BM22CS002,CS,7,,SYNTHETIC_DEMO
+369,EE123,BMS Institute of Technology and Management,Rahul Shetty BMSIT,demo.bmsit.3@smartedu.local,1BM22EC003,EC,7,,SYNTHETIC_DEMO
+370,EE124,New Horizon College of Engineering,Aarav Kumar NHCE,demo.nhce.1@smartedu.local,1NH22AI001,AI,7,,SYNTHETIC_DEMO
+371,EE124,New Horizon College of Engineering,Ananya Patil NHCE,demo.nhce.2@smartedu.local,1NH22CS002,CS,7,,SYNTHETIC_DEMO
+372,EE124,New Horizon College of Engineering,Rahul Shetty NHCE,demo.nhce.3@smartedu.local,1NH22EC003,EC,7,,SYNTHETIC_DEMO
+373,EE125,MVJ College of Engineering,Aarav Kumar MVJ,demo.mvj.1@smartedu.local,1MV22AI001,AI,7,,SYNTHETIC_DEMO
+374,EE125,MVJ College of Engineering,Ananya Patil MVJ,demo.mvj.2@smartedu.local,1MV22CS002,CS,7,,SYNTHETIC_DEMO
+375,EE125,MVJ College of Engineering,Rahul Shetty MVJ,demo.mvj.3@smartedu.local,1MV22EC003,EC,7,,SYNTHETIC_DEMO
+376,EE126,Dayananda Sagar Academy of Technology and Management,Aarav Kumar DSATM,demo.dsatm.1@smartedu.local,1DS22AI001,AI,7,,SYNTHETIC_DEMO
+377,EE126,Dayananda Sagar Academy of Technology and Management,Ananya Patil DSATM,demo.dsatm.2@smartedu.local,1DS22CS002,CS,7,,SYNTHETIC_DEMO
+378,EE126,Dayananda Sagar Academy of Technology and Management,Rahul Shetty DSATM,demo.dsatm.3@smartedu.local,1DS22EC003,EC,7,,SYNTHETIC_DEMO
+379,EE127,Acharya Institute of Technology,Aarav Kumar AIT,demo.ait.1@smartedu.local,1AI22AI001,AI,7,,SYNTHETIC_DEMO
+380,EE127,Acharya Institute of Technology,Ananya Patil AIT,demo.ait.2@smartedu.local,1AI22CS002,CS,7,,SYNTHETIC_DEMO
+381,EE127,Acharya Institute of Technology,Rahul Shetty AIT,demo.ait.3@smartedu.local,1AI22EC003,EC,7,,SYNTHETIC_DEMO
+382,EE128,Acharya Institute of Technology Management,Aarav Kumar AITM,demo.aitm.1@smartedu.local,1AI22AI001,AI,7,,SYNTHETIC_DEMO
+383,EE128,Acharya Institute of Technology Management,Ananya Patil AITM,demo.aitm.2@smartedu.local,1AI22CS002,CS,7,,SYNTHETIC_DEMO
+384,EE128,Acharya Institute of Technology Management,Rahul Shetty AITM,demo.aitm.3@smartedu.local,1AI22EC003,EC,7,,SYNTHETIC_DEMO
+385,EE129,Siddaganga Institute of Technology,Aarav Kumar SIT,demo.sit.1@smartedu.local,1SI22AI001,AI,7,,SYNTHETIC_DEMO
+386,EE129,Siddaganga Institute of Technology,Ananya Patil SIT,demo.sit.2@smartedu.local,1SI22CS002,CS,7,,SYNTHETIC_DEMO
+387,EE129,Siddaganga Institute of Technology,Rahul Shetty SIT,demo.sit.3@smartedu.local,1SI22EC003,EC,7,,SYNTHETIC_DEMO
+388,EE130,Sri Siddhartha Institute of Technology,Aarav Kumar SSIT,demo.ssit.1@smartedu.local,1SS22AI001,AI,7,,SYNTHETIC_DEMO
+389,EE130,Sri Siddhartha Institute of Technology,Ananya Patil SSIT,demo.ssit.2@smartedu.local,1SS22CS002,CS,7,,SYNTHETIC_DEMO
+390,EE130,Sri Siddhartha Institute of Technology,Rahul Shetty SSIT,demo.ssit.3@smartedu.local,1SS22EC003,EC,7,,SYNTHETIC_DEMO
+391,EE131,JSS Academy of Technical Education,Aarav Kumar JSSATE,demo.jssate.1@smartedu.local,1JS22AI001,AI,7,,SYNTHETIC_DEMO
+392,EE131,JSS Academy of Technical Education,Ananya Patil JSSATE,demo.jssate.2@smartedu.local,1JS22CS002,CS,7,,SYNTHETIC_DEMO
+393,EE131,JSS Academy of Technical Education,Rahul Shetty JSSATE,demo.jssate.3@smartedu.local,1JS22EC003,EC,7,,SYNTHETIC_DEMO
+394,EE132,Christ University School of Engineering,Aarav Kumar CIT,demo.cit.1@smartedu.local,1CI22AI001,AI,7,,SYNTHETIC_DEMO
+395,EE132,Christ University School of Engineering,Ananya Patil CIT,demo.cit.2@smartedu.local,1CI22CS002,CS,7,,SYNTHETIC_DEMO
+396,EE132,Christ University School of Engineering,Rahul Shetty CIT,demo.cit.3@smartedu.local,1CI22EC003,EC,7,,SYNTHETIC_DEMO
+397,EE133,PES Institute of Technology and Management,Aarav Kumar PESITM,demo.pesitm.1@smartedu.local,1PE22AI001,AI,7,,SYNTHETIC_DEMO
+398,EE133,PES Institute of Technology and Management,Ananya Patil PESITM,demo.pesitm.2@smartedu.local,1PE22CS002,CS,7,,SYNTHETIC_DEMO
+399,EE133,PES Institute of Technology and Management,Rahul Shetty PESITM,demo.pesitm.3@smartedu.local,1PE22EC003,EC,7,,SYNTHETIC_DEMO
+400,EE134,Vijaya Vittala Institute of Technology,Aarav Kumar VIT,demo.vit.1@smartedu.local,1VI22AI001,AI,7,,SYNTHETIC_DEMO
+401,EE134,Vijaya Vittala Institute of Technology,Ananya Patil VIT,demo.vit.2@smartedu.local,1VI22CS002,CS,7,,SYNTHETIC_DEMO
+402,EE134,Vijaya Vittala Institute of Technology,Rahul Shetty VIT,demo.vit.3@smartedu.local,1VI22EC003,EC,7,,SYNTHETIC_DEMO
+403,EE135,Acharya Institute of Management and Sciences Engineering,Aarav Kumar AIMT,demo.aimt.1@smartedu.local,1AI22AI001,AI,7,,SYNTHETIC_DEMO
+404,EE135,Acharya Institute of Management and Sciences Engineering,Ananya Patil AIMT,demo.aimt.2@smartedu.local,1AI22CS002,CS,7,,SYNTHETIC_DEMO
+405,EE135,Acharya Institute of Management and Sciences Engineering,Rahul Shetty AIMT,demo.aimt.3@smartedu.local,1AI22EC003,EC,7,,SYNTHETIC_DEMO
+406,EE136,Mysore College of Engineering and Management,Aarav Kumar MCE2,demo.mce2.1@smartedu.local,1MC22AI001,AI,7,,SYNTHETIC_DEMO
+407,EE136,Mysore College of Engineering and Management,Ananya Patil MCE2,demo.mce2.2@smartedu.local,1MC22CS002,CS,7,,SYNTHETIC_DEMO
+408,EE136,Mysore College of Engineering and Management,Rahul Shetty MCE2,demo.mce2.3@smartedu.local,1MC22EC003,EC,7,,SYNTHETIC_DEMO
+409,EE137,Sri Jagadguru Chandrashekaranatha Swamiji Institute of Technology,Aarav Kumar SJCIT,demo.sjcit.1@smartedu.local,1SJ22AI001,AI,7,,SYNTHETIC_DEMO
+410,EE137,Sri Jagadguru Chandrashekaranatha Swamiji Institute of Technology,Ananya Patil SJCIT,demo.sjcit.2@smartedu.local,1SJ22CS002,CS,7,,SYNTHETIC_DEMO
+411,EE137,Sri Jagadguru Chandrashekaranatha Swamiji Institute of Technology,Rahul Shetty SJCIT,demo.sjcit.3@smartedu.local,1SJ22EC003,EC,7,,SYNTHETIC_DEMO
+412,EE138,BGS College of Engineering and Technology,Aarav Kumar BGS,demo.bgs.1@smartedu.local,1BG22AI001,AI,7,,SYNTHETIC_DEMO
+413,EE138,BGS College of Engineering and Technology,Ananya Patil BGS,demo.bgs.2@smartedu.local,1BG22CS002,CS,7,,SYNTHETIC_DEMO
+414,EE138,BGS College of Engineering and Technology,Rahul Shetty BGS,demo.bgs.3@smartedu.local,1BG22EC003,EC,7,,SYNTHETIC_DEMO
+415,EE139,A.J. Institute of Engineering and Technology,Aarav Kumar AITK,demo.aitk.1@smartedu.local,1AI22AI001,AI,7,,SYNTHETIC_DEMO
+416,EE139,A.J. Institute of Engineering and Technology,Ananya Patil AITK,demo.aitk.2@smartedu.local,1AI22CS002,CS,7,,SYNTHETIC_DEMO
+417,EE139,A.J. Institute of Engineering and Technology,Rahul Shetty AITK,demo.aitk.3@smartedu.local,1AI22EC003,EC,7,,SYNTHETIC_DEMO
+418,EE140,Yenepoya Institute of Technology,Aarav Kumar YIT,demo.yit.1@smartedu.local,1YI22AI001,AI,7,,SYNTHETIC_DEMO
+419,EE140,Yenepoya Institute of Technology,Ananya Patil YIT,demo.yit.2@smartedu.local,1YI22CS002,CS,7,,SYNTHETIC_DEMO
+420,EE140,Yenepoya Institute of Technology,Rahul Shetty YIT,demo.yit.3@smartedu.local,1YI22EC003,EC,7,,SYNTHETIC_DEMO
+421,EE141,P.E.S. College of Engineering,Aarav Kumar PESCE,demo.pesce.1@smartedu.local,1PE22AI001,AI,7,,SYNTHETIC_DEMO
+422,EE141,P.E.S. College of Engineering,Ananya Patil PESCE,demo.pesce.2@smartedu.local,1PE22CS002,CS,7,,SYNTHETIC_DEMO
+423,EE141,P.E.S. College of Engineering,Rahul Shetty PESCE,demo.pesce.3@smartedu.local,1PE22EC003,EC,7,,SYNTHETIC_DEMO
+424,EE142,St Joseph Engineering College,Aarav Kumar SJEC,demo.sjec.1@smartedu.local,1SJ22AI001,AI,7,,SYNTHETIC_DEMO
+425,EE142,St Joseph Engineering College,Ananya Patil SJEC,demo.sjec.2@smartedu.local,1SJ22CS002,CS,7,,SYNTHETIC_DEMO
+426,EE142,St Joseph Engineering College,Rahul Shetty SJEC,demo.sjec.3@smartedu.local,1SJ22EC003,EC,7,,SYNTHETIC_DEMO
+427,EE143,SDM Institute of Technology,Aarav Kumar SDMIT,demo.sdmit.1@smartedu.local,1SD22AI001,AI,7,,SYNTHETIC_DEMO
+428,EE143,SDM Institute of Technology,Ananya Patil SDMIT,demo.sdmit.2@smartedu.local,1SD22CS002,CS,7,,SYNTHETIC_DEMO
+429,EE143,SDM Institute of Technology,Rahul Shetty SDMIT,demo.sdmit.3@smartedu.local,1SD22EC003,EC,7,,SYNTHETIC_DEMO
+430,EE144,Atria Institute of Technology,Aarav Kumar AITM2,demo.aitm2.1@smartedu.local,1AI22AI001,AI,7,,SYNTHETIC_DEMO
+431,EE144,Atria Institute of Technology,Ananya Patil AITM2,demo.aitm2.2@smartedu.local,1AI22CS002,CS,7,,SYNTHETIC_DEMO
+432,EE144,Atria Institute of Technology,Rahul Shetty AITM2,demo.aitm2.3@smartedu.local,1AI22EC003,EC,7,,SYNTHETIC_DEMO
+433,EE145,Bangalore University affiliated engineering college,Aarav Kumar BITU,demo.bitu.1@smartedu.local,1BI22AI001,AI,7,,SYNTHETIC_DEMO
+434,EE145,Bangalore University affiliated engineering college,Ananya Patil BITU,demo.bitu.2@smartedu.local,1BI22CS002,CS,7,,SYNTHETIC_DEMO
+435,EE145,Bangalore University affiliated engineering college,Rahul Shetty BITU,demo.bitu.3@smartedu.local,1BI22EC003,EC,7,,SYNTHETIC_DEMO
+436,EE146,GITAM School of Technology Bengaluru,Aarav Kumar GITAM,demo.gitam.1@smartedu.local,1GI22AI001,AI,7,,SYNTHETIC_DEMO
+437,EE146,GITAM School of Technology Bengaluru,Ananya Patil GITAM,demo.gitam.2@smartedu.local,1GI22CS002,CS,7,,SYNTHETIC_DEMO
+438,EE146,GITAM School of Technology Bengaluru,Rahul Shetty GITAM,demo.gitam.3@smartedu.local,1GI22EC003,EC,7,,SYNTHETIC_DEMO
+439,EE147,KLE Technological University,Aarav Kumar KLEC,demo.klec.1@smartedu.local,1KL22AI001,AI,7,,SYNTHETIC_DEMO
+440,EE147,KLE Technological University,Ananya Patil KLEC,demo.klec.2@smartedu.local,1KL22CS002,CS,7,,SYNTHETIC_DEMO
+441,EE147,KLE Technological University,Rahul Shetty KLEC,demo.klec.3@smartedu.local,1KL22EC003,EC,7,,SYNTHETIC_DEMO
+442,EE148,B.V. Bhoomaraddi College of Engineering and Technology,Aarav Kumar BVBC,demo.bvbc.1@smartedu.local,1BV22AI001,AI,7,,SYNTHETIC_DEMO
+443,EE148,B.V. Bhoomaraddi College of Engineering and Technology,Ananya Patil BVBC,demo.bvbc.2@smartedu.local,1BV22CS002,CS,7,,SYNTHETIC_DEMO
+444,EE148,B.V. Bhoomaraddi College of Engineering and Technology,Rahul Shetty BVBC,demo.bvbc.3@smartedu.local,1BV22EC003,EC,7,,SYNTHETIC_DEMO
+445,EE149,SDM College of Engineering and Technology,Aarav Kumar SDMCET,demo.sdmcet.1@smartedu.local,1SD22AI001,AI,7,,SYNTHETIC_DEMO
+446,EE149,SDM College of Engineering and Technology,Ananya Patil SDMCET,demo.sdmcet.2@smartedu.local,1SD22CS002,CS,7,,SYNTHETIC_DEMO
+447,EE149,SDM College of Engineering and Technology,Rahul Shetty SDMCET,demo.sdmcet.3@smartedu.local,1SD22EC003,EC,7,,SYNTHETIC_DEMO
+448,EE150,Government Engineering College,Aarav Kumar GECBL,demo.gecbl.1@smartedu.local,1GE22AI001,AI,7,,SYNTHETIC_DEMO
+449,EE150,Government Engineering College,Ananya Patil GECBL,demo.gecbl.2@smartedu.local,1GE22CS002,CS,7,,SYNTHETIC_DEMO
+450,EE150,Government Engineering College,Rahul Shetty GECBL,demo.gecbl.3@smartedu.local,1GE22EC003,EC,7,,SYNTHETIC_DEMO
+451,EE151,KLE Society’s College of Engineering and Technology,Aarav Kumar KLESCET,demo.klescet.1@smartedu.local,1KL22AI001,AI,7,,SYNTHETIC_DEMO
+452,EE151,KLE Society’s College of Engineering and Technology,Ananya Patil KLESCET,demo.klescet.2@smartedu.local,1KL22CS002,CS,7,,SYNTHETIC_DEMO
+453,EE151,KLE Society’s College of Engineering and Technology,Rahul Shetty KLESCET,demo.klescet.3@smartedu.local,1KL22EC003,EC,7,,SYNTHETIC_DEMO
+454,EE152,Anand Institute of Technology and Management,Aarav Kumar AITB,demo.aitb.1@smartedu.local,1AI22AI001,AI,7,,SYNTHETIC_DEMO
+455,EE152,Anand Institute of Technology and Management,Ananya Patil AITB,demo.aitb.2@smartedu.local,1AI22CS002,CS,7,,SYNTHETIC_DEMO
+456,EE152,Anand Institute of Technology and Management,Rahul Shetty AITB,demo.aitb.3@smartedu.local,1AI22EC003,EC,7,,SYNTHETIC_DEMO
+457,EE153,Rajarajeshwari Institute of Technology,Aarav Kumar RITB,demo.ritb.1@smartedu.local,1RI22AI001,AI,7,,SYNTHETIC_DEMO
+458,EE153,Rajarajeshwari Institute of Technology,Ananya Patil RITB,demo.ritb.2@smartedu.local,1RI22CS002,CS,7,,SYNTHETIC_DEMO
+459,EE153,Rajarajeshwari Institute of Technology,Rahul Shetty RITB,demo.ritb.3@smartedu.local,1RI22EC003,EC,7,,SYNTHETIC_DEMO
+460,EE154,Tontadarya College of Engineering,Aarav Kumar TCE,demo.tce.1@smartedu.local,1TC22AI001,AI,7,,SYNTHETIC_DEMO
+461,EE154,Tontadarya College of Engineering,Ananya Patil TCE,demo.tce.2@smartedu.local,1TC22CS002,CS,7,,SYNTHETIC_DEMO
+462,EE154,Tontadarya College of Engineering,Rahul Shetty TCE,demo.tce.3@smartedu.local,1TC22EC003,EC,7,,SYNTHETIC_DEMO
+463,EE155,Hindustan Institute of Technology Karnataka,Aarav Kumar HIT,demo.hit.1@smartedu.local,1HI22AI001,AI,7,,SYNTHETIC_DEMO
+464,EE155,Hindustan Institute of Technology Karnataka,Ananya Patil HIT,demo.hit.2@smartedu.local,1HI22CS002,CS,7,,SYNTHETIC_DEMO
+465,EE155,Hindustan Institute of Technology Karnataka,Rahul Shetty HIT,demo.hit.3@smartedu.local,1HI22EC003,EC,7,,SYNTHETIC_DEMO
+466,EE156,Demo College,Shrusti,demo.demo.1@smartedu.local,1BK22AI001,AI,7,,SYNTHETIC_DEMO
+467,EE156,Demo College,Ananya Patil DEMO,demo.demo.2@smartedu.local,1DE22CS002,CS,7,,SYNTHETIC_DEMO
+468,EE156,Demo College,Rahul Shetty DEMO,demo.demo.3@smartedu.local,1DE22EC003,EC,7,,SYNTHETIC_DEMO

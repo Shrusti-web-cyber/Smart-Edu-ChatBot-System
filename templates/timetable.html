@@ -1,0 +1,90 @@
+
+{% extends "base.html" %}
+{% block content %}
+
+<div class="app-shell">
+    <aside class="app-sidebar">
+        <div class="side-brand">
+            <b>Smart<span>Edu</span></b>
+            <small>Student Portal</small>
+        </div>
+
+        <nav>
+            <a href="/dashboard">01&nbsp; Dashboard</a>
+            <a href="/attendance">02&nbsp; Attendance</a>
+            <a href="/marks">03&nbsp; Internal Marks</a>
+            <a href="/chatbot">04&nbsp; AI Chatbot</a>
+            <a href="/materials">05&nbsp; Download</a>
+            <a href="/planner">06&nbsp; Personalized Study</a>
+            <a href="/quiz">07&nbsp; AI Quiz</a>
+            <a href="/dashboard#notifications">08&nbsp; Notifications</a>
+            <a href="/college-info">09&nbsp; College Information</a>
+            <a class="active" href="/timetable">10&nbsp; Timetable</a>
+            <a class="logout-link" href="/logout">Logout</a>
+        </nav>
+    </aside>
+
+    <section class="dashboard-area">
+        <header class="dashboard-header">
+            <div>
+                <span class="small-label">SMARTEDU STUDENT</span>
+                <h1>My Class Timetable</h1>
+                <p>{{ student.name }} · {{ student.usn }}</p>
+            </div>
+            <a href="/dashboard">Back to Dashboard</a>
+        </header>
+
+        <section class="student-hero">
+            <div>
+                <span>COLLEGE NAME</span>
+                <h2>{{ student.college_name }}</h2>
+                <p>{{ student.branch }} · Semester {{ student.semester }}</p>
+            </div>
+        </section>
+
+        <section class="dash-card">
+            <div class="card-title">
+                <div>
+                    <span>WEEKLY SCHEDULE</span>
+                    <h2>My Classes</h2>
+                </div>
+            </div>
+
+            <div class="table-scroll">
+                <table class="pro-table">
+                    <thead>
+                        <tr>
+                            <th>Day</th>
+                            <th>Start Time</th>
+                            <th>End Time</th>
+                            <th>Subject</th>
+                            <th>Faculty</th>
+                            <th>Room</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for t in timetable %}
+                        <tr>
+                            <td>{{ t.day }}</td>
+                            <td>{{ t.start_time }}</td>
+                            <td>{{ t.end_time }}</td>
+                            <td>{{ t.subject }}</td>
+                            <td>{{ t.faculty or '-' }}</td>
+                            <td>{{ t.room or '-' }}</td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="6">
+                                No timetable has been published for your class yet.
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </section>
+</div>
+
+{% endblock %}

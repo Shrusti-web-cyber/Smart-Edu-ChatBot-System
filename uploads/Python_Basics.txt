@@ -1,0 +1,3 @@
+SMART EDU SAMPLE MATERIAL
+Python Basics
+Variables, data types, conditions, loops and functions.

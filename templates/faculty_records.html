@@ -1,0 +1,22 @@
+{% extends "base.html" %}{% block content %}
+<h1>Academic Record Management</h1>
+{% for s in students %}
+<div class="card"><h2>{{s.name}} — {{s.usn}}</h2><h3>Attendance</h3>
+{% for r in attendance_records[s.id] %}
+<form class="record" method="post" action="/faculty/attendance/edit/{{r.id}}">
+<input name="subject" value="{{r.subject}}" required><input name="class_date" type="date" value="{{r.class_date}}" required>
+<select name="status"><option {% if r.status=='Present' %}selected{% endif %}>Present</option><option {% if r.status=='Absent' %}selected{% endif %}>Absent</option></select>
+<button>Save Edit</button></form>
+<form class="inline" method="post" action="/faculty/attendance/delete/{{r.id}}"><button class="danger">Delete</button></form>
+{% else %}<p class="muted">No attendance records.</p>{% endfor %}
+<h3>Internal Marks</h3>
+{% for r in marks_records[s.id] %}
+<form class="record" method="post" action="/faculty/marks/save">
+<input type="hidden" name="student_id" value="{{s.id}}"><input name="subject" value="{{r.subject}}" required>
+<input name="ia1" type="number" step=".01" value="{{r.ia1}}" required><input name="ia2" type="number" step=".01" value="{{r.ia2}}" required>
+<input name="ia3" type="number" step=".01" value="{{r.ia3}}" required><input name="assignment" type="number" step=".01" value="{{r.assignment}}" required>
+<button>Save Edit</button></form>
+<form class="inline" method="post" action="/faculty/marks/delete/{{r.id}}"><button class="danger">Delete</button></form>
+{% else %}<p class="muted">No marks records.</p>{% endfor %}</div>
+{% endfor %}
+{% endblock %}

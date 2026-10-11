@@ -1,0 +1,3 @@
+SMART EDU SAMPLE MATERIAL
+Machine Learning - Unit 1
+Introduction to ML, supervised and unsupervised learning.

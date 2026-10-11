@@ -1,0 +1,4 @@
+{% extends "base.html" %}{% block content %}
+<h1>📚 Study Materials</h1><p class="muted">Notes, PDFs, Word files, PPTs, Excel files and images uploaded by faculty.</p>
+{% for r in rows %}<div class="card material"><div class="file">📄</div><div class="grow"><h3>{{r.title}}</h3><p>{{r.subject}} · {{r.file_type|upper}} · {{r.uploaded_on}}</p></div><a class="button" href="/download/{{r.filename}}">⬇ Download</a></div>
+{% else %}<div class="card">No materials uploaded yet.</div>{% endfor %}{% endblock %}

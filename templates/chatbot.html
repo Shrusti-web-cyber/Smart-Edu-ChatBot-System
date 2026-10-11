@@ -1,0 +1,195 @@
+
+{% extends "base.html" %}
+{% block content %}
+<div class="chat card smart-chat">
+  <div class="smart-chat-header">
+    <div>
+      <span class="eyebrow">SMARTEDU AI</span>
+      <h1>AI Chatbot</h1>
+      <p class="muted">Ask questions, speak, or attach study materials.</p>
+    </div>
+    <span class="ai-status" id="aiStatus">● Ready</span>
+  </div>
+
+  <div class="chips">
+    <button type="button" onclick="ask('Explain machine learning step by step with an example.')">Explain a topic</button>
+    <button type="button" onclick="ask('What is my current attendance?')">My attendance</button>
+    <button type="button" onclick="ask('Show my internal marks by subject.')">My marks</button>
+    <button type="button" onclick="ask('Make a 7-day study plan for my semester exams.')">Study plan</button>
+  </div>
+
+  <div id="setupHint" class="ai-setup-hint" hidden>
+    Local answers are active. Check your AI API configuration to enable open-ended AI.
+  </div>
+
+  <div id="messages" aria-live="polite">
+    <div class="bubble bot">Hi! I'm SmartEdu AI. Ask me about your studies, coding, general knowledge, attendance or marks.</div>
+  </div>
+
+  <form id="chatForm">
+    <input id="message" autocomplete="off" placeholder="Message SmartEdu AI…" aria-label="Message SmartEdu AI">
+    <button id="sendButton" type="submit">Send</button>
+  </form>
+
+  <div class="chat-tools">
+    <button type="button" id="voiceButton">🎙️ Speak</button>
+    <button type="button" id="readButton">🔊 Read latest answer</button>
+    <button type="button" id="stopReadButton">⏹ Stop voice</button>
+    <label class="attach-button" for="chatFile">📎 Attach file/photo</label>
+    <input id="chatFile" type="file" accept="image/*,.pdf,.txt,.csv,.doc,.docx" hidden>
+    <button type="button" id="cameraButton">📷 Camera</button>
+    <input id="cameraFile" type="file" accept="image/*" capture="environment" hidden>
+  </div>
+  <p id="fileInfo" class="muted"></p>
+  <p class="muted chat-footnote">Only your signed-in account's academic records should be used for personal questions.</p>
+</div>
+
+<style>
+.chat-tools{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.chat-tools button,.attach-button{border:1px solid #cbd5e1;border-radius:10px;padding:9px 12px;cursor:pointer;background:#f8fafc;color:#0f172a;font:inherit}
+.attach-button{display:inline-flex;align-items:center}
+#messages{max-height:55vh;overflow-y:auto;padding:12px 0}
+.bubble{white-space:pre-wrap;overflow-wrap:anywhere;margin:10px 0;padding:12px 14px;border-radius:12px}
+.bubble.user{background:#e0f2fe;margin-left:12%;color:#0f172a}
+.bubble.bot{background:#f1f5f9;margin-right:8%;color:#0f172a}
+#chatForm{display:flex;gap:8px}
+#message{flex:1;min-width:0}
+</style>
+
+<script>
+const box = document.getElementById('messages');
+const input = document.getElementById('message');
+const sendButton = document.getElementById('sendButton');
+const statusEl = document.getElementById('aiStatus');
+const setupHint = document.getElementById('setupHint');
+const fileInput = document.getElementById('chatFile');
+const cameraInput = document.getElementById('cameraFile');
+const fileInfo = document.getElementById('fileInfo');
+
+const history = [];
+let latestAnswer = '';
+let selectedFile = null;
+
+function add(text, who) {
+  const d = document.createElement('div');
+  d.className = 'bubble ' + who;
+  d.textContent = text;
+  box.appendChild(d);
+  box.scrollTop = box.scrollHeight;
+  return d;
+}
+
+function ask(q) {
+  input.value = q;
+  document.getElementById('chatForm').requestSubmit();
+}
+
+async function sendMessage(q) {
+  add(q, 'user');
+  input.value = '';
+  sendButton.disabled = true;
+  statusEl.textContent = '● Thinking…';
+  const thinking = add('Thinking…', 'bot');
+
+  try {
+    const r = await fetch('/api/chat', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({message: q, history: history})
+    });
+
+    const d = await r.json();
+    thinking.remove();
+
+    if (!r.ok) throw new Error(d.answer || 'Chat request failed.');
+
+    const answer = d.answer || 'I could not generate an answer.';
+    add(answer, 'bot');
+    latestAnswer = answer;
+
+    if (d.mode === 'AI') {
+      statusEl.textContent = '● AI connected';
+      setupHint.hidden = true;
+    } else if (d.mode === 'local') {
+      statusEl.textContent = '● Local mode';
+      setupHint.hidden = false;
+    } else {
+      statusEl.textContent = '● AI connection issue';
+      setupHint.hidden = false;
+    }
+
+    history.push(
+      {role: 'user', content: q},
+      {role: 'assistant', content: answer}
+    );
+    if (history.length > 24) history.splice(0, history.length - 24);
+  } catch (err) {
+    thinking.remove();
+    add('Error: ' + err.message, 'bot');
+    statusEl.textContent = '● Connection issue';
+  } finally {
+    sendButton.disabled = false;
+    input.focus();
+  }
+}
+
+document.getElementById('chatForm').addEventListener('submit', e => {
+  e.preventDefault();
+  const q = input.value.trim();
+  if (q && !sendButton.disabled) sendMessage(q);
+});
+
+// Voice input: supported in browsers that provide SpeechRecognition.
+document.getElementById('voiceButton').addEventListener('click', () => {
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SpeechRecognition) {
+    add('Voice input is not supported in this browser. Try a recent version of Chrome or Edge.', 'bot');
+    return;
+  }
+
+  const recognition = new SpeechRecognition();
+  recognition.lang = 'en-IN';
+  recognition.interimResults = false;
+  recognition.onstart = () => statusEl.textContent = '● Listening…';
+  recognition.onresult = event => {
+    input.value = event.results[0][0].transcript;
+    statusEl.textContent = '● Voice captured';
+  };
+  recognition.onerror = () => statusEl.textContent = '● Voice input issue';
+  recognition.onend = () => input.focus();
+  recognition.start();
+});
+
+// Read the most recent chatbot answer aloud.
+document.getElementById('readButton').addEventListener('click', () => {
+  if (!latestAnswer) {
+    add('Ask a question first, then use Read latest answer.', 'bot');
+    return;
+  }
+  if (!('speechSynthesis' in window)) {
+    add('Read-aloud is not supported by this browser.', 'bot');
+    return;
+  }
+  window.speechSynthesis.cancel();
+  const utterance = new SpeechSynthesisUtterance(latestAnswer);
+  utterance.lang = 'en-IN';
+  window.speechSynthesis.speak(utterance);
+});
+
+document.getElementById('stopReadButton').addEventListener('click', () => {
+  if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+});
+
+document.getElementById('cameraButton').addEventListener('click', () => cameraInput.click());
+
+function handleSelectedFile(file) {
+  if (!file) return;
+  selectedFile = file;
+  fileInfo.textContent = 'Selected: ' + file.name + ' (' + Math.ceil(file.size / 1024) + ' KB). File analysis is not connected yet.';
+  add('File selected: ' + file.name + '. The current /api/chat endpoint does not yet send attachments to the AI.', 'bot');
+}
+
+fileInput.addEventListener('change', () => handleSelectedFile(fileInput.files[0]));
+cameraInput.addEventListener('change', () => handleSelectedFile(cameraInput.files[0]));
+</script>
+{% endblock %}

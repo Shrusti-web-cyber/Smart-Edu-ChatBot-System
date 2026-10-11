@@ -1,0 +1,23 @@
+SMARTEDU — RUN THE COMPLETE APP + ENABLE CHATGPT-STYLE AI
+
+1. Extract the complete ZIP to a normal folder, for example Desktop\SmartEdu.
+2. Install Python 3.11 or newer from python.org. During installation, enable “Add Python to PATH”.
+3. Open the extracted SmartEdu_Professional folder.
+4. Copy .env.example and rename the copy to .env (the filename must be exactly .env, not .env.txt).
+5. Open .env in VS Code or Notepad and set:
+   OPENAI_API_KEY=your-real-API-key
+   SMARTEDU_AI_MODEL=gpt-4.1-mini
+   SMARTEDU_SECRET=replace-this-with-a-long-random-secret
+   Also configure the SMARTEDU_SMTP_* values if you want email OTP delivery.
+6. Save .env. Never send your API key, SMTP password, or app password in screenshots or chat messages.
+7. Double-click run_smartedu.bat. Wait while dependencies install. Keep the terminal window open.
+8. Open http://127.0.0.1:5000 in Microsoft Edge if it does not open automatically.
+9. Sign in to Student or Admin. Open AI Chatbot and ask a question.
+
+IMPORTANT AI NOTES
+- The OpenAI API key is separate from a ChatGPT website subscription and may require API billing/credits.
+- The project sends only the authenticated student's permitted SmartEdu context to the AI request. Keep the key only in the server-side .env file.
+- If the key is absent, SmartEdu runs its limited local fallback and displays “Local mode”; that is not equivalent to ChatGPT.
+- If “AI connection issue” appears, check the API key, model name, internet connection and API usage/billing in the API provider account.
+- Demo attendance/marks/student records are synthetic. Replace/import them only with records the college authorizes you to use.
+- Real university results are not invented or guaranteed to sync automatically; use an authorized result source or import verified mark sheets/results.

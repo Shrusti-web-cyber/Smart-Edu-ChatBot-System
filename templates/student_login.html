@@ -1,0 +1,56 @@
+
+{% extends "base.html" %}
+{% block content %}
+<div class="auth-page">
+  <section class="auth-form-card slide-in">
+    <div class="auth-symbol">S</div>
+    <h1>Student Login</h1>
+
+    <form method="post">
+      <label>Student Name</label>
+      <input name="name" autocomplete="name" required>
+
+      <label>Student USN</label>
+      <input name="usn" autocomplete="username" required>
+
+      <label>Password</label>
+      <div style="display:flex; align-items:center; gap:8px;">
+        <input
+          type="password"
+          id="student-password"
+          name="password"
+          autocomplete="current-password"
+          required
+          style="flex:1; min-width:0;"
+        >
+        <button
+          type="button"
+          onclick="toggleStudentPassword()"
+          id="student-eye"
+          aria-label="Show password"
+          style="cursor:pointer; padding:10px;"
+        >👁</button>
+      </div>
+
+      <button class="auth-submit" type="submit">Login</button>
+    </form>
+  </section>
+</div>
+
+<script>
+function toggleStudentPassword() {
+  const password = document.getElementById('student-password');
+  const eye = document.getElementById('student-eye');
+
+  if (password.type === 'password') {
+    password.type = 'text';
+    eye.textContent = '🙈';
+    eye.setAttribute('aria-label', 'Hide password');
+  } else {
+    password.type = 'password';
+    eye.textContent = '👁';
+    eye.setAttribute('aria-label', 'Show password');
+  }
+}
+</script>
+{% endblock %}

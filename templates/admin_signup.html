@@ -1,0 +1,189 @@
+
+{% extends "base.html" %}
+{% block content %}
+<div class="signup-page">
+  <section class="signup-card slide-in">
+    <div class="form-badge admin">A</div>
+    <h1>Admin Sign Up</h1>
+
+    <form method="post" onsubmit="return submitVerified(event)">
+      <label>Admin Name</label>
+      <input name="name" required>
+
+      <label>Email ID</label>
+      <div class="otp-row">
+        <input id="adminEmail" type="email" name="email"
+               required oninput="checkEmail()">
+        <button type="button" onclick="sendOtp()">Send Code</button>
+      </div>
+      <small id="adminEmailStatus">Email verification required</small>
+
+      <label>Verification Code</label>
+      <input id="adminOtp" name="otp" inputmode="numeric"
+             maxlength="6" pattern="[0-9]{6}"
+             placeholder="6-digit OTP" disabled required>
+
+      <label>College Name</label>
+      <select name="college_id" required>
+        <option value="">Select college</option>
+        {% for c in colleges %}
+        <option value="{{c.id}}">{{c.name}} ({{c.app_code or c.code}})</option>
+        {% endfor %}
+      </select>
+
+      <label>Branch</label>
+      <select name="branch" required>
+        <option value="">Select branch</option>
+        {% for code,label in branches %}
+        <option value="{{code}}">{{label}}</option>
+        {% endfor %}
+      </select>
+
+      <label>Semester</label>
+      <select name="semester" required>
+        {% for n in range(1,9) %}
+        <option value="{{n}}">Semester {{n}}</option>
+        {% endfor %}
+      </select>
+
+      <div class="form-two">
+        <div>
+          <label>Password</label>
+          <div style="display:flex;align-items:center;gap:6px">
+            <input type="password" id="adminSignupPassword"
+                   name="password" minlength="6" required
+                   style="min-width:0;flex:1">
+            <button type="button"
+                    onclick="toggleAdminSignupPassword('adminSignupPassword',this)"
+                    aria-label="Show password">👁</button>
+          </div>
+        </div>
+
+        <div>
+          <label>Confirm Password</label>
+          <div style="display:flex;align-items:center;gap:6px">
+            <input type="password" id="adminConfirmPassword"
+                   name="confirm_password" minlength="6" required
+                   style="min-width:0;flex:1">
+            <button type="button"
+                    onclick="toggleAdminSignupPassword('adminConfirmPassword',this)"
+                    aria-label="Show confirm password">👁</button>
+          </div>
+        </div>
+      </div>
+
+      <button id="adminCreate" class="auth-submit"
+              type="submit" disabled>Submit</button>
+    </form>
+  </section>
+</div>
+
+<script>
+let verified = false;
+const valid = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+
+function toggleAdminSignupPassword(id, button) {
+  const field = document.getElementById(id);
+  if (field.type === 'password') {
+    field.type = 'text';
+    button.textContent = '🙈';
+    button.setAttribute('aria-label', 'Hide password');
+  } else {
+    field.type = 'password';
+    button.textContent = '👁';
+    button.setAttribute('aria-label', 'Show password');
+  }
+}
+
+function checkEmail() {
+  verified = false;
+  document.getElementById('adminCreate').disabled = true;
+  document.getElementById('adminOtp').disabled = true;
+  document.getElementById('adminEmailStatus').textContent =
+    valid.test(document.getElementById('adminEmail').value.trim())
+      ? 'Ready to send verification code'
+      : 'Enter a valid email ID';
+}
+
+async function sendOtp() {
+  const email = document.getElementById('adminEmail')
+    .value.trim().toLowerCase();
+  const status = document.getElementById('adminEmailStatus');
+
+  if (!valid.test(email)) {
+    status.textContent = 'Invalid email ID';
+    return;
+  }
+
+  try {
+    const fd = new FormData();
+    fd.append('role', 'admin');
+    fd.append('email', email);
+
+    const r = await fetch('/signup/send-otp', {
+      method: 'POST',
+      body: fd
+    });
+    const d = await r.json();
+
+    status.textContent = d.ok
+      ? 'Verification code sent to your email'
+      : 'Could not send verification code';
+
+    if (d.ok) {
+      document.getElementById('adminOtp').disabled = false;
+    }
+  } catch (error) {
+    status.textContent = 'Network error. Please try again.';
+  }
+}
+
+document.getElementById('adminOtp').addEventListener('input', async e => {
+  verified = false;
+  document.getElementById('adminCreate').disabled = true;
+
+  if (e.target.value.length !== 6) return;
+
+  try {
+    const fd = new FormData();
+    fd.append('role', 'admin');
+    fd.append('email', document.getElementById('adminEmail')
+      .value.trim().toLowerCase());
+    fd.append('otp', e.target.value);
+
+    const r = await fetch('/signup/verify-otp', {
+      method: 'POST',
+      body: fd
+    });
+    const d = await r.json();
+
+    verified = d.ok;
+    document.getElementById('adminEmailStatus').textContent =
+      d.ok ? '✓ Email verified' : '✖ Invalid or expired code';
+    document.getElementById('adminCreate').disabled = !verified;
+  } catch (error) {
+    document.getElementById('adminEmailStatus').textContent =
+      'Verification failed. Please try again.';
+  }
+});
+
+function submitVerified(e) {
+  const password = document.getElementById('adminSignupPassword').value;
+  const confirm = document.getElementById('adminConfirmPassword').value;
+
+  if (!verified) {
+    e.preventDefault();
+    alert('Verify the admin email first.');
+    return false;
+  }
+
+  if (password !== confirm) {
+    e.preventDefault();
+    alert('Passwords do not match.');
+    return false;
+  }
+
+  return true;
+}
+</script>
+{% endblock %}

@@ -1,0 +1,5 @@
+{% extends "base.html" %}{% block content %}
+<h1>📊 Current Attendance</h1><div class="highlight">Overall current attendance: <strong>{{overall}}%</strong></div>
+<div class="card"><table><tr><th>Subject</th><th>Attended</th><th>Conducted</th><th>Percentage</th><th>Status</th></tr>
+{% for r in rows %}<tr><td>{{r.subject}}</td><td>{{r.present}}</td><td>{{r.total}}</td><td>{{r.pct}}%</td><td>{% if r.pct < 75 %}⚠️ Low{% else %}✓ Good{% endif %}</td></tr>{% endfor %}</table></div>
+<p class="muted">Attendance is calculated automatically from faculty-entered daily records.</p>{% endblock %}

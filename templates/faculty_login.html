@@ -1,0 +1,53 @@
+
+{% extends "base.html" %}
+{% block content %}
+<div class="auth-page">
+  <section class="auth-form-card slide-in">
+    <div class="auth-symbol admin">A</div>
+    <h1>Admin Login</h1>
+
+    <form method="post">
+      <label>Admin Name</label>
+      <input name="name" autocomplete="username" required>
+
+      <label>Admin Password</label>
+      <div style="display:flex;align-items:center;gap:8px;">
+        <input
+          type="password"
+          id="admin-password"
+          name="password"
+          autocomplete="current-password"
+          required
+          style="flex:1;min-width:0;"
+        >
+        <button
+          type="button"
+          onclick="toggleAdminPassword()"
+          id="admin-eye"
+          aria-label="Show password"
+          style="cursor:pointer;padding:10px;"
+        >👁</button>
+      </div>
+
+      <button class="auth-submit" type="submit">Login</button>
+    </form>
+  </section>
+</div>
+
+<script>
+function toggleAdminPassword() {
+  const password = document.getElementById('admin-password');
+  const eye = document.getElementById('admin-eye');
+
+  if (password.type === 'password') {
+    password.type = 'text';
+    eye.textContent = '🙈';
+    eye.setAttribute('aria-label', 'Hide password');
+  } else {
+    password.type = 'password';
+    eye.textContent = '👁';
+    eye.setAttribute('aria-label', 'Show password');
+  }
+}
+</script>
+{% endblock %}
