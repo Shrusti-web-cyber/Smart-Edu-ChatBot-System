@@ -1,0 +1,101 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Edit Student | SmartEdu</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 25px;
+            background: #f1f5f9;
+            font-family: Arial, sans-serif;
+            color: #172554;
+        }
+        .card {
+            max-width: 600px;
+            margin: 25px auto;
+            padding: 28px;
+            background: white;
+            border-radius: 14px;
+            box-shadow: 0 5px 20px #0001;
+        }
+        h2 { color: #1d4ed8; }
+        label {
+            display: block;
+            margin-top: 14px;
+            font-weight: bold;
+        }
+        input, select {
+            box-sizing: border-box;
+            width: 100%;
+            padding: 11px;
+            margin-top: 6px;
+            border: 1px solid #cbd5e1;
+            border-radius: 7px;
+        }
+        button {
+            margin-top: 22px;
+            padding: 12px 18px;
+            border: 0;
+            border-radius: 7px;
+            background: #16a34a;
+            color: white;
+            cursor: pointer;
+        }
+        a { margin-left: 12px; color: #1d4ed8; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h2>Edit Student Details</h2>
+
+        <form method="POST"
+              action="{{ url_for('faculty_student_edit', sid=student['id']) }}">
+
+            <label>Name</label>
+            <input name="name" value="{{ student['name'] }}" required>
+
+            <label>Email</label>
+            <input type="email" name="email"
+                   value="{{ student['email'] or '' }}">
+
+            <label>USN</label>
+            <input name="usn" value="{{ student['usn'] }}" required>
+
+            <label>Branch</label>
+            <select name="branch" required>
+                {% for item in branches %}
+                    {% set code = item[0] %}
+                    {% set branch_name = item[1] %}
+                    <option value="{{ code }}"
+                        {% if student['branch'] == code %}selected{% endif %}>
+                        {{ branch_name }}
+                    </option>
+                {% endfor %}
+            </select>
+
+            <label>Semester</label>
+            <select name="semester" required>
+                {% for sem in range(1, 9) %}
+                    <option value="{{ sem }}"
+                        {% if student['semester']|int == sem %}selected{% endif %}>
+                        Semester {{ sem }}
+                    </option>
+                {% endfor %}
+            </select>
+
+            <label>Mobile</label>
+            <input name="mobile" value="{{ student['mobile'] or '' }}">
+
+            <label>New Password (optional)</label>
+            <input type="password" name="password"
+                   minlength="6" placeholder="Leave blank to keep current password">
+
+            <button type="submit">Save Changes</button>
+            <a href="{{ url_for('faculty_dashboard') }}">Cancel</a>
+        </form>
+    </div>
+</body>
+</html>

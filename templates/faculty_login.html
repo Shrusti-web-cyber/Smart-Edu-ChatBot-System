@@ -1,14 +1,30 @@
-
 {% extends "base.html" %}
 {% block content %}
+
 <div class="auth-page">
   <section class="auth-form-card slide-in">
     <div class="auth-symbol admin">A</div>
     <h1>Admin Login</h1>
+    <a href="{{ url_for('forgot_password') }}">Forgot Password?</a>
 
     <form method="post">
       <label>Admin Name</label>
-      <input name="name" autocomplete="username" required>
+      <input
+        type="text"
+        name="name"
+        autocomplete="username"
+        placeholder="Enter admin name"
+        required
+      >
+
+      <label>Select Semester</label>
+      <select name="semester" required>
+        <option value="">Select semester</option>
+        {% for n in range(1, 9) %}
+        <option value="{{ n }}">Semester {{ n }}</option>
+        {% endfor %}
+        <option value="ALL">ALL Semesters (1–8)</option>
+      </select>
 
       <label>Admin Password</label>
       <div style="display:flex;align-items:center;gap:8px;">
@@ -17,6 +33,7 @@
           id="admin-password"
           name="password"
           autocomplete="current-password"
+          placeholder="Enter password"
           required
           style="flex:1;min-width:0;"
         >
@@ -25,7 +42,6 @@
           onclick="toggleAdminPassword()"
           id="admin-eye"
           aria-label="Show password"
-          style="cursor:pointer;padding:10px;"
         >👁</button>
       </div>
 
@@ -50,4 +66,5 @@ function toggleAdminPassword() {
   }
 }
 </script>
+
 {% endblock %}

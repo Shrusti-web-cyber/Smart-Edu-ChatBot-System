@@ -2,7 +2,275 @@
 {% extends "base.html" %}
 {% block content %}
 
+<style>
+:root {
+    --navy: #17365d;
+    --blue: #24558a;
+    --green: #16845b;
+    --text: #172b4d;
+    --muted: #718096;
+    --border: #dce5ef;
+    --background: #f5f7fb;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+.app-shell {
+    display: flex;
+    min-height: calc(100vh - 74px);
+    background: var(--background);
+    color: var(--text);
+    font-family: Arial, sans-serif;
+    border-radius: 14px;
+    overflow: hidden;
+}
+
+.app-sidebar {
+    width: 245px;
+    flex: 0 0 245px;
+    padding: 25px 15px;
+    background: linear-gradient(180deg, #102b4e, #17365d);
+    color: white;
+}
+
+.side-brand {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    padding: 0 12px;
+    margin-bottom: 28px;
+}
+
+.side-brand b {
+    font-size: 27px;
+}
+
+.side-brand b span {
+    color: #62d6a5;
+}
+
+.side-brand small {
+    color: #c5d6ea;
+    font-size: 12px;
+}
+
+.app-sidebar nav {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.app-sidebar nav a {
+    padding: 12px;
+    color: #edf4fc;
+    text-decoration: none;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 700;
+    border-left: 3px solid transparent;
+}
+
+.app-sidebar nav a:hover,
+.app-sidebar nav a.active {
+    background: #315b87;
+    border-left-color: #62d6a5;
+    color: white;
+}
+
+.app-sidebar nav a.logout-link {
+    margin-top: 15px;
+    background: #24466f;
+}
+
+.dashboard-area {
+    flex: 1;
+    min-width: 0;
+    padding: 28px;
+    overflow-x: hidden;
+}
+
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.dashboard-header h1 {
+    margin: 8px 0;
+    color: var(--navy);
+    font-size: clamp(25px, 3vw, 34px);
+}
+
+.dashboard-header p {
+    margin: 6px 0;
+    color: var(--muted);
+}
+
+.dashboard-header > a {
+    display: inline-block;
+    padding: 11px 15px;
+    border-radius: 8px;
+    background: var(--blue);
+    color: white;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.small-label {
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    color: #56548b;
+}
+
+.student-hero {
+    padding: 23px;
+    margin-bottom: 24px;
+    border-radius: 13px;
+    border: 1px solid #cfe6d9;
+    border-left: 5px solid var(--green);
+    background: linear-gradient(120deg, #e8f8ee, #f5fbff);
+}
+
+.student-hero span {
+    color: var(--green);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 1.3px;
+}
+
+.student-hero h2 {
+    margin: 9px 0;
+    color: var(--navy);
+    overflow-wrap: anywhere;
+}
+
+.student-hero p {
+    margin-bottom: 0;
+    color: #52647c;
+}
+
+.dash-card {
+    padding: 22px;
+    margin-bottom: 24px;
+    background: white;
+    border: 1px solid var(--border);
+    border-top: 4px solid var(--green);
+    border-radius: 13px;
+    box-shadow: 0 4px 15px rgba(20, 48, 82, .05);
+}
+
+.card-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 18px;
+}
+
+.card-title span {
+    color: var(--green);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 1.3px;
+}
+
+.card-title h2 {
+    margin: 8px 0 0;
+    color: var(--navy);
+    font-size: 23px;
+}
+
+.table-scroll {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.pro-table {
+    width: 100%;
+    min-width: 720px;
+    border-collapse: collapse;
+    background: white;
+    font-size: 13px;
+}
+
+.pro-table th {
+    padding: 14px 12px;
+    text-align: left;
+    white-space: nowrap;
+    background: #dceaff;
+    color: #25466b;
+}
+
+.pro-table td {
+    padding: 13px 12px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: middle;
+}
+
+.pro-table tbody tr:hover {
+    background: #f8fbff;
+}
+
+.subject-name {
+    display: inline-block;
+    padding: 7px 10px;
+    border-left: 3px solid var(--green);
+    border-radius: 5px;
+    background: #e1f6e9;
+    color: #116b49;
+    font-weight: 800;
+}
+
+.no-timetable {
+    padding: 20px;
+    color: var(--muted);
+    text-align: center;
+    line-height: 1.6;
+}
+
+@media (max-width: 850px) {
+    .app-shell {
+        display: block;
+        overflow: visible;
+    }
+
+    .app-sidebar {
+        width: 100%;
+    }
+
+    .app-sidebar nav {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .dashboard-area {
+        padding: 18px;
+    }
+}
+
+@media (max-width: 520px) {
+    .dashboard-area {
+        padding: 12px;
+    }
+
+    .dash-card {
+        padding: 15px;
+    }
+
+    .student-hero {
+        padding: 17px;
+    }
+}
+</style>
+
 <div class="app-shell">
+
     <aside class="app-sidebar">
         <div class="side-brand">
             <b>Smart<span>Edu</span></b>
@@ -25,12 +293,14 @@
     </aside>
 
     <section class="dashboard-area">
+
         <header class="dashboard-header">
             <div>
                 <span class="small-label">SMARTEDU STUDENT</span>
                 <h1>My Class Timetable</h1>
                 <p>{{ student.name }} · {{ student.usn }}</p>
             </div>
+
             <a href="/dashboard">Back to Dashboard</a>
         </header>
 
@@ -38,7 +308,9 @@
             <div>
                 <span>COLLEGE NAME</span>
                 <h2>{{ student.college_name }}</h2>
-                <p>{{ student.branch }} · Semester {{ student.semester }}</p>
+                <p>
+                    {{ student.branch }} · Semester {{ student.semester }}
+                </p>
             </div>
         </section>
 
@@ -69,14 +341,21 @@
                             <td>{{ t.day }}</td>
                             <td>{{ t.start_time }}</td>
                             <td>{{ t.end_time }}</td>
-                            <td>{{ t.subject }}</td>
+                            <td>
+                                <span class="subject-name">
+                                    {{ t.subject }}
+                                </span>
+                            </td>
                             <td>{{ t.faculty or '-' }}</td>
                             <td>{{ t.room or '-' }}</td>
                         </tr>
                         {% else %}
                         <tr>
                             <td colspan="6">
-                                No timetable has been published for your class yet.
+                                <div class="no-timetable">
+                                    No timetable has been published for your
+                                    class yet. Please check again later.
+                                </div>
                             </td>
                         </tr>
                         {% endfor %}
@@ -84,6 +363,7 @@
                 </table>
             </div>
         </section>
+
     </section>
 </div>
 

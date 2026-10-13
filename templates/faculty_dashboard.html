@@ -1,114 +1,1126 @@
+{% extends "base.html" %}
+{% block content %}
 
-<form method="POST"
-      action="{{ url_for('add_timetable') }}"
-      class="timetable-form">
+<style>
+:root {
+    --navy: #17365d;
+    --blue: #24558a;
+    --green: #16845b;
+    --text: #172b4d;
+    --muted: #718096;
+    --border: #dce5ef;
+    --background: #f5f7fb;
+}
 
-    <h3>Publish Class Timetable</h3>
+* {
+    box-sizing: border-box;
+}
 
-    <div class="timetable-form-grid">
-        <label>
-            Branch
-            <select name="branch" required>
-                <option value="">Select branch</option>
-                <option value="AI">AI & amp;ML</option>
-                <option value="CS">CSE</option>
-                <option value="EC">ECE</option>
-            </select>
-        </label>
+.faculty-layout {
+    display: flex;
+    height: calc(100vh - 74px);
+    min-height: 600px;
+    overflow: hidden;
+    background: var(--background);
+    color: var(--text);
+    border-radius: 14px;
+    font-family: Arial, sans-serif;
+}
 
-        <label>
-            Semester
-            <select name="semester" required>
-                <option value="">Select semester</option>
-                {% for n in range(1, 9) %}
-                <option value="{{ n }}">Semester {{ n }}</option>
-                {% endfor %}
-            </select>
-        </label>
+.faculty-sidebar {
+    width: 255px;
+    flex: 0 0 255px;
+    min-height: 0;
+    overflow-y: auto;
+    background: linear-gradient(180deg, #102b4e, #17365d);
+    color: white;
+    padding: 28px 16px;
+    display: flex;
+    flex-direction: column;
+}
 
-        <label>
-            Day
-            <select name="day" required>
-                <option value="">Select day</option>
-                {% for d in ['Monday', 'Tuesday', 'Wednesday',
-                             'Thursday', 'Friday', 'Saturday'] %}
-                <option value="{{ d }}">{{ d }}</option>
-                {% endfor %}
-            </select>
-        </label>
+.faculty-brand {
+    font-size: 27px;
+    font-weight: 800;
+    padding: 0 12px;
+}
 
-        <label>
-            Start time
-            <input type="time" name="start_time" required>
-        </label>
+.faculty-brand span {
+    color: #62d6a5;
+}
 
-        <label>
-            End time
-            <input type="time" name="end_time" required>
-        </label>
+.faculty-subtitle {
+    color: #c5d6ea;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.8px;
+    padding: 0 12px;
+    margin: 9px 0 28px;
+}
 
-        <label>
-            Subject name
-            <input type="text" name="subject"
-                   placeholder="e.g. Machine Learning" required>
-        </label>
+.faculty-sidebar nav {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
 
-        <label>
-            Subject code
-            <input type="text" name="subject_code"
-                   placeholder="e.g. BAI701" required>
-        </label>
+.faculty-sidebar nav a {
+    display: flex;
+    align-items: center;
+    min-height: 44px;
+    color: #edf4fc;
+    text-decoration: none;
+    padding: 12px 14px;
+    border-radius: 9px;
+    font-size: 13px;
+    font-weight: 700;
+    border-left: 3px solid transparent;
+}
 
-        <label>
-            Faculty name
-            <input type="text" name="faculty"
-                   placeholder="Enter faculty name" required>
-        </label>
+.faculty-sidebar nav a:hover,
+.faculty-sidebar nav a.active {
+    background: #315b87;
+    color: white;
+    border-left-color: #62d6a5;
+}
 
-        <label>
-            Classroom / Lab
-            <input type="text" name="room"
-                   placeholder="e.g. Room 204">
-        </label>
-    </div>
+.faculty-sidebar nav a:last-child {
+    margin-top: 18px;
+    background: #24466f;
+}
 
-    <button type="submit" class="timetable-submit">
-        Publish Timetable Entry
-    </button>
+.faculty-main {
+    flex: 1;
+    min-width: 0;
+    height: 100%;
+    overflow: auto;
+    padding: 28px;
+}
+
+.faculty-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+    margin-bottom: 25px;
+}
+
+.faculty-header h1 {
+    margin: 8px 0;
+    font-size: clamp(24px, 3vw, 32px);
+    color: var(--navy);
+}
+
+.faculty-header h2 {
+    margin: 8px 0;
+    font-size: 19px;
+}
+
+.faculty-header p {
+    color: var(--muted);
+    margin: 5px 0;
+}
+
+.eyebrow {
+    color: #56548b;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+}
+
+.faculty-badge {
+    background: #dff7eb;
+    color: #126747;
+    padding: 10px 15px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.faculty-stats,
+.faculty-quick-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+    margin-bottom: 25px;
+}
+
+.faculty-stat,
+.faculty-quick-link,
+.faculty-card {
+    border: 1px solid var(--border);
+    border-radius: 13px;
+    padding: 20px;
+    box-shadow: 0 4px 15px rgba(20, 48, 82, .05);
+}
+
+.faculty-stat:nth-child(1) {
+    background: #eaf2ff;
+    border-top: 4px solid #3976ce;
+}
+
+.faculty-stat:nth-child(2) {
+    background: #f0edff;
+    border-top: 4px solid #8171d5;
+}
+
+.faculty-stat:nth-child(3) {
+    background: #e8f8ee;
+    border-top: 4px solid #45a878;
+}
+
+.stat-label {
+    display: block;
+    color: #25466b;
+    font-size: 15px;
+    font-weight: 800;
+}
+
+.stat-number {
+    color: var(--navy);
+    font-size: 32px;
+    font-weight: 800;
+    margin: 12px 0 5px;
+}
+
+.stat-note {
+    color: #65758b;
+    font-size: 12px;
+}
+
+.faculty-quick-link {
+    display: block;
+    color: var(--text);
+    text-decoration: none;
+}
+
+.faculty-quick-link:nth-child(1) { background: #eaf2ff; }
+.faculty-quick-link:nth-child(2) { background: #e8f8ee; }
+.faculty-quick-link:nth-child(3) { background: #fff3df; }
+.faculty-quick-link:nth-child(4) { background: #f0edff; }
+.faculty-quick-link:nth-child(5) { background: #e2f7f8; }
+.faculty-quick-link:nth-child(6) { background: #eaf2ff; }
+
+.faculty-quick-link b {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 15px;
+}
+
+.faculty-quick-link small {
+    color: #52647c;
+    line-height: 1.5;
+}
+
+.faculty-card {
+    margin-bottom: 24px;
+    background: white;
+    scroll-margin-top: 20px;
+}
+
+#students {
+    background: #f0f6ff;
+    border-top: 4px solid #3976ce;
+}
+
+#timetable {
+    background: #f0fbf7;
+    border-top: 4px solid #16845b;
+}
+
+#materials {
+    background: #f6f1ff;
+    border-top: 4px solid #8171d5;
+}
+
+#notifications {
+    background: #fff7e8;
+    border-top: 4px solid #d69a36;
+}
+
+#admin-ai {
+    background: white;
+    border-top: 4px solid #16845b;
+}
+
+.section-title {
+    color: var(--navy);
+    font-size: 23px;
+    font-weight: 800;
+    line-height: 1.4;
+    margin: 0 0 10px;
+}
+
+.card-description {
+    color: var(--muted);
+    font-size: 13px;
+    margin-bottom: 20px;
+}
+
+.table-wrap {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.faculty-table {
+    border-collapse: collapse;
+    width: 100%;
+    min-width: 650px;
+    font-size: 13px;
+    background: white;
+}
+
+.faculty-table th {
+    background: #dceaff;
+    color: #25466b;
+    text-align: left;
+    padding: 12px;
+    white-space: nowrap;
+}
+
+.faculty-table td {
+    padding: 12px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: middle;
+}
+
+.faculty-form-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 15px;
+}
+
+.faculty-form-grid label {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    font-size: 13px;
+    font-weight: 700;
+    color: #334b68;
+}
+
+.faculty-form-grid input,
+.faculty-form-grid select {
+    width: 100%;
+    min-width: 0;
+    padding: 11px;
+    border: 1px solid #cbd8e8;
+    border-radius: 7px;
+    background: white;
+    font-size: 14px;
+}
+
+.faculty-button {
+    display: inline-block;
+    background: var(--blue);
+    color: white;
+    border: 0;
+    border-radius: 7px;
+    padding: 10px 14px;
+    margin-top: 10px;
+    cursor: pointer;
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.faculty-button:hover {
+    background: var(--navy);
+}
+
+.faculty-button.green {
+    background: var(--green);
+}
+
+.faculty-button.green:hover {
+    background: #116b49;
+}
+
+.faculty-button:disabled {
+    opacity: .6;
+    cursor: not-allowed;
+}
+
+.faculty-notice {
+    border-left: 4px solid #d69a36;
+    background: #fff0d3;
+    padding: 13px;
+    margin: 12px 0;
+    border-radius: 5px;
+}
+
+.faculty-notice p {
+    margin: 6px 0 0;
+    font-size: 13px;
+}
+
+.faculty-empty {
+    padding: 18px 0;
+    color: var(--muted);
+    font-size: 13px;
+}
+
+/* Timetable */
+.timetable-table {
+    min-width: 1250px;
+    table-layout: fixed;
+}
+
+.timetable-table th,
+.timetable-table td {
+    border: 1px solid #cbd8e8;
+    padding: 8px;
+    vertical-align: top;
+}
+
+.timetable-table th:first-child {
+    width: 115px;
+}
+
+.timetable-table td {
+    min-width: 135px;
+    height: 110px;
+}
+
+.subject-highlight {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding: 10px;
+    background: #e1f6e9;
+    border-left: 4px solid #16845b;
+    border-radius: 7px;
+    color: #174b37;
+    font-size: 12px;
+    overflow-wrap: anywhere;
+}
+
+.subject-highlight strong {
+    color: #116b49;
+    font-size: 14px;
+    font-weight: 800;
+}
+
+.timetable-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 15px;
+}
+
+#timetable-add-form {
+    margin-top: 20px;
+    padding: 20px;
+    border: 1px solid #dce5ef;
+    border-radius: 10px;
+    background: #f8fbff;
+}
+
+#timetable-add-form[hidden] {
+    display: none !important;
+}
+
+.break-cell {
+    background: #fff3d7;
+    color: #855b13;
+    text-align: center;
+    font-weight: 700;
+}
+
+.lunch-cell {
+    background: #e8f8ee;
+    color: #126747;
+    text-align: center;
+    font-weight: 700;
+}
+
+/* Admin AI chat */
+#admin-chat-messages {
+    min-height: 180px;
+    max-height: 350px;
+    overflow-y: auto;
+    padding: 15px;
+    background: #f5f7fb;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+
+.admin-chat-line {
+    padding: 10px 12px;
+    border-radius: 9px;
+    margin: 8px 0;
+    line-height: 1.5;
+}
+
+.admin-chat-user {
+    background: #eaf2ff;
+}
+
+.admin-chat-ai {
+    background: #e8f8ee;
+}
+
+.admin-chat-error {
+    color: #a12626;
+    background: #fff0f0;
+}
+
+#admin-chat-input {
+    display: block;
+    width: 100%;
+    min-height: 85px;
+    padding: 12px;
+    margin-top: 8px;
+    border: 1px solid #cbd8e8;
+    border-radius: 8px;
+    font: inherit;
+    resize: vertical;
+}
+
+#admin-chat-status {
+    font-size: 13px;
+    color: var(--muted);
+    min-height: 18px;
+}
+
+@media (max-width: 900px) {
+    .faculty-layout {
+        height: auto;
+        min-height: 85vh;
+        display: block;
+        overflow: visible;
+    }
+
+    .faculty-sidebar {
+        width: 100%;
+        height: auto;
+        overflow: visible;
+    }
+
+    .faculty-sidebar nav {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .faculty-main {
+        height: auto;
+        overflow: visible;
+        padding: 18px;
+    }
+
+    .faculty-stats {
+        grid-template-columns: 1fr;
+    }
+
+    .faculty-form-grid,
+    .faculty-quick-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 520px) {
+    .faculty-form-grid,
+    .faculty-quick-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .faculty-main {
+        padding: 12px;
+    }
+
+    .faculty-card {
+        padding: 15px;
+    }
+}
+</style>
+
+<div class="faculty-layout">
+
+    <aside class="faculty-sidebar">
+        <div class="faculty-brand">Smart<span>Edu</span></div>
+        <small class="faculty-subtitle">ADMIN PORTAL</small>
+
+        <nav>
+            <a class="active" href="{{ url_for('faculty_dashboard') }}">Dashboard</a>
+            <a href="#students">Student Records</a>
+            <a href="{{ url_for('faculty_attendance') }}">Attendance Management</a>
+            <a href="{{ url_for('faculty_internal_marks') }}">Internal Marks Management</a>
+            <a href="#timetable">Class Timetable</a>
+            <a href="#materials">Study Materials</a>
+            <a href="#notifications">College Notifications</a>
+            <a href="#admin-ai">Admin AI Assistant</a>
+            <a href="/logout">Logout</a>
+        </nav>
+    </aside>
+
+    <main class="faculty-main">
+
+        <header class="faculty-header">
+            <div>
+                <span class="eyebrow">SMARTEDU ADMINISTRATION</span>
+                <h1>Welcome to Admin Dashboard</h1>
+                <h2>Hello, {{ faculty.name }}!</h2>
+                <p>Manage students, academic records, timetable and learning resources.</p>
+            </div>
+            <span class="faculty-badge">● Admin Portal</span>
+        </header>
+
+        <!-- Dashboard statistics -->
+        <section class="faculty-stats">
+            <div class="faculty-stat">
+                <span class="stat-label">Registered Students</span>
+                <div class="stat-number">{{ students|length }}</div>
+                <span class="stat-note">Students in your college</span>
+            </div>
+
+            <div class="faculty-stat">
+                <span class="stat-label">Recent Materials</span>
+                <div class="stat-number">{{ mats|length }}</div>
+                <span class="stat-note">Materials in the current list</span>
+            </div>
+
+            <div class="faculty-stat">
+                <span class="stat-label">College Notifications</span>
+                <div class="stat-number">{{ notifications|length }}</div>
+                <span class="stat-note">Recent notifications</span>
+            </div>
+        </section>
+
+        <!-- Quick links -->
+        <section class="faculty-quick-grid">
+            <a class="faculty-quick-link" href="#students">
+                <b>Student Records</b>
+                <small>Add students and edit registered student details.</small>
+            </a>
+
+            <a class="faculty-quick-link" href="{{ url_for('faculty_attendance') }}">
+                <b>Attendance Management</b>
+                <small>Record attendance and view saved records.</small>
+            </a>
+
+            <a class="faculty-quick-link" href="{{ url_for('faculty_internal_marks') }}">
+                <b>Internal Marks</b>
+                <small>Enter marks and view saved marks.</small>
+            </a>
+
+            <a class="faculty-quick-link" href="#timetable">
+                <b>Class Timetable</b>
+                <small>Manage weekly class slots.</small>
+            </a>
+
+            <a class="faculty-quick-link" href="#materials">
+                <b>Study Materials</b>
+                <small>Upload and review learning resources.</small>
+            </a>
+
+            <a class="faculty-quick-link" href="#admin-ai">
+                <b>Admin AI Assistant</b>
+                <small>Ask the AI assistant a question.</small>
+            </a>
+        </section>
+
+        <!-- Student records -->
+        <section id="students" class="faculty-card">
+            <h2 class="section-title">Student Records</h2>
+            <p class="card-description">Add students and manage the registered student list.</p>
+
+            <h3>Add New Student</h3>
+
+            <form method="POST" action="{{ url_for('faculty_student_add') }}">
+                <div class="faculty-form-grid">
+                    <label>Student Name
+                        <input type="text" name="name" placeholder="Enter full name" required>
+                    </label>
+
+                    <label>Email
+                        <input type="email" name="email" placeholder="student@example.com" required>
+                    </label>
+
+                    <label>USN
+                        <input type="text" name="usn" placeholder="Enter student USN" required>
+                    </label>
+
+                    <label>Branch
+                        <select name="branch" required>
+                            <option value="">Select branch</option>
+                            <option value="AI">AI &amp; ML</option>
+                            <option value="CS">Computer Science</option>
+                            <option value="EC">Electronics &amp; Communication</option>
+                            <option value="IS">Information Science</option>
+                            <option value="ME">Mechanical Engineering</option>
+                            <option value="CV">Civil Engineering</option>
+                            <option value="EE">Electrical Engineering</option>
+                        </select>
+                    </label>
+
+                    <label>Semester
+                        <select name="semester" required>
+                            <option value="">Select semester</option>
+                            {% for n in range(1, 9) %}
+                            <option value="{{ n }}">Semester {{ n }}</option>
+                            {% endfor %}
+                        </select>
+                    </label>
+
+                    <label>Mobile Number
+                        <input type="tel" name="mobile" placeholder="Enter mobile number">
+                    </label>
+
+                    <label>Temporary Password
+                        <input type="password" name="password"
+                               placeholder="Create initial password"
+                               minlength="8" required>
+                    </label>
+                </div>
+
+                <button class="faculty-button green" type="submit">+ Add Student</button>
+            </form>
+
+            <hr style="border:0;border-top:1px solid #dce5ef;margin:25px 0">
+
+            
+<form method="GET" action="{{ url_for('faculty_dashboard') }}"
+      style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:15px 0;">
+    <label for="semester-filter">Filter by Semester</label>
+    <select id="semester-filter" name="semester"
+            onchange="this.form.submit()"
+            style="padding:10px;border:1px solid #cbd8e8;border-radius:7px;">
+        <option value="ALL"
+            {% if selected_semester == 'ALL' %}selected{% endif %}>
+            All Semesters
+        </option>
+        {% for n in range(1, 9) %}
+        <option value="{{ n }}"
+            {% if selected_semester|string == n|string %}selected{% endif %}>
+            Semester {{ n }}
+        </option>
+        {% endfor %}
+    </select>
 </form>
-<section id="timetable">
-    <h3>Published Timetable Entries</h3>
 
-    {% if timetable_entries %}
-    <table>
-        <thead>
-            <tr>
-                <th>Day</th>
-                <th>Time</th>
-                <th>Branch</th>
-                <th>Semester</th>
-                <th>Subject</th>
-                <th>Subject Code</th>
-                <th>Faculty</th>
-                <th>Room</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for entry in timetable_entries %}
-            <tr>
-                <td>{{ entry['day'] }}</td>
-                <td>{{ entry['start_time'] }} - {{ entry['end_time'] }}</td>
-                <td>{{ entry['branch'] }}</td>
-                <td>{{ entry['semester'] }}</td>
-                <td>{{ entry['subject'] }}</td>
-                <td>{{ entry['subject_code'] }}</td>
-                <td>{{ entry['faculty'] }}</td>
-                <td>{{ entry['room'] }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    {% else %}
-    <p>No timetable entries found.</p>
-    {% endif %}
-</section>
+
+            <h3>Registered Students</h3>
+
+            {% if students %}
+            <div class="table-wrap">
+                <table class="faculty-table">
+                    <thead>
+                        <tr>
+                            <th>Student No.</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>USN</th>
+                            <th>Branch</th>
+                            <th>Semester</th>
+                            <th>Edit</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for student in students %}
+                        <tr>
+                            <td>{{ loop.index }}</td>
+                            <td>{{ student['name'] }}</td>
+                            <td>{{ student['email'] }}</td>
+                            <td>{{ student['usn'] }}</td>
+                            <td>{{ student['branch'] }}</td>
+                            <td>{{ student['semester'] }}</td>
+                            <td>
+                                <a class="faculty-button"
+                                   href="/faculty/student/edit/{{ student['id'] }}">Edit</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <p class="faculty-empty">No students registered yet. Add the first student above.</p>
+            {% endif %}
+        </section>
+
+        <!-- Weekly timetable -->
+        <section id="timetable" class="faculty-card">
+            <h2 class="section-title">SmartEdu Class Timetable</h2>
+            <p class="card-description">
+                View the weekly timetable and add classes for a branch and semester.
+            </p>
+
+            <div class="table-wrap">
+                <table class="faculty-table timetable-table" id="admin-timetable">
+                    <thead>
+                        <tr>
+                            <th>Day</th>
+                            <th>9–10 AM</th>
+                            <th>10–11 AM</th>
+                            <th>11–11:10 AM</th>
+                            <th>11:10 AM–12 PM</th>
+                            <th>12–1 PM</th>
+                            <th>1–2 PM</th>
+                            <th>2–3 PM</th>
+                            <th>3–4 PM</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for day in [
+                            'Monday', 'Tuesday', 'Wednesday',
+                            'Thursday', 'Friday', 'Saturday'
+                        ] %}
+                        <tr>
+                            <th>{{ day }}</th>
+
+                            {% for slot in [
+                                '09:00', '10:00', '11:00', '11:10',
+                                '12:00', '13:00', '14:00', '15:00'
+                            ] %}
+                                {% if slot == '11:00' %}
+                                <td class="break-cell">Break</td>
+                                {% elif slot == '12:00' %}
+                                <td class="lunch-cell">Lunch</td>
+                                {% else %}
+                                <td>
+                                    {% if timetable_cells is defined %}
+                                        {% for item in timetable_cells %}
+                                            {% if item['day'] == day and item['start_time'] == slot %}
+                                            <div class="subject-highlight">
+                                                <strong>{{ item['subject'] }}</strong>
+                                                <span>{{ item['faculty'] or 'Faculty not assigned' }}</span>
+                                                <span>{{ item['start_time'] }}–{{ item['end_time'] }}</span>
+                                                <span>Room: {{ item['room'] or 'Not assigned' }}</span>
+                                                <span>{{ item['branch'] }} · Semester {{ item['semester'] }}</span>
+                                            </div>
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% endif %}
+                                </td>
+                                {% endif %}
+                            {% endfor %}
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="timetable-actions">
+                <button type="button" id="toggle-timetable-form"
+                        class="faculty-button green">
+                    + Add Class to Timetable
+                </button>
+            </div>
+
+            <form id="timetable-add-form"
+                  method="POST"
+                  action="{{ url_for('add_timetable') }}"
+                  hidden>
+
+                <h3>Add a Timetable Entry</h3>
+
+                <div class="faculty-form-grid">
+                    <label>Day
+                        <select name="day" required>
+                            <option value="">Select day</option>
+                            <option>Monday</option>
+                            <option>Tuesday</option>
+                            <option>Wednesday</option>
+                            <option>Thursday</option>
+                            <option>Friday</option>
+                            <option>Saturday</option>
+                        </select>
+                    </label>
+
+                    <label>Subject
+                        <input type="text" name="subject"
+                               placeholder="e.g. Machine Learning" required>
+                    </label>
+
+                    <label>Faculty Name
+                        <input type="text" name="faculty"
+                               placeholder="Enter faculty name" required>
+                    </label>
+
+                    <label>Start Time
+                        <input type="time" name="start_time" required>
+                    </label>
+
+                    <label>End Time
+                        <input type="time" name="end_time" required>
+                    </label>
+
+                    <label>Room
+                        <input type="text" name="room" placeholder="e.g. Room 204">
+                    </label>
+
+                    <label>Branch
+                        <select name="branch" required>
+                            <option value="">Select branch</option>
+                            <option value="AI">AI &amp; ML</option>
+                            <option value="CS">Computer Science</option>
+                            <option value="EC">Electronics &amp; Communication</option>
+                            <option value="IS">Information Science</option>
+                            <option value="ME">Mechanical Engineering</option>
+                            <option value="CV">Civil Engineering</option>
+                            <option value="EE">Electrical Engineering</option>
+                        </select>
+                    </label>
+
+                    <label>Semester
+                        <select name="semester" required>
+                            <option value="">Select semester</option>
+                            {% for n in range(1, 9) %}
+                            <option value="{{ n }}">Semester {{ n }}</option>
+                            {% endfor %}
+                        </select>
+                    </label>
+                </div>
+
+                <button type="submit" class="faculty-button green">Save Timetable</button>
+                <button type="button" id="cancel-timetable-form"
+                        class="faculty-button">Cancel</button>
+            </form>
+        </section>
+
+        <!-- Study materials -->
+        <section id="materials" class="faculty-card">
+            <h2 class="section-title">Study Materials</h2>
+            <p class="card-description">Upload learning resources for students in your college.</p>
+
+            <form method="POST"
+                  action="{{ url_for('upload') }}"
+                  enctype="multipart/form-data">
+
+                <div class="faculty-form-grid">
+                    <label>Resource Title
+                        <input type="text" name="title"
+                               placeholder="Machine Learning Notes" required>
+                    </label>
+
+                    <label>Subject
+                        <input type="text" name="subject"
+                               placeholder="Machine Learning" required>
+                    </label>
+
+                    <label>Select File
+                        <input type="file" name="file" required
+                               accept=".pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.txt,.jpg,.jpeg,.png,.gif,.webp,.csv,.mp3,.wav,.m4a,.mp4,.webm,.mov">
+                    </label>
+                </div>
+
+                <button class="faculty-button green" type="submit">
+                    Upload Study Material
+                </button>
+            </form>
+
+            <hr style="border:0;border-top:1px solid #dce5ef;margin:25px 0">
+
+            <h3>Recent Materials</h3>
+
+            {% if mats %}
+            <div class="table-wrap">
+                <table class="faculty-table">
+                    <thead>
+                        <tr>
+                            <th>Material Name</th>
+                            <th>File</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for material in mats %}
+                        <tr>
+                            <td>
+                                {{ material['title'] if material['title'] is defined else 'Study resource' }}
+                            </td>
+                            <td>
+                                {{ material['filename'] if material['filename'] is defined else 'Uploaded resource' }}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <p class="faculty-empty">No study materials are available yet.</p>
+            {% endif %}
+        </section>
+
+        <!-- College notifications -->
+        <section id="notifications" class="faculty-card">
+            <h2 class="section-title">College Notifications</h2>
+            <p class="card-description">Recent updates available to your college.</p>
+
+            {% if notifications %}
+                {% for notice in notifications %}
+                <div class="faculty-notice">
+                    <strong>{{ notice['title'] }}</strong>
+                    <p>{{ notice['message'] }}</p>
+                </div>
+                {% endfor %}
+            {% else %}
+            <p class="faculty-empty">No notifications available.</p>
+            {% endif %}
+        </section>
+
+        <!-- Admin AI Assistant -->
+        <section id="admin-ai" class="faculty-card">
+            <h2 class="section-title">SmartEdu Admin AI Assistant</h2>
+            <p class="card-description">
+                Ask questions about college administration, attendance,
+                internal marks, timetables, Python and general knowledge.
+            </p>
+
+            <div id="admin-chat-messages" role="log" aria-live="polite">
+                <p class="admin-chat-line admin-chat-ai">
+                    <strong>SmartEdu AI:</strong>
+                    Hello! How can I help you today?
+                </p>
+            </div>
+
+            <form id="admin-chat-form">
+                <label for="admin-chat-input">Your question</label>
+
+                <textarea id="admin-chat-input"
+                          name="message"
+                          maxlength="4000"
+                          placeholder="Ask your question here..."
+                          required></textarea>
+
+                <button id="admin-chat-send"
+                        class="faculty-button green"
+                        type="submit">
+                    Send Message
+                </button>
+
+                <p id="admin-chat-status" role="status"></p>
+            </form>
+        </section>
+
+    </main>
+</div>
+
+<script>
+/* Timetable form: one copy only */
+const timetableToggle = document.getElementById('toggle-timetable-form');
+const timetableForm = document.getElementById('timetable-add-form');
+const timetableCancel = document.getElementById('cancel-timetable-form');
+
+if (timetableToggle && timetableForm) {
+    timetableToggle.addEventListener('click', function () {
+        timetableForm.hidden = !timetableForm.hidden;
+
+        timetableToggle.textContent = timetableForm.hidden
+            ? '+ Add Class to Timetable'
+            : 'Close Timetable Form';
+
+        if (!timetableForm.hidden) {
+            timetableForm.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+    });
+}
+
+if (timetableCancel && timetableForm && timetableToggle) {
+    timetableCancel.addEventListener('click', function () {
+        timetableForm.reset();
+        timetableForm.hidden = true;
+        timetableToggle.textContent = '+ Add Class to Timetable';
+    });
+}
+
+/* Admin AI Assistant: one copy only */
+const adminChatForm = document.getElementById('admin-chat-form');
+const adminChatInput = document.getElementById('admin-chat-input');
+const adminChatMessages = document.getElementById('admin-chat-messages');
+const adminChatStatus = document.getElementById('admin-chat-status');
+const adminChatSend = document.getElementById('admin-chat-send');
+
+function addAdminChatMessage(role, message, type) {
+    if (!adminChatMessages) return;
+
+    const line = document.createElement('p');
+    line.className = 'admin-chat-line';
+
+    if (type === 'error') {
+        line.classList.add('admin-chat-error');
+    } else if (role === 'You') {
+        line.classList.add('admin-chat-user');
+    } else {
+        line.classList.add('admin-chat-ai');
+    }
+
+    const label = document.createElement('strong');
+    label.textContent = role + ': ';
+
+    const content = document.createElement('span');
+    content.textContent = message;
+
+    line.appendChild(label);
+    line.appendChild(content);
+    adminChatMessages.appendChild(line);
+    adminChatMessages.scrollTop = adminChatMessages.scrollHeight;
+}
+
+if (adminChatForm && adminChatInput && adminChatSend && adminChatStatus) {
+    adminChatForm.addEventListener('submit', async function (event) {
+        event.preventDefault();
+
+        console.log('Admin chatbot submit triggered');
+        console.log('Question:', adminChatInput.value);
+
+        const message = adminChatInput.value.trim();
+
+        if (!message) {
+            adminChatStatus.textContent = 'Please type a question.';
+            return;
+        }
+
+        addAdminChatMessage('You', message);
+        adminChatInput.value = '';
+        adminChatSend.disabled = true;
+        adminChatStatus.textContent = 'AI is thinking...';
+
+        try {
+            const response = await fetch('/api/admin-chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                credentials: 'same-origin',
+                body: JSON.stringify({ message: message })
+            });
+
+            const data = await response.json().catch(() => ({}));
+
+            if (!response.ok) {
+                throw new Error(
+                    data.answer || 'Request failed with status ' + response.status
+                );
+            }
+
+            if (typeof data.answer !== 'string' || !data.answer.trim()) {
+                throw new Error('The AI returned an empty response.');
+            }
+
+            addAdminChatMessage('SmartEdu AI', data.answer);
+            adminChatStatus.textContent = 'Response received.';
+
+        } catch (error) {
+            addAdminChatMessage(
+                'SmartEdu AI',
+                error.message || 'The AI service is unavailable.',
+                'error'
+            );
+
+            adminChatStatus.textContent =
+                'Message failed. Check the Flask terminal.';
+        } finally {
+            adminChatSend.disabled = false;
+            adminChatInput.focus();
+        }
+    });
+}
+</script>
+
+{% endblock %}

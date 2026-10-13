@@ -1,22 +1,233 @@
-{% extends "base.html" %}{% block content %}
-<h1>Academic Record Management</h1>
-{% for s in students %}
-<div class="card"><h2>{{s.name}} — {{s.usn}}</h2><h3>Attendance</h3>
-{% for r in attendance_records[s.id] %}
-<form class="record" method="post" action="/faculty/attendance/edit/{{r.id}}">
-<input name="subject" value="{{r.subject}}" required><input name="class_date" type="date" value="{{r.class_date}}" required>
-<select name="status"><option {% if r.status=='Present' %}selected{% endif %}>Present</option><option {% if r.status=='Absent' %}selected{% endif %}>Absent</option></select>
-<button>Save Edit</button></form>
-<form class="inline" method="post" action="/faculty/attendance/delete/{{r.id}}"><button class="danger">Delete</button></form>
-{% else %}<p class="muted">No attendance records.</p>{% endfor %}
-<h3>Internal Marks</h3>
-{% for r in marks_records[s.id] %}
-<form class="record" method="post" action="/faculty/marks/save">
-<input type="hidden" name="student_id" value="{{s.id}}"><input name="subject" value="{{r.subject}}" required>
-<input name="ia1" type="number" step=".01" value="{{r.ia1}}" required><input name="ia2" type="number" step=".01" value="{{r.ia2}}" required>
-<input name="ia3" type="number" step=".01" value="{{r.ia3}}" required><input name="assignment" type="number" step=".01" value="{{r.assignment}}" required>
-<button>Save Edit</button></form>
-<form class="inline" method="post" action="/faculty/marks/delete/{{r.id}}"><button class="danger">Delete</button></form>
-{% else %}<p class="muted">No marks records.</p>{% endfor %}</div>
-{% endfor %}
+
+{% extends "base.html" %}
+{% block content %}
+
+<style>
+.records-page { padding: 22px; color: #0b2545; }
+.records-page h1 { margin-bottom: 8px; }
+.records-page h2 { margin-top: 24px; }
+.records-table-wrap { overflow-x: auto; margin-bottom: 28px; }
+.records-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    min-width: 760px;
+}
+.records-table th, .records-table td {
+    border: 1px solid #dbe3ed;
+    padding: 10px;
+    text-align: left;
+}
+.records-table th { background: #164e8a; color: white; }
+.records-table tr:nth-child(even) { background: #f4f8fc; }
+.records-table input, .records-table select {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 7px;
+}
+
+.records-page {
+    padding: 22px;
+    background: #ffffff;
+    color: #1f2937;
+}
+
+.action-btn {
+    padding: 7px 11px;
+    border: 0;
+    border-radius: 6px;
+    cursor: pointer;
+    margin: 2px;
+}
+.edit-btn { background: #dbeafe; color: #1d4ed8; }
+.save-btn { background: #dcfce7; color: #166534; }
+.delete-btn { background: #fee2e2; color: #991b1b; }
+.cancel-btn { background: #e2e8f0; color: #334155; }
+.editing-fields { display: none; }
+.record-row.editing .display-value {
+    display: none;
+}
+
+.record-row.editing .editing-fields {
+    display: block;
+}
+</style>
+
+<div class="records-page">
+    <h1>Academic Record Management</h1>
+    <p>Manage student attendance and internal marks.</p>
+
+    <h2>Attendance Records</h2>
+    <div class="records-table-wrap">
+        <table class="records-table">
+            <thead>
+                <tr>
+                    <th>Sl. No.</th>
+                    <th>Student Name</th>
+                    <th>USN</th>
+                    <th>Subject</th>
+                    <th>Class Date</th>
+                    <th>Attendance</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% set ns = namespace(n=0) %}
+            {% for s in students %}
+                {% for r in attendance_records[s.id] %}
+                {% set ns.n = ns.n + 1 %}
+                <tr class="record-row">
+                    <td>{{ ns.n }}</td>
+                    <td>{{ s.name }}</td>
+                    <td>{{ s.usn }}</td>
+                    <td>
+                        <span class="display-value">{{ r.subject }}</span>
+                        <div class="editing-fields">
+                            <input form="attendance-edit-{{ r.id }}"
+                                   name="subject" value="{{ r.subject }}" required>
+                        </div>
+                    </td>
+                    <td>
+                        <span class="display-value">{{ r.class_date }}</span>
+                        <div class="editing-fields">
+                            <input form="attendance-edit-{{ r.id }}"
+                                   name="class_date" type="date"
+                                   value="{{ r.class_date }}" required>
+                        </div>
+                    </td>
+                    <td>
+                        <span class="display-value">{{ r.status }}</span>
+                        <div class="editing-fields">
+                            <select form="attendance-edit-{{ r.id }}" name="status">
+                                <option value="Present"
+                                    {% if r.status == 'Present' %}selected{% endif %}>
+                                    Present
+                                </option>
+                                <option value="Absent"
+                                    {% if r.status == 'Absent' %}selected{% endif %}>
+                                    Absent
+                                </option>
+                            </select>
+                        </div>
+                    </td>
+                    <td>
+                        <form id="attendance-edit-{{ r.id }}" method="post"
+                              action="/faculty/attendance/edit/{{ r.id }}">
+                        </form>
+                        <button type="button" class="action-btn edit-btn"
+                                onclick="editRow(this)">Edit</button>
+                        <span class="editing-fields">
+                            <button form="attendance-edit-{{ r.id }}"
+                                    class="action-btn save-btn">Save</button>
+                            <button type="button" class="action-btn cancel-btn"
+                                    onclick="cancelRow(this)">Cancel</button>
+                        </span>
+                        <form method="post"
+                              action="/faculty/attendance/delete/{{ r.id }}"
+                              onsubmit="return confirm('Delete this attendance record?')">
+                            <button class="action-btn delete-btn">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <h2>Internal Marks</h2>
+    <div class="records-table-wrap">
+        <table class="records-table">
+            <thead>
+                <tr>
+                    <th>Sl. No.</th>
+                    <th>Student Name</th>
+                    <th>USN</th>
+                    <th>Subject</th>
+                    <th>IA-1</th>
+                    <th>IA-2</th>
+                    <th>IA-3</th>
+                    <th>Assignment</th>
+                    <th>Average</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% set ns = namespace(n=0) %}
+            {% for s in students %}
+                {% for r in marks_records[s.id] %}
+                {% set ns.n = ns.n + 1 %}
+                <tr class="record-row marks-row">
+                    <td>{{ ns.n }}</td>
+                    <td>{{ s.name }}</td>
+                    <td>{{ s.usn }}</td>
+                    <td>
+                        <span class="display-value">{{ r.subject }}</span>
+                        <div class="editing-fields">
+                            <input form="marks-edit-{{ r.id }}"
+                                   name="subject" value="{{ r.subject }}" required>
+                        </div>
+                    </td>
+                    {% for field in ['ia1', 'ia2', 'ia3', 'assignment'] %}
+                    <td>
+                        <span class="display-value">{{ r[field] }}</span>
+                        <div class="editing-fields">
+                            <input form="marks-edit-{{ r.id }}"
+                                   name="{{ field }}" type="number"
+                                   min="0" step="0.01"
+                                   value="{{ r[field] }}" required>
+                        </div>
+                    </td>
+                    {% endfor %}
+                    <td class="average-cell">—</td>
+                    <td>
+                        <form id="marks-edit-{{ r.id }}" method="post"
+                              action="/faculty/marks/save">
+                            <input type="hidden" name="student_id"
+                                   value="{{ s.id }}">
+                        </form>
+                        <button type="button" class="action-btn edit-btn"
+                                onclick="editRow(this)">Edit</button>
+                        <span class="editing-fields">
+                            <button form="marks-edit-{{ r.id }}"
+                                    class="action-btn save-btn">Save</button>
+                            <button type="button" class="action-btn cancel-btn"
+                                    onclick="cancelRow(this)">Cancel</button>
+                        </span>
+                        <form method="post"
+                              action="/faculty/marks/delete/{{ r.id }}"
+                              onsubmit="return confirm('Delete these marks?')">
+                            <button class="action-btn delete-btn">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+function editRow(button) {
+    const row = button.closest('.record-row');
+    row.dataset.original = row.innerHTML;
+    row.classList.add('editing');
+    button.style.display = 'none';
+}
+function cancelRow(button) {
+    const row = button.closest('.record-row');
+    row.innerHTML = row.dataset.original;
+    row.classList.remove('editing');
+}
+document.querySelectorAll('.marks-row').forEach(row => {
+    const values = [...row.querySelectorAll('td:nth-child(n+5):nth-child(-n+8) .display-value')]
+        .map(el => Number(el.textContent.trim()));
+    if (values.length && values.every(Number.isFinite)) {
+        row.querySelector('.average-cell').textContent =
+            (values.reduce((a, b) => a + b, 0) / values.length).toFixed(2);
+    }
+});
+</script>
+
 {% endblock %}

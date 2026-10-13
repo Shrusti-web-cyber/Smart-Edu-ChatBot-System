@@ -1,7 +1,7 @@
 {% extends "base.html" %}{% block content %}
 <div class="app-shell">
-<aside class="app-sidebar"><div class="side-brand"><b>Smart<span>Edu</span></b><small>Student Portal</small></div><nav>
-<a class="active" href="/dashboard">01&nbsp; Dashboard</a><a href="/attendance">02&nbsp; Attendance</a><a href="/marks">03&nbsp; Internal Marks</a><a href="/chatbot">04&nbsp; AI Chatbot</a><a href="/materials">05&nbsp; Download</a><a href="/planner">06&nbsp; Personalized Study</a><a href="/quiz">07&nbsp; AI Quiz</a><a href="#notifications">08&nbsp; Notifications</a><a href="/college-info">09&nbsp; College Information</a><a class="logout-link" href="/logout">Logout</a><a href="/timetable">10&nbsp; Timetable</a></nav></aside>
+<aside class="app-sidebar"><div class="side-brand"><b>Smart<span>Edu</span></b><small>Student Portal</small></div><nav><a href="/timetable">10&nbsp; Timetable</a>
+<a class="active" href="/dashboard">01&nbsp; Dashboard</a><a href="/attendance">02&nbsp; Attendance</a><a href="/marks">03&nbsp; Internal Marks</a><a href="/chatbot">04&nbsp; AI Chatbot</a><a href="/materials">05&nbsp; Download</a><a href="/planner">06&nbsp; Personalized Study</a><a href="/quiz">07&nbsp; AI Quiz</a><a href="#notifications">08&nbsp; Notifications</a><a href="/college-info">09&nbsp; College Information</a><a class="logout-link" href="/logout">Logout</a></nav></aside>
 <section class="dashboard-area"><header class="dashboard-header"><div><span class="small-label">SMARTEDU STUDENT</span><h1>Welcome to Dashboard</h1><p>{{student.name}} · {{student.usn}}</p></div><a class="chat-icon" href="/chatbot" title="AI Chatbot"><img src="{{url_for('static',filename='chatbot-professional.svg')}}" alt="AI"></a></header>
 <div class="student-hero"><div><span>COLLEGE NAME</span><h2>{{student.college_name}}</h2><p>{{student.branch}} · Semester {{student.semester}}</p></div><div class="student-id"><span>MY USN</span><b>{{student.usn}}</b></div>
 <div class="attendance-big">

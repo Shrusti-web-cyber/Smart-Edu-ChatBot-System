@@ -1,0 +1,153 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div style="max-width:1200px;margin:30px auto;padding:20px;color:#17365d;">
+
+    <h1>Attendance Management</h1>
+    <p>View and manage attendance records for your college.</p>
+
+    <a href="{{ url_for('faculty_dashboard') }}">← Back to Dashboard</a>
+
+    <div style="display:flex;justify-content:flex-end;margin:20px 0;">
+        <button type="button" onclick="toggleAttendanceForm()"
+            style="background:#17365d;color:white;border:0;padding:12px 20px;border-radius:6px;cursor:pointer;">
+            + Edit Attendance
+        </button>
+    </div>
+
+    <div id="attendanceForm" style="display:none;background:#f2f6fc;padding:20px;border-radius:8px;margin-bottom:25px;">
+        <h3>Add or Edit Attendance</h3>
+
+        <form method="POST" action="{{ url_for('save_attendance') }}"
+              style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:15px;">
+
+            <div>
+                <label>Student</label>
+                <select name="student_id" required style="width:100%;padding:10px;">
+                    <option value="">Select student</option>
+                    {% for student in students %}
+                    <option value="{{ student['id'] }}">
+                        {{ student['name'] }} — {{ student['usn'] }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div>
+                <label>Subject</label>
+                <input name="subject" required maxlength="100"
+                       placeholder="Enter subject"
+                       style="width:100%;padding:10px;box-sizing:border-box;">
+            </div>
+
+            <div>
+                <label>Class Date</label>
+                <input type="date" name="class_date" required
+                       style="width:100%;padding:10px;box-sizing:border-box;">
+            </div>
+
+            <div>
+                <label>Status</label>
+                <select name="status" required style="width:100%;padding:10px;">
+                    <option value="Present">Present</option>
+                    <option value="Absent">Absent</option>
+                </select>
+            </div>
+
+            <div style="align-self:end;">
+                <button type="submit"
+                    style="background:#198754;color:white;border:0;padding:11px 18px;border-radius:5px;cursor:pointer;">
+                    Save Attendance
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <div style="overflow-x:auto;">
+        <table style="width:100%;border-collapse:collapse;background:white;">
+            <thead>
+                <tr style="background:#17365d;color:white;">
+                    <th style="padding:12px;">Sl. No.</th>
+                    <th style="padding:12px;">Student Name</th>
+                    <th style="padding:12px;">USN</th>
+                    <th style="padding:12px;">Subject</th>
+                    <th style="padding:12px;">Class Date</th>
+                    <th style="padding:12px;">Attendance</th>
+                    <th style="padding:12px;">Edit</th>
+                    <th style="padding:12px;">Delete</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for record in attendance_records %}
+                <tr>
+                    <td style="padding:12px;border-bottom:1px solid #ddd;">
+                        {{ loop.index }}
+                    </td>
+                    <td style="padding:12px;border-bottom:1px solid #ddd;">
+                        {{ record['name'] }}
+                    </td>
+                    <td style="padding:12px;border-bottom:1px solid #ddd;">
+                        {{ record['usn'] }}
+                    </td>
+                    <td style="padding:12px;border-bottom:1px solid #ddd;">
+                        {{ record['subject'] }}
+                    </td>
+                    <td style="padding:12px;border-bottom:1px solid #ddd;">
+                        {{ record['class_date'] }}
+                    </td>
+                    <td style="padding:12px;border-bottom:1px solid #ddd;">
+                        <span style="color:{{ '#198754' if record['status'] == 'Present' else '#dc3545' }};font-weight:bold;">
+                            {{ record['status'] }}
+                        </span>
+                    </td>
+                    <td style="padding:12px;border-bottom:1px solid #ddd;">
+                        <button type="button"
+                            onclick="editAttendance('{{ record['student_id'] }}','{{ record['subject']|e }}','{{ record['class_date'] }}','{{ record['status'] }}')"
+                            style="background:#0d6efd;color:white;border:0;padding:8px 12px;border-radius:4px;cursor:pointer;">
+                            Edit
+                        </button>
+                    </td>
+                    <td style="padding:12px;border-bottom:1px solid #ddd;">
+                        <form method="POST"
+                              action="{{ url_for('delete_attendance', entry_id=record['id']) }}"
+                              onsubmit="return confirm('Delete this attendance record?');">
+                            <button type="submit"
+                                style="background:#dc3545;color:white;border:0;padding:8px 12px;border-radius:4px;cursor:pointer;">
+                                Delete
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="8" style="padding:20px;text-align:center;">
+                        No attendance records found. Click Edit Attendance to add one.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+function toggleAttendanceForm() {
+    const form = document.getElementById('attendanceForm');
+    form.style.display = form.style.display === 'none' ? 'block' : 'none';
+}
+
+function editAttendance(studentId, subject, date, status) {
+    const form = document.getElementById('attendanceForm');
+    form.style.display = 'block';
+
+    form.querySelector('[name="student_id"]').value = studentId;
+    form.querySelector('[name="subject"]').value = subject;
+    form.querySelector('[name="class_date"]').value = date;
+    form.querySelector('[name="status"]').value = status;
+
+    form.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+</script>
+
+{% endblock %}

@@ -14,6 +14,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from college_seed import COLLEGES
 import smtplib
 import ollama
+import time
 import secrets
 import urllib.error
 
@@ -53,6 +54,7 @@ print("SMTP USER:", bool(os.getenv("SMTP_USER")))
 print("SMTP PASSWORD:", bool(os.getenv("SMTP_PASSWORD")))
 
 app = Flask(__name__)
+app.config['SESSION_COOKIE_NAME'] = 'smartedu_session'
 import os
 
 print("APP FILE:", os.path.abspath(__file__))
@@ -388,16 +390,42 @@ def student_login():
         flash('Student name, USN or password is incorrect.')
     return render_template('student_login.html')
 
-@app.route('/faculty-login', methods=['GET','POST'])
+
+@app.route('/faculty-login', methods=['GET', 'POST'])
 def faculty_login():
-    if request.method=='POST':
-        name=request.form.get('name','').strip(); pw=request.form.get('password','')
-        c=get_db(); matches=c.execute('SELECT * FROM faculty WHERE lower(name)=lower(?)',(name,)).fetchall(); c.close()
-        f=matches[0] if len(matches)==1 else None
-        if f and password_ok(f['password'],pw):
-            session.clear(); session['faculty_id']=f['id']; session['admin_role']='admin'; return redirect(url_for('faculty_dashboard'))
+    if request.method == 'POST':
+        name = request.form.get('name', '').strip()
+        pw = request.form.get('password', '')
+        semester = request.form.get('semester', '').strip()
+
+        # Validate semester selection
+        if semester not in ['ALL', '1', '2', '3', '4', '5', '6', '7', '8']:
+            flash('Please select a valid semester.')
+            return render_template('faculty_login.html')
+
+        c = get_db()
+        try:
+            matches = c.execute(
+                'SELECT * FROM faculty WHERE lower(name) = lower(?)',
+                (name,)
+            ).fetchall()
+        finally:
+            c.close()
+
+        f = matches[0] if len(matches) == 1 else None
+
+        if f and password_ok(f['password'], pw):
+            session.clear()
+            session['faculty_id'] = f['id']
+            session['admin_role'] = 'admin'
+            session['admin_semester'] = semester
+
+            return redirect(url_for('faculty_dashboard'))
+
         flash('Admin name or password is incorrect.')
+
     return render_template('faculty_login.html')
+
 
 @app.route('/logout')
 def logout():
@@ -408,12 +436,55 @@ def logout():
     if was_admin: return redirect(url_for('faculty_login'))
     return redirect(url_for('home'))
 
+
 @app.route('/dashboard')
 def dashboard():
-    s=student()
-    if not s:return redirect(url_for('student_login'))
-    c=get_db(); marks=c.execute('SELECT * FROM marks WHERE student_id=? ORDER BY subject',(s['id'],)).fetchall(); mats=c.execute('SELECT * FROM materials WHERE college_id=? ORDER BY id DESC LIMIT 8',(s['college_id'],)).fetchall(); notifications=c.execute("SELECT * FROM notifications WHERE college_id=? AND (audience IN ('all','students') OR student_id=?) ORDER BY id DESC LIMIT 8",(s['college_id'],s['id'])).fetchall(); c.close()
-    return render_template('dashboard.html',student=s,rows=attendance_for(s['id']),overall=overall_attendance(s['id']),marks=marks,mats=mats,notifications=notifications)
+    s = student()
+    if not s:
+        return redirect(url_for('student_login'))
+
+    c = get_db()
+
+    marks = c.execute(
+        'SELECT * FROM marks WHERE student_id=? ORDER BY subject',
+        (s['id'],)
+    ).fetchall()
+
+    mats = c.execute(
+        'SELECT * FROM materials WHERE college_id=? ORDER BY id DESC LIMIT 8',
+        (s['college_id'],)
+    ).fetchall()
+
+    notifications = c.execute(
+        """SELECT * FROM notifications
+           WHERE college_id=?
+           AND (audience IN ('all','students') OR student_id=?)
+           ORDER BY id DESC LIMIT 8""",
+        (s['college_id'], s['id'])
+    ).fetchall()
+
+    # Load only the timetable matching this student's college,
+    # branch and semester.
+    timetable = c.execute(
+        """SELECT * FROM timetable
+           WHERE college_id=? AND branch=? AND semester=?
+           ORDER BY day, start_time""",
+        (s['college_id'], s['branch'], s['semester'])
+    ).fetchall()
+
+    c.close()
+
+    return render_template(
+        'dashboard.html',
+        student=s,
+        rows=attendance_for(s['id']),
+        overall=overall_attendance(s['id']),
+        marks=marks,
+        mats=mats,
+        notifications=notifications,
+        timetable=timetable
+    )
+
 
 @app.route('/attendance')
 def attendance():
@@ -463,6 +534,7 @@ def result():
     c=get_db(); rows=c.execute('SELECT * FROM marks WHERE student_id=? ORDER BY subject',(s['id'],)).fetchall(); c.close()
     return render_template('result.html',student=s,rows=rows)
 
+
 @app.route('/timetable')
 def timetable():
     s = student()
@@ -499,61 +571,100 @@ def chatbot():
     if not student():return redirect(url_for('student_login'))
     return render_template('chatbot.html')
 
-@app.route('/api/chat',methods=['POST'])
+
+@app.route('/api/chat', methods=['POST'])
 def chat():
-    s=student()
-    if not s:return jsonify({'answer':'Please log in first.'}),401
-    payload=request.json or {}
-    q=str(payload.get('message','')).strip()
-    history=payload.get('history') or []
-    if not q:return jsonify({'answer':'Please type a question.'})
-    
-    if AI_API_KEY:
-        try:
-            return jsonify({
-                'answer': call_ai(q, s, history),
-                'mode': 'AI'
-            })
-        
+    request_start = time.perf_counter()
 
-        except Exception as exc:
-            print("SMARTEDU AI ERROR:", repr(exc), flush=True)
+    s = student()
+    if not s:
+        return jsonify({
+            'answer': 'Please log in first.'
+        }), 401
 
-            if isinstance(exc, urllib.error.HTTPError):
-                print("HTTP STATUS:", exc.code, flush=True)
-                print(
-                    "API ERROR DETAILS:",
-                    exc.read().decode("utf-8", "replace"),
-                    flush=True
-                )
+    payload = request.get_json(silent=True) or {}
 
-            app.logger.exception("SmartEdu AI provider request failed")
+    if not isinstance(payload, dict):
+        return jsonify({
+            'answer': 'Invalid request.'
+        }), 400
 
-            return jsonify({
-                'answer': 'The AI service failed. Check the VS Code terminal for the exact error.',
-                'mode': 'error'
-            }), 502
+    q = str(payload.get('message', '')).strip()
+    history = payload.get('history', [])
 
-    return jsonify({
-        'answer': smart_local_answer(q, s['id']),
-        'mode': 'local',
-        'setup_required': True
-    })
+    if not q:
+        return jsonify({
+            'answer': 'Please type a question.'
+        }), 400
+
+    if len(q) > 4000:
+        return jsonify({
+            'answer': 'Please keep your message under 4000 characters.'
+        }), 400
+
+    if not isinstance(history, list):
+        history = []
+
+    # Limit conversation history
+    history = history[-10:]
+
+    try:
+        answer = call_ai(q, s, history)
+
+        total_seconds = time.perf_counter() - request_start
+
+        print(
+            f"[SmartEdu timing] Total chatbot request: "
+            f"{total_seconds:.2f}s",
+            flush=True
+        )
+
+        return jsonify({
+            'answer': answer,
+            'mode': 'AI',
+            'total_seconds': round(total_seconds, 2)
+        })
+
+    except Exception:
+        app.logger.exception(
+            'SmartEdu student chatbot failed'
+        )
+
+        return jsonify({
+            'answer': (
+                'The AI service is temporarily unavailable. '
+                'Please try again.'
+            ),
+            'mode': 'error'
+        }), 502
 
 
 def call_ai(q, s, history=None):
+    total_start = time.perf_counter()
+
+    # Load only this logged-in student's marks and college materials.
     c = get_db()
     try:
-        m = c.execute(
-            'SELECT subject,ia1,ia2,ia3,assignment FROM marks WHERE student_id=?',
+        marks = c.execute(
+            '''SELECT subject, ia1, ia2, ia3, assignment
+               FROM marks
+               WHERE student_id = ?
+               ORDER BY subject''',
             (s['id'],)
         ).fetchall()
-        mats = c.execute(
-            'SELECT title,subject,file_type FROM materials WHERE college_id=?',
+
+        materials = c.execute(
+            '''SELECT title, subject, file_type
+               FROM materials
+               WHERE college_id = ?
+               ORDER BY id DESC
+               LIMIT 30''',
             (s['college_id'],)
         ).fetchall()
     finally:
         c.close()
+
+    attendance = attendance_for(s['id'])
 
     context = {
         'student': {
@@ -563,152 +674,205 @@ def call_ai(q, s, history=None):
             'branch': s['branch'],
             'semester': s['semester']
         },
-        'attendance': attendance_for(s['id']),
-        'marks': [dict(x) for x in m],
-        'materials': [dict(x) for x in mats]
+        'attendance': attendance,
+        'marks': [dict(row) for row in marks],
+        'materials': [dict(row) for row in materials]
     }
 
-    system = (
-        "You are SmartEdu AI, a helpful college assistant. "
-        "Answer academic, programming, mathematics, science, engineering "
-        "and general knowledge questions clearly. Use the supplied student "
-        "context only for that student's personal data. Never reveal another "
-        "student's information, passwords or OTPs. If information is missing, "
-        "say so clearly."
-    )
+    system = """
+You are SmartEdu AI, a fast, friendly and reliable college assistant.
 
-    messages = []
-    for item in (history or [])[-12:]:
-        if (isinstance(item, dict)
-                and item.get('role') in ('user', 'assistant')
-                and isinstance(item.get('content'), str)):
-            messages.append({
-                'role': item['role'],
-                'content': item['content'][:6000]
-            })
+Answer academic, programming, mathematics, science, engineering,
+AI/ML and general-knowledge questions.
 
-    messages.append({'role': 'user', 'content': q})
-    system += """
-Understand informal student messages, common chat abbreviations,
-short forms, and minor spelling mistakes.
-Examples:
-- WT = what
-- Y = why, when the context indicates why
-- Ex = explain
-- Diff = difference
-- Def = define
-- Hw = how
-- imp = important
-- n = and
-- FCN = function, when the context is programming or technical.
-Infer the intended question from context. If an abbreviation is
-ambiguous, ask a short clarification instead of guessing.
-Answer the intended question naturally and accurately.
+Use simple language and give concise answers by default.
+Give examples or step-by-step explanations when requested.
+Understand informal English, common abbreviations and minor typos.
+Use recent conversation history to answer follow-up questions.
+
+Never invent attendance, marks, timetable or college records.
+Use personal information only for the authenticated student.
+Never reveal passwords, OTPs or another student's private information.
+If information is unavailable, say so honestly.
+
+Common abbreviations:
+WT = what; Ex = explain; Diff = difference;
+Def = define; Hw = how; imp = important.
+Interpret other abbreviations from context.
 """
-    full_system = (
-        system + '\nAUTHORIZED STUDENT CONTEXT:\n'
-        + json.dumps(context, ensure_ascii=False, default=str)
+
+    messages = [
+        {
+            'role': 'system',
+            'content': (
+                system
+                + '\nAUTHORIZED STUDENT CONTEXT:\n'
+                + json.dumps(
+                    context,
+                    ensure_ascii=False,
+                    default=str
+                )
+            )
+        }
+    ]
+
+    # Retain recent conversation turns for follow-up questions.
+    safe_history = []
+
+    if isinstance(history, list):
+        for item in history[-8:]:
+            if not isinstance(item, dict):
+                continue
+
+            role = item.get('role')
+            content = item.get('content')
+
+            if role in ('user', 'assistant') and isinstance(content, str):
+                content = content.strip()
+
+                if content:
+                    safe_history.append({
+                        'role': role,
+                        'content': content[:2500]
+                    })
+
+    messages.extend(safe_history)
+    messages.append({
+        'role': 'user',
+        'content': q[:4000]
+    })
+
+    prepared_seconds = time.perf_counter() - total_start
+    print(
+        f"[SmartEdu timing] Preparation: "
+        f"{prepared_seconds:.2f}s",
+        flush=True
     )
 
-    # Try local Ollama first.
+    # Call the existing local Ollama model.
+    ollama_start = time.perf_counter()
+
+
+    response = ollama.chat(
+        model='llama3.2:1b',
+        messages=messages,
+        keep_alive='10m',
+        options={
+            'temperature': 0.3,
+            'num_predict': 300
+        }
+    )
+
+    print(
+    "SmartEdu: Ollama response time:",
+    round(time.perf_counter() - ollama_start, 2),
+    "seconds"
+)
+
+
+
+    ollama_seconds = time.perf_counter() - ollama_start
+    print(
+        f"[SmartEdu timing] Ollama call: "
+        f"{ollama_seconds:.2f}s",
+        flush=True
+    )
+
+    # Ollama Python responses use the singular key "message".
+    answer = response['message']['content'].strip()
+
+    if not answer:
+        raise RuntimeError('Ollama returned an empty answer.')
+
+    return answer
+
+    
+
+@app.route('/api/admin-chat', methods=['POST'])
+def admin_chat():
+    f = faculty()
+    if not f:
+        return jsonify({
+            'answer': 'Please log in as faculty first.'
+        }), 401
+
+    payload = request.get_json(silent=True)
+    if not isinstance(payload, dict):
+        return jsonify({'answer': 'Invalid request.'}), 400
+
+    q = str(payload.get('message', '')).strip()
+
+    if not q:
+        return jsonify({'answer': 'Please type a question.'}), 400
+
+    if len(q) > 4000:
+        return jsonify({
+            'answer': 'Please keep your message under 4000 characters.'
+        }), 400
+
+    system_prompt = """
+You are SmartEdu AI, a helpful college and general-purpose AI assistant.
+
+YOUR RESPONSIBILITIES:
+1. Answer general knowledge and everyday questions.
+2. Explain Python, Java, C, SQL, DBMS, AI, Machine Learning,
+   Deep Learning, NLP, Data Science, Cloud Computing, and Computer Networks.
+3. Help engineering students prepare for exams with simple explanations,
+   definitions, examples, programs, diagrams in text, and step-by-step solutions.
+4. For programming questions, provide correct code and explain how to run it.
+5. For academic questions, organize answers using headings and numbered steps.
+6. Match the user's language: English, Hindi, or simple Hinglish.
+7. Give a direct answer first, then explain with an example when useful.
+8. If a question is unclear, ask one short clarification.
+9. Never invent attendance, marks, timetable entries, or student records.
+10. Never claim to have modified college records unless a real authorized
+    database operation has completed.
+11. Be polite, clear, accurate, and helpful. Avoid repetitive introductions.
+12. If you do not know something, say so honestly.
+
+For student-specific data, use only verified information provided by
+authorized application logic. Do not pretend to access records that
+have not been supplied to you.
+"""
+
     try:
         response = ollama.chat(
             model='llama3.2:1b',
             messages=[
-                {'role': 'system', 'content': full_system},
-                *messages
-            ]
-        )
-        answer = response['message']['content'].strip()
-        if answer:
-            return answer
-    except Exception as e:
-        app.logger.warning("Ollama unavailable; trying OpenAI: %s", e)
-
-    # Use OpenAI only if local Ollama fails.
-    if not AI_API_KEY:
-        raise RuntimeError(
-            'Ollama is unavailable and OpenAI API key is not configured.'
+                {'role': 'system', 'content': system_prompt},
+                {'role': 'user', 'content': q}
+            ],
+            keep_alive='30m',
+            options={
+                'temperature': 0.3,
+                'num_predict': 300
+            }
         )
 
-    payload = {
-        'model': AI_MODEL,
-        'instructions': full_system,
-        'input': messages
-    }
+        answer = response.get('message', {}).get('content', '').strip()
 
-    req = urllib.request.Request(
-        'https://api.openai.com/v1/responses',
-        data=json.dumps(payload).encode(),
-        headers={
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + AI_API_KEY
-        }
-    )
+        if not answer:
+            app.logger.warning('Ollama returned an empty answer')
+            return jsonify({
+                'answer': 'I could not generate an answer. Please try again.'
+            }), 502
 
-    with urllib.request.urlopen(req, timeout=45) as r:
-        out = json.loads(r.read().decode())
+        return jsonify({
+            'answer': answer,
+            'mode': 'AI'
+        })
 
-    if out.get('output_text'):
-        return out['output_text']
+    except Exception:
+        app.logger.exception('SmartEdu admin chatbot failed')
+        return jsonify({
+            'answer': (
+                'The AI service could not respond. Check that Ollama is '
+                'running and the llama3.2:1b model is installed, then retry.'
+            )
+        }), 502
 
-    parts = [
-        content['text']
-        for item in out.get('output', [])
-        for content in item.get('content', [])
-        if isinstance(content, dict) and content.get('text')
-    ]
 
-    if parts:
-        return '\n'.join(parts)
 
-    raise RuntimeError('No text returned by AI service')
-
-def smart_local_answer(q,sid):
-    ql=q.lower(); rows=attendance_for(sid); c=get_db(); marks=c.execute('SELECT * FROM marks WHERE student_id=? ORDER BY subject',(sid,)).fetchall(); mats=c.execute('SELECT * FROM materials WHERE college_id=(SELECT college_id FROM students WHERE id=?) ORDER BY id DESC',(sid,)).fetchall(); c.close()
-    if any(x in ql for x in ['current attendance','overall attendance','my attendance','attendance percentage']):return f'Your current overall attendance is {overall_attendance(sid)}%.'
-    if 'lowest attendance' in ql or 'low attendance' in ql:
-        if rows:
-            x=min(rows,key=lambda z:z['pct']);return f"Your lowest attendance is {x['subject']} at {x['pct']}% ({x['present']}/{x['total']})."
-    for r in rows:
-        if r['subject'].lower() in ql and 'attendance' in ql:return f"Your current {r['subject']} attendance is {r['pct']}% ({r['present']}/{r['total']} classes attended)."
-    if 'attendance' in ql:return ' | '.join(f"{r['subject']}: {r['pct']}%" for r in rows) or 'No attendance records are available.'
-    if any(x in ql for x in ['internal mark','internal marks','marks','ia marks']):
-        for r in marks:
-            if r['subject'].lower() in ql:
-                total=sum(float(r[k]) for k in ['ia1','ia2','ia3','assignment']);return f"{r['subject']}: IA1 {r['ia1']}, IA2 {r['ia2']}, IA3 {r['ia3']}, Assignment {r['assignment']}. Total = {total:.0f}."
-        return ' | '.join(f"{r['subject']}: {sum(float(r[k]) for k in ['ia1','ia2','ia3','assignment']):.0f}" for r in marks)
-    if any(x in ql for x in ['notes','study material','materials','pdf','download','file','document']):return ('Available materials: '+', '.join(r['title'] for r in mats[:10])+'. Open Study Materials to view/download them.') if mats else 'No study materials uploaded yet.'
-    if ql in {'hi','hello','hey'}:return 'Hello! I can answer academic and general questions, and I can check your own attendance and internal marks.'
-    facts={'what is ai':'Artificial Intelligence (AI) is the field of building systems that can perform tasks that normally require human intelligence, such as learning, reasoning and language understanding.','what is machine learning':'Machine Learning is a branch of AI in which systems learn patterns from data to make predictions or decisions.','what is deep learning':'Deep Learning is a subset of machine learning that uses multi-layer neural networks to learn complex patterns from data.','what is python':'Python is a high-level, general-purpose programming language widely used in AI, data science and web development.','what is java':'Java is a general-purpose, object-oriented programming language widely used for enterprise, web and Android-related development.','what is dbms':'A DBMS is software used to create, store, organize, retrieve and manage data in databases.','what is sql':'SQL is a language used to create, query, update and manage data in relational databases.','what is computer network':'A computer network is a collection of connected devices that communicate and share resources.','what is operating system':'An operating system manages computer hardware and provides services and an interface for application software.','what is cloud computing':'Cloud computing provides computing resources such as storage, servers and software over a network, usually on demand.','what is nlp':'Natural Language Processing (NLP) is a field of AI that enables computers to process and understand human language.','what is big data':'Big Data refers to very large, fast and varied datasets that require scalable technologies for storage and analysis.','what is hadoop':'Hadoop is an open-source framework for distributed storage and processing of large datasets.','what is hive':'Hive is a data warehouse system on Hadoop that provides SQL-like querying and analysis of large datasets.','what is computer security':'Computer security protects systems, networks and data from unauthorized access, misuse and disruption.','what is cryptography':'Cryptography uses mathematical techniques to protect information through encryption, integrity and authentication.','what is database normalization':'Normalization organizes relational data to reduce redundancy and improve data integrity.','what is algorithm':'An algorithm is a finite sequence of well-defined steps used to solve a problem or perform a computation.','what is recursion':'Recursion is a programming technique in which a function solves a problem by calling itself on a smaller instance of the problem.','what is cnn':'A Convolutional Neural Network (CNN) is a deep-learning architecture commonly used for image and spatial-pattern processing.','what is reinforcement learning':'Reinforcement learning is a machine-learning approach where an agent learns actions through rewards and penalties.','what is excel':'Microsoft Excel is a spreadsheet application used for data entry, formulas, analysis, charts and reporting.'}
-    for k,v in facts.items():
-        if k in ql:return v
-    return 'I can answer academic and general questions. Configure OPENAI_API_KEY for open-ended AI answers. I can always answer your personal attendance, marks and study-material questions from the authorized college database.'
-
-@app.route('/admin-chatbot')
-def admin_chatbot():
-    f=faculty()
-    if not f:return redirect(url_for('faculty_login'))
-    return render_template('admin_chatbot.html',faculty=f)
-
-@app.route('/api/admin-chat',methods=['POST'])
-def admin_chat():
-    f=faculty()
-    if not f:return jsonify({'answer':'Please log in first.'}),401
-    q=str((request.json or {}).get('message','')).strip()
-    if not q:return jsonify({'answer':'Please type a question.'})
-    c=get_db(); count=c.execute('SELECT COUNT(*) FROM students WHERE college_id=?',(f['college_id'],)).fetchone()[0]; c.close()
-    if AI_API_KEY:
-        try:
-            system='You are SmartEdu Admin AI. Answer naturally like a professional educational assistant. Use only the authorized college context supplied. Never reveal passwords, OTPs, or another college data.'
-            payload={'model':AI_MODEL,'instructions':system+' Authorized college: '+f['college_name']+'; student count: '+str(count),'input':q}
-            req=urllib.request.Request('https://api.openai.com/v1/responses',data=json.dumps(payload).encode(),headers={'Content-Type':'application/json','Authorization':'Bearer '+AI_API_KEY})
-            with urllib.request.urlopen(req,timeout=45) as r: out=json.loads(r.read().decode())
-            if out.get('output_text'): return jsonify({'answer':out['output_text']})
-        except Exception:
-            app.logger.exception('SmartEdu admin AI provider request failed')
-            return jsonify({'answer':'The AI service could not complete this request. Check OPENAI_API_KEY, SMARTEDU_AI_MODEL, internet access, and API usage/billing settings.','mode':'error'}), 502
-    return jsonify({'answer':f"Your college currently has {count} students in SmartEdu. For open-ended ChatGPT-style answers, configure OPENAI_API_KEY in the project .env file.",'mode':'local','setup_required':True})
 
 @app.get('/faculty/export/<kind>')
 def faculty_export(kind):
@@ -736,8 +900,178 @@ def faculty_export(kind):
 # ---------------- ADMIN ----------------
 
 
+
 @app.route('/faculty/dashboard')
 def faculty_dashboard():
+    f = faculty()
+    if not f:
+        return redirect(url_for('faculty_login'))
+
+    selected_semester = request.args.get(
+        'semester',
+        session.get('admin_semester', 'ALL')
+    ).strip()
+
+    if selected_semester != 'ALL':
+        try:
+            selected_semester = int(selected_semester)
+            if not 1 <= selected_semester <= 8:
+                raise ValueError
+        except (TypeError, ValueError):
+            selected_semester = 'ALL'
+
+    c = get_db()
+
+    try:
+        # Registered students: college + selected semester
+        student_sql = '''
+            SELECT * FROM students
+            WHERE college_id = ?
+        '''
+        student_params = [f['college_id']]
+
+        if selected_semester != 'ALL':
+            student_sql += ' AND semester = ?'
+            student_params.append(selected_semester)
+
+        student_sql += ' ORDER BY name'
+
+        students = c.execute(
+            student_sql, student_params
+        ).fetchall()
+
+        attendance_records = {}
+        marks_records = {}
+
+        for student in students:
+            sid = student['id']
+
+            attendance_records[sid] = c.execute(
+                '''SELECT * FROM attendance
+                   WHERE student_id = ?
+                   ORDER BY class_date DESC, id DESC''',
+                (sid,)
+            ).fetchall()
+
+            marks_records[sid] = c.execute(
+                '''SELECT * FROM marks
+                   WHERE student_id = ?
+                   ORDER BY subject''',
+                (sid,)
+            ).fetchall()
+
+        # Latest study materials for this college
+        mats = c.execute(
+            '''SELECT * FROM materials
+               WHERE college_id = ?
+               ORDER BY id DESC
+               LIMIT 8''',
+            (f['college_id'],)
+        ).fetchall()
+
+        # Timetable: selected semester or all semesters
+        branch = request.args.get(
+            'branch', f['branch'] or 'AI'
+        ).strip()
+
+        timetable_sql = '''
+            SELECT t.*
+            FROM timetable t
+            WHERE t.college_id = ?
+              AND t.branch = ?
+        '''
+        timetable_params = [f['college_id'], branch]
+
+        if selected_semester != 'ALL':
+            timetable_sql += ' AND t.semester = ?'
+            timetable_params.append(selected_semester)
+
+        timetable_sql += '''
+            AND t.id = (
+                SELECT MAX(t2.id)
+                FROM timetable t2
+                WHERE t2.college_id = t.college_id
+                  AND t2.branch = t.branch
+                  AND t2.semester = t.semester
+                  AND t2.day = t.day
+                  AND t2.start_time = t.start_time
+            )
+            ORDER BY t.day, t.start_time
+        '''
+
+        timetable_entries = c.execute(
+            timetable_sql, timetable_params
+        ).fetchall()
+
+        timetable_cells = [
+            dict(row) for row in timetable_entries
+        ]
+
+        # Latest college notifications
+        notifications = c.execute(
+            '''SELECT * FROM notifications
+               WHERE college_id = ?
+               ORDER BY id DESC
+               LIMIT 8''',
+            (f['college_id'],)
+        ).fetchall()
+
+    finally:
+        c.close()
+
+    return render_template(
+        'faculty_dashboard.html',
+        faculty=f,
+        students=students,
+        attendance_records=attendance_records,
+        marks_records=marks_records,
+        mats=mats,
+        notifications=notifications,
+        timetable_entries=timetable_entries,
+        timetable_cells=timetable_cells,
+        selected_semester=selected_semester
+    )
+
+
+@app.route('/faculty/internal-marks')
+def faculty_internal_marks():
+    f = faculty()
+    if not f:
+        return redirect(url_for('faculty_login'))
+
+    c = get_db()
+
+    try:
+        students = c.execute(
+            '''SELECT id, name, usn, branch, semester
+               FROM students
+               WHERE college_id = ?
+               ORDER BY name''',
+            (f['college_id'],)
+        ).fetchall()
+
+        marks_records = c.execute(
+            '''SELECT m.*, s.name, s.usn
+               FROM marks m
+               JOIN students s ON s.id = m.student_id
+               WHERE s.college_id = ?
+               ORDER BY s.name, m.subject''',
+            (f['college_id'],)
+        ).fetchall()
+
+    finally:
+        c.close()
+
+    return render_template(
+        'faculty_internal_marks.html',
+        faculty=f,
+        students=students,
+        marks_records=marks_records
+    )
+
+
+@app.route('/faculty/attendance')
+def faculty_attendance():
     f = faculty()
     if not f:
         return redirect(url_for('faculty_login'))
@@ -751,39 +1085,89 @@ def faculty_dashboard():
             (f['college_id'],)
         ).fetchall()
 
-        mats = c.execute(
-            '''SELECT * FROM materials
-               WHERE college_id = ?
-               ORDER BY id DESC LIMIT 8''',
-            (f['college_id'],)
-        ).fetchall()
-
-        timetable_entries = c.execute(
-            '''SELECT * FROM timetable
-               WHERE college_id = ?
-               ORDER BY day, start_time''',
-            (f['college_id'],)
-        ).fetchall()
-
-        notifications = c.execute(
-            '''SELECT * FROM notifications
-               WHERE college_id = ?
-               AND (audience IN ('all', 'students')
-                    OR student_id IS NULL)
-               ORDER BY id DESC LIMIT 8''',
+        attendance_records = c.execute(
+            '''SELECT a.*, s.name, s.usn
+               FROM attendance a
+               JOIN students s ON s.id = a.student_id
+               WHERE s.college_id = ?
+               ORDER BY a.class_date DESC, a.id DESC''',
             (f['college_id'],)
         ).fetchall()
     finally:
         c.close()
 
     return render_template(
-        'faculty_dashboard.html',
+        'faculty_attendance.html',
         faculty=f,
         students=students,
-        mats=mats,
-        notifications=notifications,
-        timetable_entries=timetable_entries
+        attendance_records=attendance_records
     )
+
+
+@app.route('/faculty/attendance/save', methods=['POST'])
+def save_attendance():
+    f = faculty()
+    if not f:
+        return redirect(url_for('faculty_login'))
+
+    student_id = request.form.get('student_id', '').strip()
+    subject = request.form.get('subject', '').strip()
+    class_date = request.form.get('class_date', '').strip()
+    status = request.form.get('status', '').strip()
+
+    if not all([student_id, subject, class_date]):
+        return 'Please fill all required fields', 400
+
+    if status not in ('Present', 'Absent'):
+        return 'Invalid attendance status', 400
+
+    c = get_db()
+    try:
+        student = c.execute(
+            'SELECT id FROM students WHERE id=? AND college_id=?',
+            (student_id, f['college_id'])
+        ).fetchone()
+
+        if not student:
+            return 'Student not found in your college', 404
+
+        c.execute(
+            '''INSERT INTO attendance
+               (student_id, subject, class_date, status)
+               VALUES (?, ?, ?, ?)
+               ON CONFLICT(student_id, subject, class_date)
+               DO UPDATE SET status=excluded.status''',
+            (student_id, subject, class_date, status)
+        )
+        c.commit()
+    finally:
+        c.close()
+
+    return redirect(url_for('faculty_attendance'))
+
+
+@app.route('/faculty/attendance/delete/<int:entry_id>',
+           methods=['POST'])
+def delete_attendance(entry_id):
+    f = faculty()
+    if not f:
+        return redirect(url_for('faculty_login'))
+
+    c = get_db()
+    try:
+        c.execute(
+            '''DELETE FROM attendance
+               WHERE id = ?
+               AND student_id IN (
+                   SELECT id FROM students WHERE college_id = ?
+               )''',
+            (entry_id, f['college_id'])
+        )
+        c.commit()
+    finally:
+        c.close()
+
+    return redirect(url_for('faculty_attendance'))
 
 
 
@@ -802,6 +1186,101 @@ def faculty_student_add():
     except sqlite3.IntegrityError: flash('USN is already registered in this college.')
     c.close();return redirect(url_for('faculty_dashboard'))
 
+
+@app.route('/faculty/student/edit/<int:sid>', methods=['GET', 'POST'])
+def faculty_student_edit(sid):
+    f = faculty()
+    if not f:
+        return redirect(url_for('faculty_login'))
+
+    c = get_db()
+
+    try:
+        student = c.execute(
+            '''SELECT * FROM students
+               WHERE id = ? AND college_id = ?''',
+            (sid, f['college_id'])
+        ).fetchone()
+
+        if not student:
+            return 'Student not found or not authorized', 404
+
+        if request.method == 'POST':
+            name = request.form.get('name', '').strip()
+            email = request.form.get('email', '').strip().lower()
+            usn = request.form.get('usn', '').strip().upper()
+            branch = request.form.get('branch', '').strip()
+            mobile = request.form.get('mobile', '').strip()
+            password = request.form.get('password', '').strip()
+
+            try:
+                semester = int(request.form.get('semester', ''))
+                if not 1 <= semester <= 8:
+                    raise ValueError
+            except ValueError:
+                flash('Semester must be between 1 and 8.')
+                return redirect(url_for(
+                    'faculty_student_edit', sid=sid
+                ))
+
+            if not all([name, usn, branch]):
+                flash('Name, USN and branch are required.')
+                return redirect(url_for(
+                    'faculty_student_edit', sid=sid
+                ))
+
+            try:
+                if password:
+                    if len(password) < 6:
+                        flash('Password must be at least 6 characters.')
+                        return redirect(url_for(
+                            'faculty_student_edit', sid=sid
+                        ))
+
+                    c.execute(
+                        '''UPDATE students
+                           SET name=?, email=?, usn=?, branch=?,
+                               semester=?, mobile=?, password=?
+                           WHERE id=? AND college_id=?''',
+                        (
+                            name, email, usn, branch, semester,
+                            mobile, generate_password_hash(password),
+                            sid, f['college_id']
+                        )
+                    )
+                else:
+                    c.execute(
+                        '''UPDATE students
+                           SET name=?, email=?, usn=?, branch=?,
+                               semester=?, mobile=?
+                           WHERE id=? AND college_id=?''',
+                        (
+                            name, email, usn, branch, semester,
+                            mobile, sid, f['college_id']
+                        )
+                    )
+
+                c.commit()
+                flash('Student details updated successfully.')
+                return redirect(
+                    url_for('faculty_dashboard') + '#students'
+                )
+
+            except sqlite3.IntegrityError:
+                c.rollback()
+                flash('That USN may already be registered.')
+
+    finally:
+        c.close()
+
+    return render_template(
+        'faculty_student_edit.html',
+        faculty=f,
+        student=student,
+        branches=BRANCHES
+    )
+
+
 @app.post('/faculty/students/delete/<int:sid>')
 def faculty_student_delete(sid):
     f=faculty()
@@ -816,58 +1295,240 @@ def faculty_notify():
     if not f:return redirect(url_for('faculty_login'))
     c=get_db(); c.execute('INSERT INTO notifications(title,message,audience,created_at,college_id) VALUES(?,?,?,?,?)',(request.form.get('title','College Notification'),request.form.get('message',''),'all',date.today().isoformat(),f['college_id'])); c.commit(); c.close(); flash('Notification published.'); return redirect(url_for('faculty_dashboard'))
 
+
 @app.post('/faculty/attendance/add')
 def attendance_add():
-    f=faculty()
-    if not f:return redirect(url_for('faculty_login'))
-    c=get_db(); sid=int(request.form['student_id'])
-    if not admin_owns_student(c,sid,f['id']):c.close();return 'Not authorized',403
-    try:c.execute('INSERT INTO attendance(student_id,subject,class_date,status) VALUES(?,?,?,?)',(sid,request.form['subject'],request.form['class_date'],request.form['status']));c.commit();flash('Attendance added.')
-    except sqlite3.IntegrityError:flash('A record for this student, subject and date already exists.')
-    c.close();return redirect(url_for('faculty_dashboard'))
+    f = faculty()
+    if not f:
+        return redirect(url_for('faculty_login'))
+
+    sid = request.form.get('student_id', '').strip()
+    subject = request.form.get('subject', '').strip()
+    class_date = request.form.get('class_date', '').strip()
+    status = request.form.get('status', '').strip()
+
+    if not all([sid, subject, class_date, status]):
+        flash('Please fill in all attendance fields.')
+        return redirect(url_for('faculty_dashboard') + '#attendance')
+
+    if status not in ('Present', 'Absent'):
+        flash('Invalid attendance status.')
+        return redirect(url_for('faculty_dashboard') + '#attendance')
+
+    try:
+        sid = int(sid)
+        from datetime import date
+        date.fromisoformat(class_date)
+    except (ValueError, TypeError):
+        flash('Please select a valid student and date.')
+        return redirect(url_for('faculty_dashboard') + '#attendance')
+
+    c = get_db()
+    try:
+        if not admin_owns_student(c, sid, f['id']):
+            return 'Not authorized', 403
+
+        c.execute(
+            '''INSERT INTO attendance
+               (student_id, subject, class_date, status)
+               VALUES (?, ?, ?, ?)''',
+            (sid, subject, class_date, status)
+        )
+        c.commit()
+        flash('Attendance added successfully.')
+
+    except sqlite3.IntegrityError:
+        flash('A record for this student, subject and date already exists.')
+
+    finally:
+        c.close()
+
+    return redirect(url_for('faculty_dashboard') + '#attendance')
+
 
 @app.post('/faculty/attendance/edit/<int:rid>')
 def attendance_edit(rid):
-    f=faculty()
-    if not f:return redirect(url_for('faculty_login'))
-    c=get_db(); row=c.execute('SELECT a.student_id FROM attendance a JOIN students s ON s.id=a.student_id WHERE a.id=? AND s.college_id=?',(rid,f['college_id'])).fetchone()
-    if not row:c.close();return 'Not authorized',403
-    c.execute('UPDATE attendance SET subject=?,class_date=?,status=? WHERE id=?',(request.form['subject'],request.form['class_date'],request.form['status'],rid));c.commit();c.close();flash('Attendance record updated.');return redirect(url_for('faculty_dashboard'))
+    f = faculty()
+    if not f:
+        return redirect(url_for('faculty_login'))
+
+    subject = request.form.get('subject', '').strip()
+    class_date = request.form.get('class_date', '').strip()
+    status = request.form.get('status', '').strip()
+
+    if not subject or not class_date or status not in ('Present', 'Absent'):
+        flash('Please enter valid attendance details.')
+        return redirect(url_for('faculty_dashboard') + '#attendance')
+
+    from datetime import date
+    try:
+        date.fromisoformat(class_date)
+    except ValueError:
+        flash('Please select a valid date.')
+        return redirect(url_for('faculty_dashboard') + '#attendance')
+
+    c = get_db()
+    try:
+        row = c.execute(
+            '''SELECT a.id
+               FROM attendance a
+               JOIN students s ON s.id = a.student_id
+               WHERE a.id = ? AND s.college_id = ?''',
+            (rid, f['college_id'])
+        ).fetchone()
+
+        if not row:
+            return 'Not authorized', 403
+
+        c.execute(
+            '''UPDATE attendance
+               SET subject = ?, class_date = ?, status = ?
+               WHERE id = ?''',
+            (subject, class_date, status, rid)
+        )
+        c.commit()
+        flash('Attendance updated successfully.')
+
+    finally:
+        c.close()
+
+    return redirect(url_for('faculty_dashboard') + '#attendance')
+
+
 
 @app.post('/faculty/attendance/delete/<int:rid>')
 def attendance_delete(rid):
-    f=faculty()
-    if not f:return redirect(url_for('faculty_login'))
-    c=get_db();c.execute('DELETE FROM attendance WHERE id IN (SELECT a.id FROM attendance a JOIN students s ON s.id=a.student_id WHERE a.id=? AND s.college_id=?)',(rid,f['college_id']));c.commit();c.close();flash('Attendance record deleted.');return redirect(url_for('faculty_dashboard'))
+    f = faculty()
+    if not f:
+        return redirect(url_for('faculty_login'))
+
+    c = get_db()
+    try:
+        row = c.execute(
+            '''SELECT a.id
+               FROM attendance a
+               JOIN students s ON s.id = a.student_id
+               WHERE a.id = ? AND s.college_id = ?''',
+            (rid, f['college_id'])
+        ).fetchone()
+
+        if not row:
+            return 'Attendance record not found or not authorized', 404
+
+        c.execute('DELETE FROM attendance WHERE id = ?', (rid,))
+        c.commit()
+        flash('Attendance record deleted successfully.')
+
+    finally:
+        c.close()
+
+    return redirect(url_for('faculty_dashboard') + '#attendance')
+
+
 
 @app.post('/faculty/marks/save')
 def marks_save():
-    f=faculty()
-    if not f:return redirect(url_for('faculty_login'))
-    c=get_db();sid=int(request.form['student_id'])
-    if not admin_owns_student(c,sid,f['id']):c.close();return 'Not authorized',403
-    sub=request.form['subject'].strip();vals=[float(request.form.get(k,0) or 0) for k in ['ia1','ia2','ia3','assignment']];old=c.execute('SELECT id FROM marks WHERE student_id=? AND subject=?',(sid,sub)).fetchone()
-    if old:c.execute('UPDATE marks SET ia1=?,ia2=?,ia3=?,assignment=? WHERE id=?',(*vals,old['id']));msg='Internal marks updated.'
-    else:c.execute('INSERT INTO marks(student_id,subject,ia1,ia2,ia3,assignment) VALUES(?,?,?,?,?,?)',(sid,sub,*vals));msg='Internal marks added.'
-    c.commit();c.close();flash(msg);return redirect(url_for('faculty_dashboard'))
+    f = faculty()
+    if not f:
+        return redirect(url_for('faculty_login'))
+
+    sid = request.form.get('student_id', '').strip()
+    subject = request.form.get('subject', '').strip()
+
+    try:
+        sid = int(sid)
+        vals = [
+            float(request.form.get(key, '0') or 0)
+            for key in ('ia1', 'ia2', 'ia3', 'assignment')
+        ]
+
+        if any(not 0 <= value <= 100 for value in vals):
+            raise ValueError
+
+    except (ValueError, TypeError):
+        flash('Enter a valid student ID and marks between 0 and 100.')
+        return redirect(url_for('faculty_dashboard') + '#internal-marks')
+
+    if not subject:
+        flash('Please enter a subject.')
+        return redirect(url_for('faculty_internal_marks'))
+
+    c = get_db()
+    try:
+        if not admin_owns_student(c, sid, f['id']):
+            return 'Not authorized', 403
+
+        existing = c.execute(
+            'SELECT id FROM marks WHERE student_id = ? AND subject = ?',
+            (sid, subject)
+        ).fetchone()
+
+        if existing:
+            c.execute(
+                '''UPDATE marks
+                   SET ia1 = ?, ia2 = ?, ia3 = ?, assignment = ?
+                   WHERE id = ?''',
+                (*vals, existing['id'])
+            )
+            flash('Internal marks updated successfully.')
+        else:
+            c.execute(
+                '''INSERT INTO marks
+                   (student_id, subject, ia1, ia2, ia3, assignment)
+                   VALUES (?, ?, ?, ?, ?, ?)''',
+                (sid, subject, *vals)
+            )
+            flash('Internal marks saved successfully.')
+
+        c.commit()
+
+    finally:
+        c.close()
+
+    return redirect(url_for('faculty_dashboard') + '#internal-marks')
+
+
 
 @app.post('/faculty/marks/delete/<int:rid>')
 def marks_delete(rid):
-    f=faculty()
-    if not f:return redirect(url_for('faculty_login'))
-    c=get_db();c.execute('DELETE FROM marks WHERE id IN (SELECT m.id FROM marks m JOIN students s ON s.id=m.student_id WHERE m.id=? AND s.college_id=?)',(rid,f['college_id']));c.commit();c.close();flash('Internal marks deleted.');return redirect(url_for('faculty_dashboard'))
+    f = faculty()
+    if not f:
+        return redirect(url_for('faculty_login'))
+
+    c = get_db()
+    try:
+        record = c.execute(
+            '''SELECT m.id
+               FROM marks m
+               JOIN students s ON s.id = m.student_id
+               WHERE m.id = ? AND s.college_id = ?''',
+            (rid, f['college_id'])
+        ).fetchone()
+
+        if not record:
+            return 'Marks record not found or not authorized', 404
+
+        c.execute('DELETE FROM marks WHERE id = ?', (rid,))
+        c.commit()
+        flash('Internal marks deleted successfully.')
+
+    finally:
+        c.close()
+
+    return redirect(url_for('faculty_dashboard') + '#internal-marks')
+
 
 @app.post('/faculty/upload')
 def upload():
     fadmin=faculty()
     if not fadmin:return redirect(url_for('faculty_login'))
     file=request.files.get('file')
-    if not file or not file.filename:flash('Choose a file.');return redirect(url_for('faculty_dashboard'))
+    if not file or not file.filename:flash('Choose a file.');return redirect(url_for('faculty_records'))
     ext=file.filename.rsplit('.',1)[-1].lower() if '.' in file.filename else ''
-    if ext not in ALLOWED:flash('Unsupported file type.');return redirect(url_for('faculty_dashboard'))
+    if ext not in ALLOWED:flash('Unsupported file type.');return redirect(url_for('faculty_records'))
     filename=secure_filename(file.filename);stem,extension=os.path.splitext(filename);n=1
     while os.path.exists(os.path.join(UPLOADS,filename)):filename=f'{stem}_{n}{extension}';n+=1
-    file.save(os.path.join(UPLOADS,filename));c=get_db();c.execute('INSERT INTO materials(title,subject,filename,file_type,uploaded_on,college_id) VALUES(?,?,?,?,?,?)',(request.form['title'],request.form['subject'],filename,ext,date.today().isoformat(),fadmin['college_id']));c.commit();c.close();flash('Material uploaded successfully.');return redirect(url_for('faculty_dashboard'))
+    file.save(os.path.join(UPLOADS,filename));c=get_db();c.execute('INSERT INTO materials(title,subject,filename,file_type,uploaded_on,college_id) VALUES(?,?,?,?,?,?)',(request.form['title'],request.form['subject'],filename,ext,date.today().isoformat(),fadmin['college_id']));c.commit();c.close();flash('Material uploaded successfully.');return redirect(url_for('faculty_records'))
 
 @app.post('/faculty/material/delete/<int:rid>')
 def material_delete(rid):
@@ -878,7 +1539,7 @@ def material_delete(rid):
         try:os.remove(os.path.join(UPLOADS,x['filename']))
         except OSError:pass
         c.execute('DELETE FROM materials WHERE id=?',(rid,));c.commit()
-    c.close();flash('Material deleted.');return redirect(url_for('faculty_dashboard'))
+    c.close();flash('Material deleted.');return redirect(url_for('faculty_records'))
 
 @app.post('/faculty/notification')
 def faculty_notification():
@@ -971,9 +1632,7 @@ def add_timetable():
 
     return redirect(url_for('faculty_dashboard') + '#timetable')
 
-
-@app.route('/faculty/timetable/delete/<int:entry_id>',
-           methods=['POST'])
+@app.route('/faculty/timetable/delete/<int:entry_id>', methods=['POST'])
 def delete_timetable(entry_id):
     f = faculty()
     if not f:
@@ -986,6 +1645,10 @@ def delete_timetable(entry_id):
             (entry_id, f['college_id'])
         )
         c.commit()
+    except Exception:
+        c.rollback()
+        app.logger.exception("Failed to delete timetable entry")
+        return 'Could not delete timetable entry', 500
     finally:
         c.close()
 
@@ -1022,12 +1685,13 @@ def faculty_timetable_editor():
     branch = request.values.get('branch', '').strip()
     semester = request.values.get('semester', '1').strip()
 
-    try:
-        semester = int(semester)
-        if not 1 <= semester <= 8:
-            raise ValueError
-    except (TypeError, ValueError):
-        semester = 1
+    if semester != 'ALL':
+        try:
+            semester = int(semester)
+            if not 1 <= semester <= 8:
+                raise ValueError
+        except (TypeError, ValueError):
+            semester = 1
 
     c = get_db()
 
@@ -1092,9 +1756,12 @@ def faculty_timetable_editor():
             semester=semester
         ))
     
+    
     rows = c.execute(
         '''SELECT * FROM timetable
-           WHERE college_id = ? AND branch = ? AND semester = ?
+           WHERE college_id = ?
+             AND branch = ?
+             AND semester = ?
            ORDER BY day, start_time''',
         (f['college_id'], branch, semester)
     ).fetchall()
@@ -1110,17 +1777,312 @@ def faculty_timetable_editor():
         faculty=f,
         days=days,
         slots=slots,
-        labels=labels, 
+        labels=labels,
         branch=branch,
         semester=semester,
         timetable=timetable
     )
 
+
+# Save or edit ONE timetable cell.
+# Other timetable entries remain unchanged.
+
+
+
+@app.route('/faculty/timetable/cell/save', methods=['POST'])
+def faculty_timetable_cell_save():
+    f = faculty()
+    if not f:
+        return redirect(url_for('faculty_login'))
+
+    day = request.form.get('day', '').strip()
+    start_time = request.form.get('start_time', '').strip()
+    subject = request.form.get('subject', '').strip()
+    lecturer = request.form.get('faculty', '').strip()
+    room = request.form.get('room', '').strip()
+
+    allowed_days = [
+        'Monday', 'Tuesday', 'Wednesday',
+        'Thursday', 'Friday', 'Saturday'
+    ]
+
+    allowed_slots = {
+        '09:00': '10:00',
+        '10:00': '11:00',
+        '11:10': '12:10',
+        '13:00': '14:00',
+        '14:00': '15:00',
+        '15:00': '16:00'
+    }
+
+    if day not in allowed_days or start_time not in allowed_slots:
+        flash('Invalid day or time slot.')
+        return redirect(url_for('faculty_dashboard') + '#timetable')
+
+    if not subject:
+        flash('Please enter a subject.')
+        return redirect(url_for('faculty_dashboard') + '#timetable')
+
+    branch = f['branch'] or 'AI'
+    semester = f['semester'] or 1
+    end_time = allowed_slots[start_time]
+
+    c = get_db()
+    try:
+        # Remove previous entries for this exact timetable slot
+        c.execute(
+            '''DELETE FROM timetable
+               WHERE college_id = ?
+                 AND branch = ?
+                 AND semester = ?
+                 AND day = ?
+                 AND start_time = ?''',
+            (
+                f['college_id'], branch, semester,
+                day, start_time
+            )
+        )
+
+        # Save only the newly submitted entry
+        c.execute(
+            '''INSERT INTO timetable
+               (college_id, branch, semester, day,
+                start_time, end_time, subject, faculty, room)
+               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)''',
+            (
+                f['college_id'], branch, semester, day,
+                start_time, end_time, subject, lecturer, room
+            )
+        )
+
+        c.commit()
+        flash('Timetable replaced with the latest entry.')
+
+    except Exception:
+        c.rollback()
+        app.logger.exception('Timetable replacement failed')
+        flash('Could not save timetable. Check the terminal.')
+
+    finally:
+        c.close()
+
+    return redirect(url_for('faculty_dashboard') + '#timetable')
+
+
+
+# Delete ONE selected timetable entry.
+@app.route('/faculty/timetable/cell/delete', methods=['POST'])
+def faculty_timetable_cell_delete():
+    f = faculty()
+    if not f:
+        return redirect(url_for('faculty_login'))
+
+    entry_id = request.form.get('entry_id', '').strip()
+    branch = request.form.get('branch', '').strip()
+
+    try:
+        semester = int(request.form.get('semester', '1'))
+        if not entry_id or not branch or not 1 <= semester <= 8:
+            raise ValueError
+    except (TypeError, ValueError):
+        flash('Invalid timetable entry.', 'error')
+        return redirect(url_for('faculty_timetable_editor'))
+
+    c = get_db()
+
+    try:
+        result = c.execute(
+            '''DELETE FROM timetable
+               WHERE id = ? AND college_id = ?
+                 AND branch = ? AND semester = ?''',
+            (entry_id, f['college_id'], branch, semester)
+        )
+        c.commit()
+
+        if result.rowcount:
+            flash('Selected class deleted.', 'success')
+        else:
+            flash('Class not found. No other entries were deleted.', 'error')
+
+    except Exception:
+        c.rollback()
+        app.logger.exception('Timetable cell delete failed')
+        flash('Could not delete this class.', 'error')
+
+    finally:
+        c.close()
+
+    return redirect(url_for(
+        'faculty_timetable_editor',
+        branch=branch, semester=semester
+    ))
+
+
+# ---------------- FORGOT PASSWORD ----------------
+
+@app.route('/forgot-password')
+def forgot_password():
+    return render_template('forgot_password.html')
+
+
+@app.route('/forgot-password/send-otp', methods=['POST'])
+def forgot_password_send_otp():
+    role = request.form.get('role', '').strip().lower()
+    email = request.form.get('email', '').strip().lower()
+    identity = request.form.get('identity', '').strip()
+
+    if role not in ('student', 'admin'):
+        return jsonify(ok=False, message='Invalid account type.'), 400
+
+    if not email or not identity:
+        return jsonify(ok=False, message='Enter your account details.'), 400
+
+    c = get_db()
+    try:
+        if role == 'student':
+            row = c.execute(
+                '''SELECT id, email FROM students
+                   WHERE upper(usn)=upper(?) AND lower(email)=lower(?)''',
+                (identity, email)
+            ).fetchone()
+        else:
+            row = c.execute(
+                '''SELECT id, email FROM faculty
+                   WHERE lower(name)=lower(?) AND lower(email)=lower(?)''',
+                (identity, email)
+            ).fetchone()
+    finally:
+        c.close()
+
+    if not row:
+        return jsonify(
+            ok=False,
+            message='Account details did not match. Check your registered email and identity.'
+        ), 400
+
+    reset_role = 'reset_' + role
+
+    try:
+        create_otp(reset_role, {
+            'user_id': row['id'],
+            'email': email
+        })
+        session.pop('password_reset_verified', None)
+        session['password_reset_email'] = email
+        session['password_reset_role'] = reset_role
+
+        return jsonify(
+            ok=True,
+            message='OTP sent to your registered email.'
+        )
+    except Exception:
+        app.logger.exception('Password reset OTP failed')
+        return jsonify(
+            ok=False,
+            message='Could not send OTP. Check your email settings.'
+        ), 500
+
+
+@app.route('/forgot-password/verify-otp', methods=['POST'])
+def forgot_password_verify_otp():
+    email = request.form.get('email', '').strip().lower()
+    otp = request.form.get('otp', '').strip()
+    role = session.get('password_reset_role')
+
+    if role not in ('reset_student', 'reset_admin'):
+        return jsonify(ok=False, message='Request a new OTP.'), 400
+
+    if email != session.get('password_reset_email'):
+        return jsonify(ok=False, message='Email does not match.'), 400
+
+    payload = verify_otp(email, role, otp)
+
+    if not payload:
+        return jsonify(
+            ok=False,
+            message='Invalid or expired OTP. Request a new one.'
+        ), 400
+
+    session['password_reset_verified'] = {
+        'role': role,
+        'user_id': payload['user_id'],
+        'email': email
+    }
+
+    return jsonify(ok=True, message='Email verified successfully.')
+
+
+@app.route('/forgot-password/reset', methods=['POST'])
+def forgot_password_reset():
+    reset = session.get('password_reset_verified')
+
+    if not reset or reset.get('role') not in (
+        'reset_student', 'reset_admin'
+    ):
+        return jsonify(
+            ok=False,
+            message='Verify your email with an OTP first.'
+        ), 403
+
+    password = request.form.get('password', '')
+    confirm = request.form.get('confirm_password', '')
+
+    if len(password) < 8:
+        return jsonify(
+            ok=False,
+            message='Password must contain at least 8 characters.'
+        ), 400
+
+    if password != confirm:
+        return jsonify(
+            ok=False,
+            message='Passwords do not match.'
+        ), 400
+
+    table = (
+        'students'
+        if reset['role'] == 'reset_student'
+        else 'faculty'
+    )
+
+    c = get_db()
+    try:
+        result = c.execute(
+            f'''UPDATE {table}
+                SET password=?
+                WHERE id=? AND lower(email)=lower(?)''',
+            (
+                generate_password_hash(password),
+                reset['user_id'],
+                reset['email']
+            )
+        )
+        c.commit()
+
+        if result.rowcount != 1:
+            return jsonify(
+                ok=False,
+                message='Account not found. Please start again.'
+            ), 400
+
+    finally:
+        c.close()
+
+    session.pop('password_reset_verified', None)
+    session.pop('password_reset_email', None)
+    session.pop('password_reset_role', None)
+
+    return jsonify(
+        ok=True,
+        message='Password reset successfully. You can now log in.'
+    )
+
+
+
 if __name__ == '__main__':
     init_db()
     app.run(
-        debug=False,
-        host='0.0.0.0',
-        port=int(os.environ.get('PORT', '10000'))
-   )
-  
+        debug=True,
+        host='127.0.0.1',
+        port=5000
+    )

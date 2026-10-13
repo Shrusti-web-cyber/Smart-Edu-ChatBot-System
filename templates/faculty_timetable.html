@@ -1,0 +1,251 @@
+
+{% extends "base.html" %}
+{% block content %}
+
+<style>
+.timetable-page { padding: 24px; color: #0b2545; }
+.timetable-header {
+    display: flex; justify-content: space-between;
+    align-items: center; flex-wrap: wrap; gap: 12px;
+    margin-bottom: 20px;
+}
+.timetable-header h1 { margin: 0; color: #0b2545; }
+.timetable-header p { color: #64748b; }
+.timetable-card {
+    background: #fff; border: 1px solid #dbeafe;
+    border-radius: 14px; padding: 18px; margin-bottom: 20px;
+    box-shadow: 0 4px 16px rgba(11,37,69,.06);
+}
+.timetable-controls {
+    display: flex; flex-wrap: wrap; gap: 12px;
+    align-items: end; margin-bottom: 18px;
+}
+.timetable-controls label {
+    display: block; font-weight: 600; margin-bottom: 6px;
+}
+.timetable-controls input,
+.timetable-controls select {
+    padding: 10px; border: 1px solid #cbd5e1;
+    border-radius: 8px;
+}
+.timetable-scroll { overflow-x: auto; }
+.timetable-grid {
+    width: 100%; min-width: 1150px;
+    border-collapse: collapse; table-layout: fixed;
+}
+.timetable-grid th {
+    background: #164e8a; color: #fff;
+    padding: 12px 8px; border: 1px solid #dbeafe;
+}
+.timetable-grid td {
+    border: 1px solid #dbeafe; padding: 9px;
+    vertical-align: top; background: #fff;
+}
+.timetable-grid tr:nth-child(even) td { background: #f0f7ff; }
+.day-cell { font-weight: 700; color: #164e8a; min-width: 100px; }
+.saved-subject {
+    font-weight: 800; color: #0b2545; font-size: 14px;
+    overflow-wrap: anywhere;
+}
+.saved-detail {
+    font-weight: 700; color: #334155; font-size: 12px;
+    margin-top: 5px; overflow-wrap: anywhere;
+}
+.slot-input {
+    width: 100%; box-sizing: border-box; margin-bottom: 7px;
+    padding: 8px; border: 1px solid #cbd5e1;
+    border-radius: 6px; background: white; color: #0b2545;
+}
+.slot-input:focus { outline: 2px solid #93c5fd; border-color: #2563eb; }
+.btn {
+    border: none; border-radius: 8px; padding: 9px 14px;
+    cursor: pointer; font-weight: 700;
+}
+.btn-primary { background: #164e8a; color: white; }
+.btn-edit { background: #166534; color: white; width: 100%; }
+.btn-save { background: #164e8a; color: white; width: 100%; }
+.btn-cancel {
+    width: 100%; margin-top: 6px; padding: 9px;
+    background: #e2e8f0; color: #0b2545;
+    border: none; border-radius: 8px; cursor: pointer;
+}
+.edit-panel[hidden] { display: none !important; }
+.status-message {
+    padding: 10px; margin-bottom: 12px;
+    background: #eff6ff; color: #164e8a; border-radius: 8px;
+}
+.action-heading, .action-cell { width: 110px; text-align: center; }
+@media (max-width: 700px) {
+    .timetable-page { padding: 12px; }
+    .timetable-card { padding: 10px; }
+}
+</style>
+
+<div class="timetable-page">
+    <header class="timetable-header">
+        <div>
+            <span>SMARTEDU ADMIN PORTAL</span>
+            <h1>Weekly Timetable Editor</h1>
+            <p>View saved classes and edit only when needed.</p>
+        </div>
+        <a href="{{ url_for('faculty_dashboard') }}">Back to Dashboard</a>
+    </header>
+
+    <section class="timetable-card">
+        <form method="GET"
+              action="{{ url_for('faculty_timetable_editor') }}"
+              class="timetable-controls">
+            <div>
+                <label for="branch">Branch</label>
+                <input id="branch" name="branch"
+                       value="{{ branch }}" placeholder="e.g. AIML" required>
+            </div>
+            <div>
+                <label for="semester">Semester</label>
+                <select id="semester" name="semester">
+                    {% for sem in range(1, 9) %}
+                    <option value="{{ sem }}"
+                        {% if semester|int == sem %}selected{% endif %}>
+                        Semester {{ sem }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <button class="btn btn-primary" type="submit">Load Timetable</button>
+        </form>
+    </section>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% for category, message in messages %}
+        <div class="status-message">{{ message }}</div>
+        {% endfor %}
+    {% endwith %}
+
+    <section class="timetable-card">
+        <h2>Class Schedule</h2>
+        <p>Saved subjects, faculty names, and rooms appear in bold.
+           Use Edit row to change a class.</p>
+
+        <div class="timetable-scroll">
+            <table class="timetable-grid">
+                <thead>
+                    <tr>
+                        <th>Day / Time</th>
+                        <th>9–10 AM</th>
+                        <th>10–11 AM</th>
+                        <th>11–12 PM</th>
+                        <th>12–1 PM</th>
+                        <th>1–2 PM</th>
+                        <th>2–3 PM</th>
+                        <th>3–4 PM</th>
+                        <th class="action-heading">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% set start_times = [
+                    '09:00', '10:00', '11:00', '12:00',
+                    '13:00', '14:00', '15:00'
+                ] %}
+
+                {% for day in [
+                    'Monday', 'Tuesday', 'Wednesday',
+                    'Thursday', 'Friday', 'Saturday', 'Sunday'
+                ] %}
+                    <tr>
+                        <td class="day-cell">{{ day }}</td>
+
+                        {% for i in range(7) %}
+                            {% set entry = timetable.get((day, start_times[i])) %}
+                            <td>
+                                <div id="view-{{ day }}-{{ i }}">
+                                    {% if entry %}
+                                        <div class="saved-subject">{{ entry.subject }}</div>
+                                        {% if entry.faculty %}
+                                        <div class="saved-detail">
+                                            Faculty: {{ entry.faculty }}
+                                        </div>
+                                        {% endif %}
+                                        {% if entry.room %}
+                                        <div class="saved-detail">
+                                            Room: {{ entry.room }}
+                                        </div>
+                                        {% endif %}
+                                    {% else %}
+                                        <span style="color:#94a3b8;">—</span>
+                                    {% endif %}
+                                </div>
+
+                                <div class="edit-panel"
+                                     id="edit-{{ day }}-{{ i }}" hidden>
+                                    <form method="POST"
+                                          action="{{ url_for('faculty_timetable_cell_save') }}">
+                                        <input type="hidden" name="day" value="{{ day }}">
+                                        <input type="hidden" name="start_time"
+                                               value="{{ start_times[i] }}">
+                                        <input type="hidden" name="branch" value="{{ branch }}">
+                                        <input type="hidden" name="semester" value="{{ semester }}">
+
+                                        <input class="slot-input" name="subject"
+                                               placeholder="Subject"
+                                               value="{{ entry.subject if entry else '' }}"
+                                               required>
+                                        <input class="slot-input" name="faculty"
+                                               placeholder="Faculty name/ID"
+                                               value="{{ entry.faculty if entry else '' }}">
+                                        <input class="slot-input" name="room"
+                                               placeholder="Room"
+                                               value="{{ entry.room if entry else '' }}">
+
+                                        <button class="btn btn-save" type="submit">
+                                            Save
+                                        </button>
+                                    </form>
+
+                                    <button class="btn-cancel" type="button"
+                                            onclick="cancelEdit(this)">
+                                        Cancel
+                                    </button>
+                                </div>
+                            </td>
+                        {% endfor %}
+
+                        <td class="action-cell">
+                            <button class="btn btn-edit" type="button"
+                                    onclick="editRow('{{ day }}')">
+                                Edit row
+                            </button>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+</div>
+
+<script>
+function editRow(day) {
+    for (let i = 0; i < 7; i++) {
+        const view = document.getElementById(`view-${day}-${i}`);
+        const panel = document.getElementById(`edit-${day}-${i}`);
+
+        if (view && panel) {
+            view.hidden = true;
+            panel.hidden = false;
+        }
+    }
+}
+
+function cancelEdit(button) {
+    const panel = button.closest('.edit-panel');
+    if (!panel) return;
+
+    const cell = panel.closest('td');
+    const view = cell ? cell.querySelector('[id^="view-"]') : null;
+
+    panel.hidden = true;
+    if (view) view.hidden = false;
+}
+</script>
+
+{% endblock %}

@@ -1,0 +1,243 @@
+
+{% extends "base.html" %}
+{% block content %}
+
+<style>
+.marks-page {
+    max-width: 1150px;
+    margin: 30px auto;
+    padding: 24px;
+    color: #17365d;
+    font-family: Arial, sans-serif;
+}
+.marks-card {
+    background: #fff;
+    border: 1px solid #dce5ef;
+    border-radius: 12px;
+    padding: 22px;
+    margin-bottom: 24px;
+    box-shadow: 0 4px 15px rgba(20,48,82,.05);
+}
+.marks-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 15px;
+}
+.marks-grid label {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    font-size: 13px;
+    font-weight: 700;
+}
+.marks-grid input,
+.marks-grid select {
+    width: 100%;
+    padding: 11px;
+    border: 1px solid #cbd8e8;
+    border-radius: 7px;
+    background: white;
+}
+.marks-button {
+    background: #16845b;
+    color: white;
+    border: 0;
+    border-radius: 7px;
+    padding: 12px 17px;
+    margin-top: 18px;
+    cursor: pointer;
+    font-weight: 700;
+}
+.marks-table-wrap { overflow-x: auto; }
+.marks-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 650px;
+    font-size: 13px;
+}
+.marks-table th {
+    background: #17365d;
+    color: white;
+    text-align: left;
+    padding: 12px;
+}
+.marks-table td {
+    padding: 12px;
+    border-bottom: 1px solid #dce5ef;
+}
+.marks-table input {
+    width: 75px;
+    padding: 7px;
+}
+.action-button {
+    padding: 8px 11px;
+    border: 0;
+    border-radius: 5px;
+    cursor: pointer;
+    color: white;
+    background: #24558a;
+}
+.delete-button { background: #c62828; }
+.back-link { color: #24558a; font-weight: bold; }
+@media(max-width:650px) {
+    .marks-grid { grid-template-columns: 1fr; }
+    .marks-page { padding: 12px; }
+}
+</style>
+
+<div class="marks-page">
+    <h1>Internal Marks Management</h1>
+    <p>Admin: {{ faculty.name }}</p>
+
+    <p>
+        <a class="back-link"
+           href="{{ url_for('faculty_dashboard') }}">
+            ← Back to Dashboard
+        </a>
+    </p>
+
+    <section class="marks-card">
+        <h2>Add Internal Marks</h2>
+
+        {% if students %}
+        <form method="POST" action="{{ url_for('marks_save') }}">
+            <div class="marks-grid">
+                <label>Student
+                    <select name="student_id" required>
+                        <option value="">Select student</option>
+                        {% for student in students %}
+                        <option value="{{ student['id'] }}">
+                            {{ student['name'] }} — {{ student['usn'] }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </label>
+
+                <label>Subject
+                    <input type="text" name="subject"
+                           placeholder="Machine Learning" required>
+                </label>
+
+                <label>Internal Assessment 1
+                    <input type="number" name="ia1"
+                           min="0" max="100" step="0.01"
+                           value="0" required>
+                </label>
+
+                <label>Internal Assessment 2
+                    <input type="number" name="ia2"
+                           min="0" max="100" step="0.01"
+                           value="0" required>
+                </label>
+
+                <label>Internal Assessment 3
+                    <input type="number" name="ia3"
+                           min="0" max="100" step="0.01"
+                           value="0" required>
+                </label>
+
+                <label>Assignment
+                    <input type="number" name="assignment"
+                           min="0" max="100" step="0.01"
+                           value="0" required>
+                </label>
+            </div>
+
+            <button class="marks-button" type="submit">
+                Save Internal Marks
+            </button>
+        </form>
+        {% else %}
+        <p>No students found. Add students first.</p>
+        {% endif %}
+    </section>
+
+    <section class="marks-card">
+        <h2>Saved Internal Marks</h2>
+
+        <div class="marks-table-wrap">
+            <table class="marks-table">
+                <thead>
+                    <tr>
+                        <th>Student</th>
+                        <th>USN</th>
+                        <th>Subject</th>
+                        <th>IA 1</th>
+                        <th>IA 2</th>
+                        <th>IA 3</th>
+                        <th>Assignment</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for record in marks_records %}
+                    <tr>
+                        <td>{{ record['name'] }}</td>
+                        <td>{{ record['usn'] }}</td>
+
+                        <form id="edit-mark-{{ record['id'] }}"
+                              method="POST"
+                              action="{{ url_for('marks_save') }}">
+                            <input type="hidden" name="student_id"
+                                   value="{{ record['student_id'] }}">
+                        </form>
+
+                        <td>
+                            <input form="edit-mark-{{ record['id'] }}"
+                                   name="subject"
+                                   value="{{ record['subject'] }}"
+                                   required>
+                        </td>
+                        <td>
+                            <input form="edit-mark-{{ record['id'] }}"
+                                   type="number" name="ia1"
+                                   value="{{ record['ia1'] }}"
+                                   min="0" max="100" step="0.01" required>
+                        </td>
+                        <td>
+                            <input form="edit-mark-{{ record['id'] }}"
+                                   type="number" name="ia2"
+                                   value="{{ record['ia2'] }}"
+                                   min="0" max="100" step="0.01" required>
+                        </td>
+                        <td>
+                            <input form="edit-mark-{{ record['id'] }}"
+                                   type="number" name="ia3"
+                                   value="{{ record['ia3'] }}"
+                                   min="0" max="100" step="0.01" required>
+                        </td>
+                        <td>
+                            <input form="edit-mark-{{ record['id'] }}"
+                                   type="number" name="assignment"
+                                   value="{{ record['assignment'] }}"
+                                   min="0" max="100" step="0.01" required>
+                        </td>
+                        <td>
+                            <button class="action-button"
+                                    form="edit-mark-{{ record['id'] }}"
+                                    type="submit">
+                                Update
+                            </button>
+
+                            <form method="POST"
+                                  action="{{ url_for('marks_delete', rid=record['id']) }}"
+                                  onsubmit="return confirm('Delete these marks?');">
+                                <button class="action-button delete-button"
+                                        type="submit">
+                                    Delete
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="8">No internal marks saved yet.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+</div>
+
+{% endblock %}
