@@ -2078,11 +2078,40 @@ def forgot_password_reset():
     )
 
 
+# Initialize database for local development and Render
+# Initialize database on startup
+
+try:
+    init_db()
+
+    c = get_db()
+    try:
+        tables = [
+            row['name'] for row in
+            c.execute(
+                "SELECT name FROM sqlite_master WHERE type='table'"
+            ).fetchall()
+        ]
+
+        print("DATABASE PATH:", DB)
+        print("DATABASE TABLES:", tables)
+
+        assert 'faculty' in tables, "faculty table missing"
+        assert 'students' in tables, "students table missing"
+
+        print("DATABASE CHECK: SUCCESS")
+    finally:
+        c.close()
+
+except Exception:
+    import traceback
+    traceback.print_exc()
+    raise
+
 
 if __name__ == '__main__':
-    init_db()
     app.run(
         debug=True,
-        host='127.0.0.1',
+        host='0.0.0.0',
         port=5000
     )
